@@ -1,0 +1,13 @@
+echo "➜ Linting..."
+pnpm lint || exit 1
+
+echo "➜ Type-checking..."
+pnpm type-check || exit 1
+
+echo "➜ Checking formatting..."
+pnpm format:check || exit 1
+
+echo "➜ Building..."
+pnpm build || exit 1
+
+echo "✅ All checks passed — pushing"
