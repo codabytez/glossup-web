@@ -2,29 +2,19 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
-import { useRef, useState } from "react";
 
 import { ProductCard } from "@/components/product/product-card";
-import { ArrowLineIcon } from "@/components/ui/arrow-line-icon";
 import { Button } from "@/components/ui/button";
+import { CarouselArrows } from "@/components/ui/carousel-arrows";
 import products from "@/data/products.json";
+import { useScrollCarousel } from "@/hooks/use-scroll-carousel";
 import { fadeUpContainer, fadeUpItem } from "@/lib/motion";
 
 const SCROLL_AMOUNT = 296 + 32; // card width + gap
 
 export function TopEssentials() {
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollPrev, setCanScrollPrev] = useState(false);
-  const [canScrollNext, setCanScrollNext] = useState(true);
-
-  const handleScroll = (el: HTMLDivElement) => {
-    setCanScrollPrev(el.scrollLeft > 0);
-    setCanScrollNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
-  };
-
-  const scrollByAmount = (amount: number) => {
-    scrollRef.current?.scrollBy({ left: amount, behavior: "smooth" });
-  };
+  const { scrollRef, canScrollPrev, canScrollNext, onScroll, scrollPrev, scrollNext } =
+    useScrollCarousel(SCROLL_AMOUNT);
 
   return (
     <motion.section
@@ -44,29 +34,12 @@ export function TopEssentials() {
             Top essentials
           </h2>
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon-circle"
-                aria-label="Previous"
-                className="border-grey-400"
-                disabled={!canScrollPrev}
-                onClick={() => scrollByAmount(-SCROLL_AMOUNT)}
-              >
-                <ArrowLineIcon className="text-grey-400 size-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon-circle"
-                aria-label="Next"
-                className="border-grey-400 relative overflow-hidden"
-                disabled={!canScrollNext}
-                onClick={() => scrollByAmount(SCROLL_AMOUNT)}
-              >
-                <span className="bg-secondary-200 absolute -inset-px -bottom-px h-0" />
-                <ArrowLineIcon className="text-grey-500 size-5 -scale-x-100" />
-              </Button>
-            </div>
+            <CarouselArrows
+              onPrev={scrollPrev}
+              onNext={scrollNext}
+              prevDisabled={!canScrollPrev}
+              nextDisabled={!canScrollNext}
+            />
             <Button variant="pill" size="pill" className="relative overflow-hidden">
               <span className="bg-secondary-200 absolute -inset-x-px -bottom-px h-0" />
               <span>View all products</span>
@@ -79,7 +52,7 @@ export function TopEssentials() {
       <motion.div
         ref={scrollRef}
         variants={fadeUpItem}
-        onScroll={(e) => handleScroll(e.currentTarget)}
+        onScroll={onScroll}
         className="-mx-20 mt-9 flex snap-x snap-mandatory scroll-pr-20 scroll-pl-20 scrollbar-none gap-8 overflow-x-auto scroll-smooth pr-20 pb-2 pl-20"
       >
         {products.map((product) => (

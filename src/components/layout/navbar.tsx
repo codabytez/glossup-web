@@ -5,9 +5,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { BagIcon } from "@/components/ui/bag-icon";
-import { SearchIcon } from "@/components/ui/search-icon";
-import { UserIcon } from "@/components/ui/user-icon";
+import { BagIcon } from "@/components/icons/bag-icon";
+import { SearchIcon } from "@/components/icons/search-icon";
+import { UserIcon } from "@/components/icons/user-icon";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
