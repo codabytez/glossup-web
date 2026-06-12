@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "the-wash",
+    "name": "The Wash",
+    "description": "Gentle & hydrating body wash",
+    "price": "₦22,900",
+    "image": "/products/the-wash.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  },
+  {
+    "slug": "the-scrub",
+    "name": "The Scrub",
+    "description": "Exfoliating body scrub",
+    "price": "₦22,900",
+    "image": "/products/the-scrub.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  },
+  {
+    "slug": "the-cream",
+    "name": "The Cream",
+    "description": "Rich body cream",
+    "price": "₦22,900",
+    "image": "/products/the-cream.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  },
+  {
+    "slug": "gloss-up-hand-cream",
+    "name": "Gloss Up Hand Cream",
+    "description": "Nourishing hand cream",
+    "price": "₦22,900",
+    "image": "/products/hand-cream.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  },
+  {
+    "slug": "the-wash-2",
+    "name": "The Wash",
+    "description": "Gentle & hydrating body wash",
+    "price": "₦22,900",
+    "image": "/products/the-wash.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  },
+  {
+    "slug": "the-scrub-2",
+    "name": "The Scrub",
+    "description": "Exfoliating body scrub",
+    "price": "₦22,900",
+    "image": "/products/the-scrub.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  },
+  {
+    "slug": "the-cream-2",
+    "name": "The Cream",
+    "description": "Rich body cream",
+    "price": "₦22,900",
+    "image": "/products/the-cream.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  },
+  {
+    "slug": "gloss-up-hand-cream-2",
+    "name": "Gloss Up Hand Cream",
+    "description": "Nourishing hand cream",
+    "price": "₦22,900",
+    "image": "/products/hand-cream.png",
+    "rating": 4.2,
+    "reviewCount": "1.4k"
+  }
+]

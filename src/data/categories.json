@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "skincare",
+    "name": "Skincare",
+    "count": "24",
+    "description": "Lorem ipsum dolor sit amet consectetur. Aliquam aliquet velit eu",
+    "image": "/categories/skincare.png"
+  },
+  {
+    "slug": "body-care",
+    "name": "Body Care",
+    "count": "134",
+    "description": "Lorem ipsum dolor sit amet consectetur. Aliquam aliquet velit eu",
+    "image": "/categories/body-care.png"
+  },
+  {
+    "slug": "targeted-care",
+    "name": "Targeted Care",
+    "count": "18",
+    "description": "Lorem ipsum dolor sit amet consectetur. Aliquam aliquet velit eu",
+    "image": "/categories/targeted-care.png"
+  },
+  {
+    "slug": "soap",
+    "name": "Soap",
+    "count": "8",
+    "description": "Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores.",
+    "image": "/categories/soap.png"
+  },
+  {
+    "slug": "fragrance",
+    "name": "Fragrance",
+    "count": "21",
+    "description": "Lorem ipsum dolor sit amet consectetur. Aliquam aliquet velit eu",
+    "image": "/categories/fragrance.png"
+  },
+  {
+    "slug": "essential-oil",
+    "name": "Essential Oil",
+    "count": "10",
+    "description": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "image": "/categories/fragrance.png"
+  }
+]
