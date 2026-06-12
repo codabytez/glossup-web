@@ -1,6 +1,6 @@
 # GlossUp
 
-GlossUp is a Nigerian cosmetics e-commerce brand. This repo is the storefront — a Next.js (App Router) app backed by Shopify, targeting customers in Lagos and Abuja.
+GlossUp is a cosmetics e-commerce brand. This repo is the storefront — a Next.js (App Router) app backed by Shopify.
 
 ## Tech Stack
 
@@ -14,8 +14,6 @@ GlossUp is a Nigerian cosmetics e-commerce brand. This repo is the storefront �
 - **Logistics:** GIG Logistics API (order tracking)
 - **Monitoring:** Sentry
 - **Deployment:** Vercel
-
-See [glossup-spec.md](./glossup-spec.md) for the full technical specification.
 
 ## Getting Started
 
@@ -57,7 +55,7 @@ All env vars are validated at build time via `@t3-oss/env-nextjs` — the build 
 
 ## Project Structure
 
-Pages are composition-only — all data fetching and business logic live in `/hooks`, and every UI element is broken into the smallest meaningful reusable component (no monolithic page files). See section 4 of [glossup-spec.md](./glossup-spec.md) for the full folder layout and component breakdown.
+Pages are composition-only — all data fetching and business logic live in `/hooks`, and every UI element is broken into the smallest meaningful reusable component (no monolithic page files).
 
 ## Git Workflow
 
@@ -71,6 +69,6 @@ Commits follow [Conventional Commits](https://www.conventionalcommits.org/), enf
 
 Hosted on Vercel:
 
-- Merge to `main` → production (`glossup.com`)
+- Merge to `main` → production
 - Merge to `dev` → staging preview
 - Every PR → automatic preview URL
