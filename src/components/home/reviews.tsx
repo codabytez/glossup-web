@@ -4,8 +4,7 @@ import { motion } from "motion/react";
 import Image from "next/image";
 import { useState } from "react";
 
-import { ArrowLineIcon } from "@/components/ui/arrow-line-icon";
-import { Button } from "@/components/ui/button";
+import { CarouselArrows } from "@/components/ui/carousel-arrows";
 import reviews from "@/data/reviews.json";
 import { fadeUpContainer, fadeUpItem, TRANSITION } from "@/lib/motion";
 
@@ -85,27 +84,7 @@ export function Reviews() {
               <span className="text-grey-400">/</span>
               <span className="text-grey-400">{String(reviews.length).padStart(2, "0")}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="icon-circle"
-                aria-label="Previous"
-                className="border-grey-200"
-                onClick={showPrev}
-              >
-                <ArrowLineIcon className="text-grey-400 size-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="icon-circle"
-                aria-label="Next"
-                className="border-grey-400 relative overflow-hidden"
-                onClick={showNext}
-              >
-                <span className="bg-secondary-200 absolute -inset-px -bottom-px h-0" />
-                <ArrowLineIcon className="text-grey-500 size-5 -scale-x-100" />
-              </Button>
-            </div>
+            <CarouselArrows onPrev={showPrev} onNext={showNext} />
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { TRANSITION } from "@/lib/motion";
 
 const heroProducts = [
   {
@@ -22,8 +23,6 @@ const heroProducts = [
     description: "Cleanser, cream and mask",
   },
 ];
-
-const TRANSITION = { duration: 0.4, ease: [0.32, 0.72, 0, 1] } as const;
 
 const containerVariants = {
   hidden: {},
