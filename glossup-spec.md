@@ -67,7 +67,7 @@ GlossUp is a Nigerian cosmetics e-commerce brand delivering a premium shopping e
 
 All commits must follow [Conventional Commits](https://www.conventionalcommits.org/) format, enforced via Commitlint + Husky:
 
-```
+```text
 feat: add order tracking page
 fix: resolve cart quantity update bug
 chore: configure ESLint rules
@@ -150,7 +150,7 @@ All env vars are validated at build time using `@t3-oss/env-nextjs`. The app wil
 
 > Every UI element must be broken into the smallest meaningful reusable component. No monolithic page files.
 
-```
+```text
 glossup-web/
 ├── src/
 │   ├── app/

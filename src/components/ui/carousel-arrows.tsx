@@ -24,11 +24,12 @@ export function CarouselArrows({
         variant="outline"
         size="icon-circle"
         aria-label={prevLabel}
-        className="border-grey-400"
+        className="border-grey-400 relative overflow-hidden"
         disabled={prevDisabled}
         onClick={onPrev}
       >
-        <ArrowLineIcon className="text-grey-400 size-5" />
+        <span className="bg-primary-900 absolute -inset-px -bottom-px h-0 transition-[height] duration-300 group-hover/button:h-full" />
+        <ArrowLineIcon className="text-grey-500 relative size-5 transition-colors duration-300 group-hover/button:text-white" />
       </Button>
       <Button
         variant="outline"
@@ -38,8 +39,8 @@ export function CarouselArrows({
         disabled={nextDisabled}
         onClick={onNext}
       >
-        <span className="bg-secondary-200 absolute -inset-px -bottom-px h-0" />
-        <ArrowLineIcon className="text-grey-500 size-5 -scale-x-100" />
+        <span className="bg-primary-900 absolute -inset-px -bottom-px h-0 transition-[height] duration-300 group-hover/button:h-full" />
+        <ArrowLineIcon className="text-grey-500 relative size-5 -scale-x-100 transition-colors duration-300 group-hover/button:text-white" />
       </Button>
     </div>
   );
