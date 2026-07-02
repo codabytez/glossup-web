@@ -48,7 +48,7 @@ export function Testimonial() {
             size="pill"
             className="border-secondary-200/60 relative overflow-hidden bg-white/20 text-white backdrop-blur-[2px] hover:bg-white/20"
           >
-            <span className="bg-primary-900 absolute -inset-px -bottom-px h-0 transition-[height] duration-300 group-hover/button:h-full" />
+            <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/button:h-full" />
             <span className="relative text-white transition-colors duration-300">Talk to us</span>
           </Button>
         </motion.div>

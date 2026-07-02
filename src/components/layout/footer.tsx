@@ -17,7 +17,7 @@ const footerLinks = [
 ];
 
 const socials = [
-  { href: "#", icon: "/icons/x.svg", alt: "X", width: 16, height: 14.46 },
+  { href: "#", icon: "/icons/x.svg", alt: "X", width: 16, height: 15 },
   { href: "#", icon: "/icons/instagram.svg", alt: "Instagram", width: 16, height: 16 },
   { href: "#", icon: "/icons/whatsapp.svg", alt: "WhatsApp", width: 16, height: 16 },
 ];
@@ -97,8 +97,15 @@ export function Footer() {
           <span>All rights reserved.</span>
         </motion.div>
 
-        <motion.div variants={fadeUpItem} className="relative h-13 w-full sm:h-36.25 lg:h-48.25">
-          <Image src="/footer/wordmark.svg" alt="Gloss Up" fill sizes="100vw" />
+        <motion.div variants={fadeUpItem}>
+          <Image
+            src="/footer/wordmark.svg"
+            alt="Gloss Up"
+            width={1280}
+            height={193}
+            className="h-auto w-full"
+            unoptimized
+          />
         </motion.div>
       </div>
     </motion.footer>
