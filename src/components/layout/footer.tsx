@@ -17,7 +17,7 @@ const footerLinks = [
 ];
 
 const socials = [
-  { href: "#", icon: "/icons/x.svg", alt: "X", width: 16, height: 14.46 },
+  { href: "#", icon: "/icons/x.svg", alt: "X", width: 16, height: 15 },
   { href: "#", icon: "/icons/instagram.svg", alt: "Instagram", width: 16, height: 16 },
   { href: "#", icon: "/icons/whatsapp.svg", alt: "WhatsApp", width: 16, height: 16 },
 ];

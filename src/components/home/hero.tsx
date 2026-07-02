@@ -192,6 +192,7 @@ export function Hero() {
                   src={product.image}
                   alt={product.alt}
                   fill
+                  priority={index === 0}
                   sizes="80px"
                   className="object-cover"
                 />

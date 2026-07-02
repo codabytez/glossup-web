@@ -125,7 +125,7 @@ export function ProductCard({
           transition={TRANSITION}
           className="group/add-to-bag border-grey-200 relative flex h-13.25 w-full shrink-0 items-center justify-between overflow-hidden border bg-white px-6 py-3"
         >
-          <span className="bg-primary-900 absolute -inset-x-px -bottom-px h-0 transition-[height] duration-300 group-hover/add-to-bag:h-full" />
+          <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/add-to-bag:h-full" />
           <span className="text-grey-900 relative text-base transition-colors duration-300 group-hover/add-to-bag:text-white">
             Add to bag
           </span>
