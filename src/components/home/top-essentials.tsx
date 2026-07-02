@@ -26,7 +26,7 @@ export function TopEssentials() {
         nextDisabled={!canScrollNext}
       />
       <Button variant="pill" size="pill" className="relative overflow-hidden">
-        <span className="bg-primary-900 absolute -inset-x-px -bottom-px h-0 transition-[height] duration-300 group-hover/button:h-full" />
+        <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/button:h-full" />
         <span className="relative transition-colors duration-300 group-hover/button:text-white">
           View all products
         </span>

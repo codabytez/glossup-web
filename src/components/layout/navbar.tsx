@@ -112,6 +112,7 @@ export function Navbar() {
             src={scrolled ? "/logos/primary-logo-black.png" : "/logos/primary-logo-white.png"}
             alt="Gloss Up"
             fill
+            priority
             sizes="160px"
             className="object-contain object-left"
           />
