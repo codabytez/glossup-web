@@ -75,7 +75,7 @@ export function Hero() {
           initial="hidden"
           animate="visible"
           variants={containerVariants}
-          className="flex w-full flex-1 flex-col justify-between gap-16 lg:flex-row lg:items-end lg:justify-normal lg:gap-16 2xl:mx-auto 2xl:max-w-384"
+          className="flex w-full flex-1 flex-col justify-center gap-16 lg:flex-row lg:items-center lg:gap-16 2xl:mx-auto 2xl:max-w-384"
         >
           <motion.div
             variants={containerVariants}
@@ -181,39 +181,34 @@ export function Hero() {
               </div>
             </div>
             <motion.div
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              key={index}
+              initial={{ opacity: 0, x: direction * 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={TRANSITION}
+              className="flex w-full items-center gap-2 rounded-lg bg-white p-2 sm:w-auto lg:w-auto"
             >
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: direction * 24 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={TRANSITION}
-                className="flex w-full items-center gap-2 rounded-lg bg-white p-2 sm:w-auto sm:rounded-2xl lg:w-auto lg:rounded-2xl"
-              >
-                <div className="relative size-16 shrink-0 overflow-hidden rounded-lg border border-white sm:size-20 sm:rounded-xl lg:size-20 lg:rounded-xl">
-                  <Image
-                    src={product.image}
-                    alt={product.alt}
-                    fill
-                    sizes="80px"
-                    className="object-cover"
-                  />
+              <div className="relative size-16 shrink-0 overflow-hidden rounded-[4px] border border-white sm:size-20 lg:size-20">
+                <Image
+                  src={product.image}
+                  alt={product.alt}
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex flex-1 flex-col gap-2 px-2 sm:w-77.75 sm:flex-none sm:gap-4 sm:px-4 lg:w-77.75 lg:flex-none lg:gap-4 lg:px-4">
+                <div className="flex flex-col gap-2">
+                  <p className="flex items-baseline gap-1 text-sm whitespace-nowrap">
+                    <span className="text-grey-950 font-medium">{product.name}</span>
+                    <span className="font-serif text-[#8e0e22] italic">• {product.tag}</span>
+                  </p>
+                  <p className="text-grey-600 text-sm">{product.description}</p>
                 </div>
-                <div className="flex flex-1 flex-col gap-2 px-2 sm:w-77.75 sm:flex-none sm:gap-4 sm:px-4 lg:w-77.75 lg:flex-none lg:gap-4 lg:px-4">
-                  <div className="flex flex-col gap-2">
-                    <p className="flex items-baseline gap-1 text-sm whitespace-nowrap">
-                      <span className="text-grey-950 font-medium">{product.name}</span>
-                      <span className="font-serif text-[#8e0e22] italic">• {product.tag}</span>
-                    </p>
-                    <p className="text-grey-600 text-sm">{product.description}</p>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <span className="text-grey-950 text-sm font-medium">View</span>
-                    <Image src="/hero/arrow-right-2.svg" alt="" width={12} height={12} />
-                  </div>
+                <div className="flex items-center gap-0.5">
+                  <span className="text-grey-950 text-sm font-medium">View</span>
+                  <Image src="/hero/arrow-right-2.svg" alt="" width={12} height={12} />
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         </motion.div>

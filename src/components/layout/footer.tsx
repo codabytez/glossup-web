@@ -97,8 +97,15 @@ export function Footer() {
           <span>All rights reserved.</span>
         </motion.div>
 
-        <motion.div variants={fadeUpItem} className="relative h-13 w-full sm:h-36.25 lg:h-48.25">
-          <Image src="/footer/wordmark.svg" alt="Gloss Up" fill sizes="100vw" />
+        <motion.div variants={fadeUpItem}>
+          <Image
+            src="/footer/wordmark.svg"
+            alt="Gloss Up"
+            width={1280}
+            height={193}
+            className="h-auto w-full"
+            unoptimized
+          />
         </motion.div>
       </div>
     </motion.footer>
