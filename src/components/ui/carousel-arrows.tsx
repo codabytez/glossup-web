@@ -24,23 +24,23 @@ export function CarouselArrows({
         variant="outline"
         size="icon-circle"
         aria-label={prevLabel}
-        className="border-grey-400 relative overflow-hidden"
+        className="border-grey-400"
+        fillOnHover
         disabled={prevDisabled}
         onClick={onPrev}
       >
-        <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/button:h-full" />
-        <ArrowLineIcon className="text-grey-500 relative size-5 transition-colors duration-300 group-hover/button:text-white" />
+        <ArrowLineIcon className="text-grey-500 size-3" />
       </Button>
       <Button
         variant="outline"
         size="icon-circle"
         aria-label={nextLabel}
-        className="border-grey-400 relative overflow-hidden"
+        className="border-grey-400"
+        fillOnHover
         disabled={nextDisabled}
         onClick={onNext}
       >
-        <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/button:h-full" />
-        <ArrowLineIcon className="text-grey-500 relative size-5 -scale-x-100 transition-colors duration-300 group-hover/button:text-white" />
+        <ArrowLineIcon className="text-grey-500 size-3 -scale-x-100" />
       </Button>
     </div>
   );

@@ -25,12 +25,13 @@ export function TopEssentials() {
         prevDisabled={!canScrollPrev}
         nextDisabled={!canScrollNext}
       />
-      <Button variant="pill" size="pill" className="relative overflow-hidden">
-        <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/button:h-full" />
-        <span className="relative transition-colors duration-300 group-hover/button:text-white">
-          View all products
-        </span>
-        <ArrowUpRightIcon className="relative size-2.5 transition-colors duration-300 group-hover/button:text-white" />
+      <Button
+        variant="pill"
+        size="pill"
+        fillOnHover
+        endIcon={<ArrowUpRightIcon className="size-2.5" />}
+      >
+        View all products
       </Button>
     </>
   );
