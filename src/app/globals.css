@@ -5,7 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --radius: 0.625rem; /* 10px */
+
   /* Brand color scales */
+  --color-primary-975: #43141e;
   --color-primary-950: #510015;
   --color-primary-900: #990b33;
   --color-primary-800: #a90830;
@@ -89,9 +92,10 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: 0.5rem;
+  --radius-xs: calc(var(--radius) * 0.2);
+  --radius-sm: calc(var(--radius) * 0.4);
+  --radius-md: calc(var(--radius) * 0.6);
+  --radius-lg: calc(var(--radius) * 0.8);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
@@ -99,7 +103,7 @@
 }
 
 :root {
-  --background: var(--color-grey-50);
+  --background: #ffffff;
   --foreground: var(--color-grey-950);
   --card: #ffffff;
   --card-foreground: var(--color-grey-950);
@@ -122,7 +126,6 @@
   --chart-3: var(--color-primary-300);
   --chart-4: var(--color-secondary-300);
   --chart-5: var(--color-grey-400);
-  --radius: 0.625rem;
   --sidebar: var(--color-grey-50);
   --sidebar-foreground: var(--color-grey-950);
   --sidebar-primary: var(--color-primary-900);
