@@ -1,8 +1,15 @@
 export function ArrowUpRightIcon({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 10 10" fill="none" aria-hidden className={className}>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="10"
+      height="10"
+      viewBox="0 0 10 10"
+      fill="none"
+      className={className}
+    >
       <path
-        d="M8.80913 5.40455L8.8746 0.625028L4.09508 0.690501M8.8746 0.625028L0.625022 8.87461"
+        d="M8.80913 5.40452L8.8746 0.624997L4.09508 0.69047M8.8746 0.624997L0.625021 8.87458"
         stroke="currentColor"
         strokeWidth="1.25"
         strokeLinecap="round"

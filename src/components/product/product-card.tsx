@@ -62,9 +62,9 @@ export function ProductCard({
       initial="rest"
       whileHover="hover"
       animate="rest"
-      className="relative h-108 w-74 shrink-0 overflow-hidden"
+      className="group/product-card relative h-108 w-74 shrink-0 overflow-hidden"
     >
-      <div className="bg-grey-100 absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden bg-gray-50">
         <motion.div
           variants={imageVariants}
           transition={IMAGE_TRANSITION}
@@ -114,7 +114,7 @@ export function ProductCard({
         <motion.div
           variants={detailsVariants}
           transition={TRANSITION}
-          className="flex flex-col gap-1 overflow-hidden"
+          className="flex flex-col gap-1 overflow-hidden pt-6"
         >
           <p className="text-grey-950 text-base font-medium">{name}</p>
           <p className="text-grey-700 text-sm">{description}</p>
@@ -123,7 +123,7 @@ export function ProductCard({
           type="button"
           variants={buttonVariants}
           transition={TRANSITION}
-          className="group/add-to-bag border-grey-200 relative flex h-13.25 w-full shrink-0 items-center justify-between overflow-hidden border bg-white px-6 py-3"
+          className="group/add-to-bag border-grey-200 relative flex h-13.25 w-full shrink-0 items-center justify-between overflow-hidden border px-6 py-3 group-hover/product-card:border-0 group-hover/product-card:bg-white"
         >
           <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/add-to-bag:h-full" />
           <span className="text-grey-900 relative text-base transition-colors duration-300 group-hover/add-to-bag:text-white">

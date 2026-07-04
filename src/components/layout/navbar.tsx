@@ -90,7 +90,7 @@ export function Navbar() {
                         <Link
                           href={link.href}
                           className={cn(
-                            "block rounded-lg px-3 py-2.5 transition-colors",
+                            "block rounded-lg px-3 py-2.5 text-sm font-medium tracking-wide uppercase transition-colors",
                             isActive
                               ? "bg-grey-100 text-grey-950"
                               : "text-grey-600 hover:bg-grey-100 hover:text-grey-950",
@@ -123,7 +123,10 @@ export function Navbar() {
 
             return (
               <li key={link.href}>
-                <Link href={link.href} className="group relative inline-block py-1">
+                <Link
+                  href={link.href}
+                  className="group relative inline-block py-1 text-sm font-medium tracking-wide uppercase"
+                >
                   {link.label}
                   <span
                     className={cn(

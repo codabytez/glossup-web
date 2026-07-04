@@ -26,9 +26,12 @@ export function Testimonial() {
           sizes="(min-width: 1024px) 56vw, 100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent sm:bg-linear-to-r sm:from-black/0 sm:via-black/30 sm:to-black/80 lg:bg-linear-to-l lg:from-black/70 lg:via-black/30 lg:to-black/0" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.8)_0%,rgba(0,0,0,0.2)_40%,rgba(0,0,0,0)_100%)] sm:bg-[linear-gradient(to_right,rgba(0,0,0,0)_0%,rgba(0,0,0,0.3)_75%,rgba(0,0,0,0.8)_100%)] lg:bg-[linear-gradient(to_left,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0)_24.35%)]" />
       </motion.div>
-      <div className="lg:bg-grey-800 sm:bg-grey-800 relative z-10 flex flex-1 items-end px-4 pb-14 sm:w-[44%] sm:items-center sm:px-0 sm:pb-0 lg:flex lg:w-[48%] lg:items-center lg:px-0 lg:pb-0">
+      <motion.div
+        variants={fadeUpItem}
+        className="lg:bg-grey-800 sm:bg-grey-800 relative z-10 flex flex-1 items-end px-4 pb-14 sm:w-[44%] sm:items-center sm:px-0 sm:pb-0 lg:flex lg:w-[48%] lg:items-center lg:px-0 lg:pb-0"
+      >
         <motion.div
           variants={fadeUpItem}
           className="flex w-full flex-col items-start gap-4 px-4 sm:relative sm:-ml-36.5 sm:w-115 lg:relative lg:-ml-46.5 lg:w-156 2xl:w-182"
@@ -46,13 +49,13 @@ export function Testimonial() {
           <Button
             variant="pill"
             size="pill"
-            className="border-secondary-200/60 relative overflow-hidden bg-white/20 text-white backdrop-blur-[2px] hover:bg-white/20"
+            fillOnHover
+            className="border-secondary-200/60 bg-white/20 text-white backdrop-blur-[2px] hover:bg-white/20"
           >
-            <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/button:h-full" />
-            <span className="relative text-white transition-colors duration-300">Talk to us</span>
+            Talk to us
           </Button>
         </motion.div>
-      </div>
+      </motion.div>
     </motion.section>
   );
 }
