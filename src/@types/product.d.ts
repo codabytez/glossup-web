@@ -6,4 +6,5 @@ interface Product {
   image: string;
   rating: number;
   reviewCount: string;
+  category?: string;
 }

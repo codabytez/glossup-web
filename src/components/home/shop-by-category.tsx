@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { CategoryCard } from "@/components/home/category-card";
 import { CarouselArrows } from "@/components/ui/carousel-arrows";
@@ -50,9 +51,9 @@ export function ShopByCategory() {
         className="-mx-4 mt-9 flex snap-x snap-mandatory scroll-pr-4 scroll-pl-4 scrollbar-none gap-4 overflow-x-auto scroll-smooth pr-4 pb-2 pl-4 sm:-mx-8 sm:scroll-pr-8 sm:scroll-pl-8 sm:pr-8 sm:pl-8 lg:-mx-10 lg:scroll-pr-10 lg:scroll-pl-10 lg:pr-10 lg:pl-10 xl:-mx-20 xl:scroll-pr-20 xl:scroll-pl-20 xl:pr-20 xl:pl-20 2xl:scroll-pl-[max(5rem,calc(50vw-48rem))] 2xl:pl-[max(5rem,calc(50vw-48rem))]"
       >
         {categories.map((category) => (
-          <div key={category.slug} className="snap-start">
+          <Link key={category.slug} href={`/collection/${category.slug}`} className="snap-start">
             <CategoryCard {...category} />
-          </div>
+          </Link>
         ))}
       </motion.div>
 

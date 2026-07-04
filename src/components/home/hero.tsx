@@ -96,10 +96,14 @@ export function Hero() {
                 </p>
               </motion.div>
               <motion.div variants={itemVariants} className="flex items-start gap-4">
-                <Button size="pill" endIcon={<ArrowUpRightIcon className="size-3" />}>
+                <Button
+                  size="pill"
+                  href="/products"
+                  endIcon={<ArrowUpRightIcon className="size-3" />}
+                >
                   Shop Now
                 </Button>
-                <Button variant="glass" size="pill">
+                <Button variant="glass" size="pill" href="/collection">
                   Our collection
                 </Button>
               </motion.div>

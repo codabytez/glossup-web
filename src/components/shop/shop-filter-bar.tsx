@@ -3,19 +3,31 @@ import { FilterIcon } from "@/components/icons/filter-icon";
 
 interface ShopFilterBarProps {
   onFilterClick?: () => void;
+  onSidebarToggle?: () => void;
   onSortClick?: () => void;
 }
 
-export function ShopFilterBar({ onFilterClick, onSortClick }: ShopFilterBarProps) {
+export function ShopFilterBar({ onFilterClick, onSidebarToggle, onSortClick }: ShopFilterBarProps) {
   return (
     <div className="flex items-center justify-between">
+      {/* Mobile: opens drawer */}
       <button
         type="button"
         onClick={onFilterClick}
         className="text-grey-950 flex items-center gap-2 transition-opacity hover:opacity-70 lg:hidden"
       >
         <FilterIcon className="text-primary-900 size-4" />
-        <span className="text-body-base font-normal">Filter BY</span>
+        <span className="text-body-base font-normal">FILTER BY</span>
+      </button>
+
+      {/* Desktop: toggles sidebar */}
+      <button
+        type="button"
+        onClick={onSidebarToggle}
+        className="text-grey-950 hidden items-center gap-2 transition-opacity hover:opacity-70 lg:flex"
+      >
+        <FilterIcon className="text-primary-900 size-4" />
+        <span className="text-body-base font-normal">FILTER BY</span>
       </button>
 
       <button

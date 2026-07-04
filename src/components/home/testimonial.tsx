@@ -50,6 +50,7 @@ export function Testimonial() {
             variant="pill"
             size="pill"
             fillOnHover
+            href="/contact"
             className="border-secondary-200/60 bg-white/20 text-white backdrop-blur-[2px] hover:bg-white/20"
           >
             Talk to us

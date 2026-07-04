@@ -185,9 +185,10 @@ interface FilterState {
 
 interface FilterSidebarProps {
   onApply?: (filters: FilterState) => void;
+  hideCategory?: boolean;
 }
 
-export function FilterSidebar({ onApply }: FilterSidebarProps) {
+export function FilterSidebar({ onApply, hideCategory }: FilterSidebarProps) {
   const [filters, setFilters] = useState<FilterState>({
     categories: [],
     priceMin: 0,
@@ -214,19 +215,21 @@ export function FilterSidebar({ onApply }: FilterSidebarProps) {
 
   return (
     <div className="flex flex-col gap-8 pb-6">
-      <FilterSection title="Category">
-        <div className="flex flex-col pl-4">
-          {CATEGORY_ITEMS.map((item) => (
-            <CheckboxItem
-              key={item.label}
-              label={item.label}
-              count={item.count}
-              checked={filters.categories.includes(item.label)}
-              onChange={() => toggleCategory(item.label)}
-            />
-          ))}
-        </div>
-      </FilterSection>
+      {!hideCategory && (
+        <FilterSection title="Category">
+          <div className="flex flex-col pl-4">
+            {CATEGORY_ITEMS.map((item) => (
+              <CheckboxItem
+                key={item.label}
+                label={item.label}
+                count={item.count}
+                checked={filters.categories.includes(item.label)}
+                onChange={() => toggleCategory(item.label)}
+              />
+            ))}
+          </div>
+        </FilterSection>
+      )}
 
       <FilterSection title="Price">
         <PriceRangeSlider
