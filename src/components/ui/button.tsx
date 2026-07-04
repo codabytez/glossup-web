@@ -1,5 +1,6 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
@@ -49,6 +50,7 @@ interface ButtonProps extends ButtonPrimitive.Props, VariantProps<typeof buttonV
   startIcon?: React.ReactNode;
   endIcon?: React.ReactNode;
   fillOnHover?: boolean;
+  href?: string;
 }
 
 function Button({
@@ -58,6 +60,7 @@ function Button({
   startIcon,
   endIcon,
   fillOnHover,
+  href,
   children,
   ...props
 }: ButtonProps) {
@@ -68,6 +71,7 @@ function Button({
         buttonVariants({ variant, size, className }),
         fillOnHover && "relative overflow-hidden",
       )}
+      {...(href ? { nativeButton: false, render: <Link href={href} /> } : {})}
       {...props}
     >
       {fillOnHover && (

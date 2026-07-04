@@ -23,7 +23,7 @@ import { SLOW_TRANSITION } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Shop", href: "/shop" },
+  { label: "Shop", href: "/products" },
   { label: "Collection", href: "/collection" },
   { label: "Contact Us", href: "/contact" },
 ];
@@ -31,12 +31,12 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const [scrolled, setScrolled] = useState(!isHome);
+  const [scrollY, setScrollY] = useState(0);
+  const scrolled = !isHome || scrollY > 80;
 
   useEffect(() => {
     if (!isHome) return;
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
+    const onScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);

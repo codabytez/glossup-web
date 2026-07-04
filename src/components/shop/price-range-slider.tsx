@@ -47,7 +47,7 @@ export function PriceRangeSlider({ min, max, onMinChange, onMaxChange }: PriceRa
             step={1000}
             value={min}
             onChange={(e) => onMinChange(Math.min(Number(e.target.value), max - 1000))}
-            className="price-slider absolute inset-x-0 w-full"
+            className="price-slider absolute inset-x-0 w-full opacity-0"
             style={{ top: -6, height: 16, zIndex: min > MAX_PRICE * 0.95 ? 5 : 3 }}
           />
 
@@ -58,7 +58,7 @@ export function PriceRangeSlider({ min, max, onMinChange, onMaxChange }: PriceRa
             step={1000}
             value={max}
             onChange={(e) => onMaxChange(Math.max(Number(e.target.value), min + 1000))}
-            className="price-slider absolute inset-x-0 w-full"
+            className="price-slider absolute inset-x-0 w-full opacity-0"
             style={{ top: -6, height: 16, zIndex: 4 }}
           />
 

@@ -6,7 +6,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.2,
-    "reviewCount": "1.4k"
+    "reviewCount": "1.4k",
+    "category": "skincare"
   },
   {
     "slug": "the-scrub",
@@ -15,7 +16,8 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.5,
-    "reviewCount": "980"
+    "reviewCount": "980",
+    "category": "skincare"
   },
   {
     "slug": "the-cream",
@@ -24,7 +26,8 @@
     "price": "₦22,900",
     "image": "/products/the-cream.png",
     "rating": 4.7,
-    "reviewCount": "2.1k"
+    "reviewCount": "2.1k",
+    "category": "skincare"
   },
   {
     "slug": "gloss-up-hand-cream",
@@ -33,7 +36,8 @@
     "price": "₦22,900",
     "image": "/products/hand-cream.png",
     "rating": 4.3,
-    "reviewCount": "760"
+    "reviewCount": "760",
+    "category": "skincare"
   },
   {
     "slug": "the-wash-2",
@@ -42,7 +46,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.1,
-    "reviewCount": "1.1k"
+    "reviewCount": "1.1k",
+    "category": "skincare"
   },
   {
     "slug": "the-scrub-2",
@@ -51,7 +56,8 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.6,
-    "reviewCount": "830"
+    "reviewCount": "830",
+    "category": "body-care"
   },
   {
     "slug": "the-cream-2",
@@ -60,7 +66,8 @@
     "price": "₦22,900",
     "image": "/products/the-cream.png",
     "rating": 4.4,
-    "reviewCount": "1.7k"
+    "reviewCount": "1.7k",
+    "category": "body-care"
   },
   {
     "slug": "gloss-up-hand-cream-2",
@@ -69,7 +76,8 @@
     "price": "₦22,900",
     "image": "/products/hand-cream.png",
     "rating": 4.2,
-    "reviewCount": "540"
+    "reviewCount": "540",
+    "category": "body-care"
   },
   {
     "slug": "the-wash-3",
@@ -78,7 +86,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.3,
-    "reviewCount": "1.2k"
+    "reviewCount": "1.2k",
+    "category": "body-care"
   },
   {
     "slug": "the-scrub-3",
@@ -87,7 +96,8 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.0,
-    "reviewCount": "470"
+    "reviewCount": "470",
+    "category": "body-care"
   },
   {
     "slug": "the-cream-3",
@@ -96,7 +106,8 @@
     "price": "₦22,900",
     "image": "/products/the-cream.png",
     "rating": 4.8,
-    "reviewCount": "3.2k"
+    "reviewCount": "3.2k",
+    "category": "targeted-care"
   },
   {
     "slug": "gloss-up-hand-cream-3",
@@ -105,7 +116,8 @@
     "price": "₦22,900",
     "image": "/products/hand-cream.png",
     "rating": 4.5,
-    "reviewCount": "690"
+    "reviewCount": "690",
+    "category": "targeted-care"
   },
   {
     "slug": "the-wash-4",
@@ -114,7 +126,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.2,
-    "reviewCount": "900"
+    "reviewCount": "900",
+    "category": "targeted-care"
   },
   {
     "slug": "the-scrub-4",
@@ -123,7 +136,8 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.4,
-    "reviewCount": "1.0k"
+    "reviewCount": "1.0k",
+    "category": "targeted-care"
   },
   {
     "slug": "the-cream-4",
@@ -132,7 +146,8 @@
     "price": "₦22,900",
     "image": "/products/the-cream.png",
     "rating": 4.6,
-    "reviewCount": "1.5k"
+    "reviewCount": "1.5k",
+    "category": "targeted-care"
   },
   {
     "slug": "gloss-up-hand-cream-4",
@@ -141,7 +156,8 @@
     "price": "₦22,900",
     "image": "/products/hand-cream.png",
     "rating": 4.1,
-    "reviewCount": "320"
+    "reviewCount": "320",
+    "category": "soap"
   },
   {
     "slug": "the-wash-5",
@@ -150,7 +166,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.7,
-    "reviewCount": "2.0k"
+    "reviewCount": "2.0k",
+    "category": "soap"
   },
   {
     "slug": "the-scrub-5",
@@ -159,7 +176,8 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.3,
-    "reviewCount": "610"
+    "reviewCount": "610",
+    "category": "soap"
   },
   {
     "slug": "the-cream-5",
@@ -168,7 +186,8 @@
     "price": "₦22,900",
     "image": "/products/the-cream.png",
     "rating": 4.5,
-    "reviewCount": "1.3k"
+    "reviewCount": "1.3k",
+    "category": "soap"
   },
   {
     "slug": "gloss-up-hand-cream-5",
@@ -177,7 +196,8 @@
     "price": "₦22,900",
     "image": "/products/hand-cream.png",
     "rating": 4.2,
-    "reviewCount": "410"
+    "reviewCount": "410",
+    "category": "soap"
   },
   {
     "slug": "the-wash-6",
@@ -186,7 +206,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.0,
-    "reviewCount": "580"
+    "reviewCount": "580",
+    "category": "fragrance"
   },
   {
     "slug": "the-scrub-6",
@@ -195,7 +216,8 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.6,
-    "reviewCount": "1.6k"
+    "reviewCount": "1.6k",
+    "category": "fragrance"
   },
   {
     "slug": "the-cream-6",
@@ -204,7 +226,8 @@
     "price": "₦22,900",
     "image": "/products/the-cream.png",
     "rating": 4.3,
-    "reviewCount": "870"
+    "reviewCount": "870",
+    "category": "fragrance"
   },
   {
     "slug": "gloss-up-hand-cream-6",
@@ -213,7 +236,8 @@
     "price": "₦22,900",
     "image": "/products/hand-cream.png",
     "rating": 4.7,
-    "reviewCount": "1.9k"
+    "reviewCount": "1.9k",
+    "category": "fragrance"
   },
   {
     "slug": "the-wash-7",
@@ -222,7 +246,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.4,
-    "reviewCount": "730"
+    "reviewCount": "730",
+    "category": "fragrance"
   },
   {
     "slug": "the-scrub-7",
@@ -231,7 +256,8 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.1,
-    "reviewCount": "390"
+    "reviewCount": "390",
+    "category": "essential-oils"
   },
   {
     "slug": "the-cream-7",
@@ -240,7 +266,8 @@
     "price": "₦22,900",
     "image": "/products/the-cream.png",
     "rating": 4.9,
-    "reviewCount": "4.1k"
+    "reviewCount": "4.1k",
+    "category": "essential-oils"
   },
   {
     "slug": "gloss-up-hand-cream-7",
@@ -249,7 +276,8 @@
     "price": "₦22,900",
     "image": "/products/hand-cream.png",
     "rating": 4.3,
-    "reviewCount": "550"
+    "reviewCount": "550",
+    "category": "essential-oils"
   },
   {
     "slug": "the-wash-8",
@@ -258,7 +286,8 @@
     "price": "₦22,900",
     "image": "/products/the-wash.png",
     "rating": 4.5,
-    "reviewCount": "1.8k"
+    "reviewCount": "1.8k",
+    "category": "essential-oils"
   },
   {
     "slug": "the-scrub-8",
@@ -267,6 +296,7 @@
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
     "rating": 4.2,
-    "reviewCount": "620"
+    "reviewCount": "620",
+    "category": "essential-oils"
   }
 ]

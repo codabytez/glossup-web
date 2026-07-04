@@ -21,6 +21,7 @@ export function ShopView() {
   const [activeCategory, setActiveCategory] = useState<string | undefined>();
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const filtered = activeCategory
     ? products.filter((p) => p.slug.startsWith(activeCategory))
@@ -44,7 +45,10 @@ export function ShopView() {
 
       <div className="px-4 pt-8 pb-14 sm:px-8 sm:pt-10 lg:px-10 lg:pt-10 xl:px-20">
         <div className="2xl:mx-auto 2xl:max-w-384">
-          <ShopFilterBar onFilterClick={() => setFilterOpen(true)} />
+          <ShopFilterBar
+            onFilterClick={() => setFilterOpen(true)}
+            onSidebarToggle={() => setSidebarOpen((prev) => !prev)}
+          />
 
           {/* Mobile filter drawer */}
           <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
@@ -60,7 +64,9 @@ export function ShopView() {
 
           <div className="mt-11 flex items-start gap-8">
             {/* Filter sidebar — desktop only */}
-            <aside className="hidden w-74 shrink-0 lg:sticky lg:top-28 lg:block lg:max-h-[calc(100vh-7rem)] lg:scrollbar-none lg:overflow-x-hidden lg:overflow-y-auto">
+            <aside
+              className={`hidden w-74 shrink-0 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:scrollbar-none lg:overflow-x-hidden lg:overflow-y-auto ${sidebarOpen ? "lg:block" : "lg:hidden"}`}
+            >
               <FilterSidebar />
             </aside>
 

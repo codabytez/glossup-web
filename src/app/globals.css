@@ -212,58 +212,58 @@
   .scrollbar-none::-webkit-scrollbar {
     display: none;
   }
+}
 
-  /* Price range slider — fully transparent, we render all visuals ourselves */
-  .price-slider {
-    -webkit-appearance: none;
-    appearance: none;
-    background: transparent;
-    accent-color: transparent;
-    pointer-events: all;
-    outline: none;
-    box-shadow: none;
-    border: none;
-    cursor: pointer;
-  }
-  .price-slider:focus,
-  .price-slider:focus-visible {
-    outline: none;
-    box-shadow: none;
-  }
-  .price-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 9999px;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    cursor: pointer;
-  }
-  .price-slider::-webkit-slider-runnable-track {
-    -webkit-appearance: none;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    height: 4px;
-  }
-  .price-slider::-moz-range-thumb {
-    pointer-events: all;
-    width: 16px;
-    height: 16px;
-    border-radius: 9999px;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    cursor: pointer;
-  }
-  .price-slider::-moz-range-track {
-    background: transparent;
-    border: none;
-    height: 4px;
-  }
-  .price-slider::-moz-range-progress {
-    background: transparent;
-  }
+/* Price range slider — outside @layer so it wins over browser native styles */
+.price-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  color: transparent;
+  pointer-events: all;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+}
+.price-slider:focus,
+.price-slider:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+.price-slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+  height: 4px;
+}
+.price-slider::-moz-range-thumb {
+  pointer-events: all;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+.price-slider::-moz-range-track {
+  background: transparent;
+  border: none;
+  height: 4px;
+}
+.price-slider::-moz-range-progress {
+  background: transparent;
 }
