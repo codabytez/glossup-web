@@ -13,3 +13,15 @@ export const fadeUpItem = {
   hidden: { opacity: 0, y: 40 },
   visible: { opacity: 1, y: 0, transition: SLOW_TRANSITION },
 };
+
+export const gridContainer = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.05 },
+  },
+};
+
+export const gridItem = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: TRANSITION },
+};

@@ -30,7 +30,7 @@ export function Footer() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={fadeUpContainer}
-      className="flex flex-col gap-16 bg-[#3e1111] px-4 py-14 sm:px-8 sm:py-20 lg:px-20 lg:py-30"
+      className="flex flex-col gap-16 bg-[#3e1111] px-4 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-30 xl:px-20"
     >
       <div className="flex w-full flex-col gap-16 2xl:mx-auto 2xl:max-w-384">
         <motion.div variants={fadeUpItem} className="flex flex-col gap-8 sm:flex-row">
@@ -61,7 +61,7 @@ export function Footer() {
           <div className="flex w-full flex-col items-start gap-12 sm:flex-1 sm:items-end sm:justify-between sm:gap-0 sm:self-stretch lg:flex-1 lg:items-end lg:justify-between lg:gap-0">
             <ul className="text-secondary-200 flex flex-wrap items-center gap-2 text-xl leading-[1.2] sm:justify-end lg:justify-end">
               {footerLinks.map((link, index) => (
-                <li key={link.href} className="flex items-center gap-2">
+                <li key={link.href} className="flex min-w-max items-center gap-2">
                   {index > 0 && <span aria-hidden>/</span>}
                   <Link href={link.href} className="group relative inline-block">
                     {link.label}

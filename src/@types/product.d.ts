@@ -1,4 +1,4 @@
-export type Product = {
+interface Product {
   slug: string;
   name: string;
   description: string;
@@ -6,4 +6,4 @@ export type Product = {
   image: string;
   rating: number;
   reviewCount: string;
-};
+}

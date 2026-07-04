@@ -71,7 +71,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.4)_0%,rgba(0,0,0,0)_10%),linear-gradient(0deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_65%)] lg:bg-[linear-gradient(to_left,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
       </div>
 
-      <div className="flex flex-1 flex-col px-4 pt-30 pb-8 sm:px-8 lg:px-20 lg:py-30">
+      <div className="flex flex-1 flex-col px-4 pt-30 pb-8 sm:px-8 lg:px-10 lg:py-30 xl:px-20">
         <motion.div
           initial="hidden"
           animate="visible"

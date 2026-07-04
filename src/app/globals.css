@@ -184,4 +184,86 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  /* Global scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-grey-100);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary-900);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-700);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary-900) var(--color-grey-100);
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Price range slider — fully transparent, we render all visuals ourselves */
+  .price-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    accent-color: transparent;
+    pointer-events: all;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    cursor: pointer;
+  }
+  .price-slider:focus,
+  .price-slider:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+  .price-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+  }
+  .price-slider::-webkit-slider-runnable-track {
+    -webkit-appearance: none;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    height: 4px;
+  }
+  .price-slider::-moz-range-thumb {
+    pointer-events: all;
+    width: 16px;
+    height: 16px;
+    border-radius: 9999px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    cursor: pointer;
+  }
+  .price-slider::-moz-range-track {
+    background: transparent;
+    border: none;
+    height: 4px;
+  }
+  .price-slider::-moz-range-progress {
+    background: transparent;
+  }
 }

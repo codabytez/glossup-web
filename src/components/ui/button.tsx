@@ -45,12 +45,11 @@ const buttonVariants = cva(
   },
 );
 
-type ButtonProps = ButtonPrimitive.Props &
-  VariantProps<typeof buttonVariants> & {
-    startIcon?: React.ReactNode;
-    endIcon?: React.ReactNode;
-    fillOnHover?: boolean;
-  };
+interface ButtonProps extends ButtonPrimitive.Props, VariantProps<typeof buttonVariants> {
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  fillOnHover?: boolean;
+}
 
 function Button({
   className,
