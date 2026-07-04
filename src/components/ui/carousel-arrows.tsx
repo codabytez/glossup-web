@@ -1,14 +1,14 @@
 import { ArrowLineIcon } from "@/components/icons/arrow-line-icon";
 import { Button } from "@/components/ui/button";
 
-type CarouselArrowsProps = {
+interface CarouselArrowsProps {
   onPrev: () => void;
   onNext: () => void;
   prevDisabled?: boolean;
   nextDisabled?: boolean;
   prevLabel?: string;
   nextLabel?: string;
-};
+}
 
 export function CarouselArrows({
   onPrev,

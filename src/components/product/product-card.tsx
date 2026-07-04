@@ -8,9 +8,6 @@ import { HeartIcon } from "@/components/icons/heart-icon";
 import { StarRating } from "@/components/product/star-rating";
 import { Button } from "@/components/ui/button";
 import { IMAGE_TRANSITION, TRANSITION } from "@/lib/motion";
-import type { Product } from "@/types/product";
-
-type ProductCardProps = Product;
 
 const imageVariants = {
   rest: { scale: 1 },
@@ -47,14 +44,7 @@ const saveVariants = {
   hover: { opacity: 1, scale: 1, y: 0 },
 };
 
-export function ProductCard({
-  image,
-  name,
-  description,
-  price,
-  rating,
-  reviewCount,
-}: ProductCardProps) {
+export function ProductCard({ image, name, description, price, rating, reviewCount }: Product) {
   const [isSaved, setIsSaved] = useState(false);
 
   return (
@@ -92,7 +82,7 @@ export function ProductCard({
           aria-label={isSaved ? "Remove from wishlist" : "Save to wishlist"}
           aria-pressed={isSaved}
           onClick={() => setIsSaved((prev) => !prev)}
-          className="h-auto w-auto rounded-full border-[0.5px] border-white bg-white p-2 backdrop-blur-[1px] hover:bg-white"
+          className="hover:bg-secondary-100 h-auto w-auto rounded-full border-[0.5px] border-white bg-white p-2 backdrop-blur-[1px] transition-transform duration-150 hover:scale-110"
         >
           <motion.span
             key={isSaved ? "saved" : "unsaved"}

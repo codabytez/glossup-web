@@ -21,7 +21,7 @@ export function ShopByCategory() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={fadeUpContainer}
-      className="px-4 py-14 sm:px-8 sm:py-20 lg:px-20 lg:py-30"
+      className="px-4 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-30 xl:px-20"
     >
       <motion.div variants={fadeUpItem} className="flex flex-col gap-4 2xl:mx-auto 2xl:max-w-384">
         <div className="flex items-center gap-2">
@@ -47,7 +47,7 @@ export function ShopByCategory() {
         ref={scrollRef}
         variants={fadeUpItem}
         onScroll={onScroll}
-        className="-mx-4 mt-9 flex snap-x snap-mandatory scroll-pr-4 scroll-pl-4 scrollbar-none gap-4 overflow-x-auto scroll-smooth pr-4 pb-2 pl-4 sm:-mx-8 sm:scroll-pr-8 sm:scroll-pl-8 sm:pr-8 sm:pl-8 lg:-mx-20 lg:scroll-pr-20 lg:scroll-pl-20 lg:pr-20 lg:pl-20 2xl:scroll-pl-[max(5rem,calc(50vw-48rem))] 2xl:pl-[max(5rem,calc(50vw-48rem))]"
+        className="-mx-4 mt-9 flex snap-x snap-mandatory scroll-pr-4 scroll-pl-4 scrollbar-none gap-4 overflow-x-auto scroll-smooth pr-4 pb-2 pl-4 sm:-mx-8 sm:scroll-pr-8 sm:scroll-pl-8 sm:pr-8 sm:pl-8 lg:-mx-10 lg:scroll-pr-10 lg:scroll-pl-10 lg:pr-10 lg:pl-10 xl:-mx-20 xl:scroll-pr-20 xl:scroll-pl-20 xl:pr-20 xl:pl-20 2xl:scroll-pl-[max(5rem,calc(50vw-48rem))] 2xl:pl-[max(5rem,calc(50vw-48rem))]"
       >
         {categories.map((category) => (
           <div key={category.slug} className="snap-start">

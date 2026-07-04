@@ -23,21 +23,23 @@ import { SLOW_TRANSITION } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { label: "Shop", href: "/products" },
+  { label: "Shop", href: "/shop" },
   { label: "Collection", href: "/collection" },
   { label: "Contact Us", href: "/contact" },
 ];
 
 export function Navbar() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
+  const isHome = pathname === "/";
+  const [scrolled, setScrolled] = useState(!isHome);
 
   useEffect(() => {
+    if (!isHome) return;
     const onScroll = () => setScrolled(window.scrollY > 80);
     onScroll();
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [isHome]);
 
   return (
     <motion.nav
@@ -45,7 +47,7 @@ export function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={SLOW_TRANSITION}
       className={cn(
-        "fixed inset-x-0 top-0 z-50 px-4 py-6 transition-colors duration-300 lg:px-20",
+        "fixed inset-x-0 top-0 z-50 px-4 py-6 transition-colors duration-300 lg:px-10 xl:px-20",
         scrolled
           ? "text-grey-950 border-b border-white/40 bg-white/50 shadow-sm backdrop-blur-md"
           : "text-white",
@@ -86,6 +88,7 @@ export function Navbar() {
                 return (
                   <li key={link.href}>
                     <SheetClose
+                      nativeButton={false}
                       render={
                         <Link
                           href={link.href}
@@ -109,7 +112,11 @@ export function Navbar() {
 
         <Link href="/" className="relative hidden h-6 w-40 lg:block">
           <Image
-            src={scrolled ? "/logos/primary-logo-black.png" : "/logos/primary-logo-white.png"}
+            src={
+              scrolled || !isHome
+                ? "/logos/primary-logo-black.png"
+                : "/logos/primary-logo-white.png"
+            }
             alt="Gloss Up"
             fill
             priority

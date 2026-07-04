@@ -22,7 +22,7 @@ export function Reviews() {
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={fadeUpContainer}
-      className="flex flex-col gap-16 px-4 py-14 sm:px-8 sm:py-20 lg:px-20 lg:py-30"
+      className="flex flex-col gap-16 px-4 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-30 xl:px-20"
     >
       <div className="flex w-full flex-col gap-16 2xl:mx-auto 2xl:max-w-384">
         <motion.div variants={fadeUpItem} className="flex flex-col gap-4">

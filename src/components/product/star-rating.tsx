@@ -1,10 +1,10 @@
 import { StarIcon } from "@/components/icons/star-icon";
 
-type StarRatingProps = {
+interface StarRatingProps {
   rating: number;
   reviewCount: string;
   className?: string;
-};
+}
 
 export function StarRating({ rating, reviewCount, className }: StarRatingProps) {
   return (

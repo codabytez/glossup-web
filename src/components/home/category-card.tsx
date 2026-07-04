@@ -4,16 +4,13 @@ import { motion } from "motion/react";
 import Image from "next/image";
 
 import { IMAGE_TRANSITION } from "@/lib/motion";
-import type { Category } from "@/types/category";
-
-type CategoryCardProps = Category;
 
 const imageVariants = {
   rest: { scale: 1 },
   hover: { scale: 1.08 },
 };
 
-export function CategoryCard({ name, count, description, image }: CategoryCardProps) {
+export function CategoryCard({ name, count, description, image }: Category) {
   return (
     <motion.div
       initial="rest"
