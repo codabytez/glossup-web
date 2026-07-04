@@ -137,7 +137,7 @@ export function Hero() {
               transition={TRANSITION}
               className="flex w-full items-center gap-4 rounded-lg bg-white p-2 sm:w-auto lg:w-auto"
             >
-              <div className="relative size-16 shrink-0 overflow-hidden rounded-[4px] border border-white sm:size-20">
+              <div className="relative size-16 shrink-0 overflow-hidden rounded-sm border border-white sm:size-20">
                 <Image
                   src={product.image}
                   alt={product.alt}
