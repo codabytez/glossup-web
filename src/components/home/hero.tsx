@@ -71,7 +71,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.4)_0%,rgba(0,0,0,0)_10%),linear-gradient(0deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.5)_65%)] lg:bg-[linear-gradient(to_left,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
       </div>
 
-      <div className="flex flex-1 flex-col px-4 pt-30 pb-8 sm:px-8 lg:px-20 lg:py-30">
+      <div className="flex flex-1 flex-col px-4 pt-30 pb-8 sm:px-8 lg:px-10 lg:py-30 xl:px-20">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -96,10 +96,14 @@ export function Hero() {
                 </p>
               </motion.div>
               <motion.div variants={itemVariants} className="flex items-start gap-4">
-                <Button size="pill" endIcon={<ArrowUpRightIcon className="size-3" />}>
+                <Button
+                  size="pill"
+                  href="/products"
+                  endIcon={<ArrowUpRightIcon className="size-3" />}
+                >
                   Shop Now
                 </Button>
-                <Button variant="glass" size="pill">
+                <Button variant="glass" size="pill" href="/collection">
                   Our collection
                 </Button>
               </motion.div>
@@ -133,7 +137,7 @@ export function Hero() {
               transition={TRANSITION}
               className="flex w-full items-center gap-4 rounded-lg bg-white p-2 sm:w-auto lg:w-auto"
             >
-              <div className="relative size-16 shrink-0 overflow-hidden rounded-[4px] border border-white sm:size-20">
+              <div className="relative size-16 shrink-0 overflow-hidden rounded-sm border border-white sm:size-20">
                 <Image
                   src={product.image}
                   alt={product.alt}

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "motion/react";
 import { useState } from "react";
 
@@ -8,9 +9,6 @@ import { HeartIcon } from "@/components/icons/heart-icon";
 import { StarRating } from "@/components/product/star-rating";
 import { Button } from "@/components/ui/button";
 import { IMAGE_TRANSITION, TRANSITION } from "@/lib/motion";
-import type { Product } from "@/types/product";
-
-type ProductCardProps = Product;
 
 const imageVariants = {
   rest: { scale: 1 },
@@ -48,13 +46,14 @@ const saveVariants = {
 };
 
 export function ProductCard({
+  slug,
   image,
   name,
   description,
   price,
   rating,
   reviewCount,
-}: ProductCardProps) {
+}: Product) {
   const [isSaved, setIsSaved] = useState(false);
 
   return (
@@ -64,6 +63,8 @@ export function ProductCard({
       animate="rest"
       className="group/product-card relative h-108 w-74 shrink-0 overflow-hidden"
     >
+      <Link href={`/products/${slug}`} aria-label={name} className="absolute inset-0 z-10" />
+
       <div className="absolute inset-0 overflow-hidden bg-gray-50">
         <motion.div
           variants={imageVariants}
@@ -85,14 +86,14 @@ export function ProductCard({
       <motion.div
         variants={saveVariants}
         transition={TRANSITION}
-        className="absolute right-4 bottom-20"
+        className="absolute right-4 bottom-20 z-20"
       >
         <Button
           variant="outline"
           aria-label={isSaved ? "Remove from wishlist" : "Save to wishlist"}
           aria-pressed={isSaved}
           onClick={() => setIsSaved((prev) => !prev)}
-          className="h-auto w-auto rounded-full border-[0.5px] border-white bg-white p-2 backdrop-blur-[1px] hover:bg-white"
+          className="hover:bg-secondary-100 h-auto w-auto rounded-full! border-0 bg-white p-2 backdrop-blur-[1px] transition-transform duration-150 hover:scale-110"
         >
           <motion.span
             key={isSaved ? "saved" : "unsaved"}
@@ -109,7 +110,7 @@ export function ProductCard({
       <motion.div
         variants={panelVariants}
         transition={TRANSITION}
-        className="absolute inset-x-0 bottom-0 flex flex-col"
+        className="absolute inset-x-0 bottom-0 z-20 flex flex-col"
       >
         <motion.div
           variants={detailsVariants}
