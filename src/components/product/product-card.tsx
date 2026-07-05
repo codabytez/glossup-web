@@ -2,11 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "motion/react";
+import { motion, type MotionProps } from "motion/react";
 import { useState } from "react";
 
 import { HeartIcon } from "@/components/icons/heart-icon";
 import { StarRating } from "@/components/product/star-rating";
+import { AddToBagButton } from "@/components/ui/add-to-bag-button";
 import { Button } from "@/components/ui/button";
 import { IMAGE_TRANSITION, TRANSITION } from "@/lib/motion";
 
@@ -34,6 +35,9 @@ const buttonVariants = {
   rest: { borderColor: "#E4E4E7", boxShadow: "0 0px 0px rgba(0,0,0,0)" },
   hover: { borderColor: "rgba(228,228,231,0)", boxShadow: "0 8px 24px rgba(0,0,0,0.08)" },
 };
+
+const MotionAddToBagButton = motion.create(AddToBagButton);
+const MotionButton = motion.create(Button);
 
 const badgeVariants = {
   rest: { opacity: 0, scale: 0.85, y: -8 },
@@ -88,12 +92,14 @@ export function ProductCard({
         transition={TRANSITION}
         className="absolute right-4 bottom-20 z-20"
       >
-        <Button
+        <MotionButton
           variant="outline"
           aria-label={isSaved ? "Remove from wishlist" : "Save to wishlist"}
           aria-pressed={isSaved}
           onClick={() => setIsSaved((prev) => !prev)}
-          className="hover:bg-secondary-100 h-auto w-auto rounded-full! border-0 bg-white p-2 backdrop-blur-[1px] transition-transform duration-150 hover:scale-110"
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.9 }}
+          className="hover:bg-secondary-100 h-auto w-auto rounded-full! border-0 bg-white p-2 backdrop-blur-[1px]"
         >
           <motion.span
             key={isSaved ? "saved" : "unsaved"}
@@ -104,7 +110,7 @@ export function ProductCard({
           >
             <HeartIcon filled={isSaved} className="size-4" />
           </motion.span>
-        </Button>
+        </MotionButton>
       </motion.div>
 
       <motion.div
@@ -120,20 +126,13 @@ export function ProductCard({
           <p className="text-grey-950 text-base font-medium">{name}</p>
           <p className="text-grey-700 text-sm">{description}</p>
         </motion.div>
-        <motion.button
-          type="button"
-          variants={buttonVariants}
+        <MotionAddToBagButton
+          price={price}
+          fillColor="primary"
+          variants={buttonVariants as MotionProps["variants"]}
           transition={TRANSITION}
-          className="group/add-to-bag border-grey-200 relative flex h-13.25 w-full shrink-0 items-center justify-between overflow-hidden border px-6 py-3 group-hover/product-card:border-0 group-hover/product-card:bg-white"
-        >
-          <span className="bg-primary-900 absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/add-to-bag:h-full" />
-          <span className="text-grey-900 relative text-base transition-colors duration-300 group-hover/add-to-bag:text-white">
-            Add to bag
-          </span>
-          <span className="text-primary-900 relative text-base font-medium transition-colors duration-300 group-hover/add-to-bag:text-white">
-            {price}
-          </span>
-        </motion.button>
+          className="border-grey-200 h-13.25 w-full shrink-0 border px-6 py-3 group-hover/product-card:border-0 group-hover/product-card:bg-white"
+        />
       </motion.div>
     </motion.div>
   );
