@@ -11,6 +11,7 @@ import { BagIcon } from "@/components/icons/bag-icon";
 import { SearchIcon } from "@/components/icons/search-icon";
 import { UserIcon } from "@/components/icons/user-icon";
 import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/store/cart-store";
 import {
   Sheet,
   SheetClose,
@@ -31,6 +32,7 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const { toggle: toggleCart, items } = useCartStore();
   const [scrollY, setScrollY] = useState(0);
   const scrolled = !isHome || scrollY > 80;
 
@@ -176,13 +178,19 @@ export function Navbar() {
           >
             <UserIcon className="size-6 shrink-0" />
           </Link>
-          <Link
-            href="/cart"
-            aria-label="Cart"
-            className="hover:text-primary-900 text-current transition-[color,transform] active:scale-90"
+          <button
+            type="button"
+            aria-label={`Cart${items.length > 0 ? ` (${items.length} items)` : ""}`}
+            onClick={toggleCart}
+            className="hover:text-primary-900 relative text-current transition-[color,transform] active:scale-90"
           >
             <BagIcon className="size-6 shrink-0" />
-          </Link>
+            {items.length > 0 && (
+              <span className="bg-primary-900 absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full text-[10px] font-medium text-white">
+                {items.length}
+              </span>
+            )}
+          </button>
         </div>
       </div>
     </motion.nav>
