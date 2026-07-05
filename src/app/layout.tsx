@@ -2,9 +2,6 @@ import type { Metadata } from "next";
 import { Geist_Mono, Work_Sans } from "next/font/google";
 import localFont from "next/font/local";
 
-import { Footer } from "@/components/layout/footer";
-import { Navbar } from "@/components/layout/navbar";
-
 import "./globals.css";
 
 const workSans = Work_Sans({
@@ -49,11 +46,7 @@ export default function RootLayout({
       lang="en"
       className={`${workSans.variable} ${geistMono.variable} ${zodiak.variable} h-full font-sans antialiased`}
     >
-      <body className="flex min-h-full flex-col">
-        <Navbar />
-        {children}
-        <Footer />
-      </body>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }

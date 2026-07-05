@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { CarouselArrows } from "@/components/ui/carousel-arrows";
 import { useScrollCarousel } from "@/hooks/use-scroll-carousel";
 import { fadeUpContainer, fadeUpItem } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 const SCROLL_AMOUNT = 296 + 32;
 
@@ -18,6 +19,7 @@ interface ProductCarouselProps {
   products: Product[];
   ctaLabel?: string;
   ctaHref?: string;
+  className?: string;
 }
 
 export function ProductCarousel({
@@ -26,6 +28,7 @@ export function ProductCarousel({
   products,
   ctaLabel = "View all products",
   ctaHref,
+  className,
 }: ProductCarouselProps) {
   const { scrollRef, canScrollPrev, canScrollNext, onScroll, scrollPrev, scrollNext } =
     useScrollCarousel(SCROLL_AMOUNT);
@@ -56,7 +59,7 @@ export function ProductCarousel({
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={fadeUpContainer}
-      className="px-4 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-20 xl:px-20"
+      className={cn("px-4 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-20 xl:px-20", className)}
     >
       <motion.div variants={fadeUpItem} className="flex flex-col gap-4 2xl:mx-auto 2xl:max-w-384">
         {badge && (

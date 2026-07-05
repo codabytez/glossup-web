@@ -1,4 +1,9 @@
+"use client";
+
+import { motion } from "motion/react";
+
 import { StarIcon } from "@/components/icons/star-icon";
+import { TRANSITION } from "@/lib/motion";
 
 interface StarRatingProps {
   rating: number;
@@ -13,7 +18,13 @@ export function StarRating({ rating, reviewCount, className }: StarRatingProps) 
         {Array.from({ length: 5 }, (_, i) => {
           const fillPercent = Math.max(0, Math.min(1, rating - i)) * 100;
           return (
-            <span key={i} className="text-grey-300 relative inline-block size-2.25">
+            <motion.span
+              key={i}
+              initial={{ opacity: 0, scale: 0.4 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ ...TRANSITION, delay: i * 0.06 }}
+              className="text-grey-300 relative inline-block size-2.25"
+            >
               <StarIcon className="size-full" />
               <span
                 className="text-grey-500 absolute inset-0 overflow-hidden"
@@ -21,7 +32,7 @@ export function StarRating({ rating, reviewCount, className }: StarRatingProps) 
               >
                 <StarIcon className="size-2.25" />
               </span>
-            </span>
+            </motion.span>
           );
         })}
       </div>
