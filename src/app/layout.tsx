@@ -3,6 +3,7 @@ import { Geist_Mono, Work_Sans } from "next/font/google";
 import localFont from "next/font/local";
 
 import "./globals.css";
+import { Providers } from "@/components/providers";
 
 const workSans = Work_Sans({
   variable: "--font-work-sans",
@@ -46,7 +47,9 @@ export default function RootLayout({
       lang="en"
       className={`${workSans.variable} ${geistMono.variable} ${zodiak.variable} h-full font-sans antialiased`}
     >
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

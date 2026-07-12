@@ -22,7 +22,7 @@ function CartItemRow({ item }: { item: CartItem }) {
       </div>
 
       {/* Info */}
-      <div className="flex flex-1 flex-col gap-3 self-stretch">
+      <div className="flex flex-1 flex-col justify-between self-stretch">
         {/* Name + price */}
         <div className="flex items-start justify-between gap-2">
           <div className="flex flex-col gap-2">
