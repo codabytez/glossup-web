@@ -180,6 +180,7 @@ export function Navbar() {
           </Link>
           <button
             type="button"
+            data-cart-icon
             aria-label={`Cart${items.length > 0 ? ` (${items.length} items)` : ""}`}
             onClick={toggleCart}
             className="hover:text-primary-900 relative text-current transition-[color,transform] active:scale-90"
