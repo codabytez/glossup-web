@@ -3,13 +3,14 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
+    SITE_URL: z.url(),
     SHOPIFY_STORE_DOMAIN: z.string().min(1),
     SHOPIFY_ADMIN_API_KEY: z.string().min(1),
     SHOPIFY_ADMIN_API_VERSION: z.string().min(1),
     FEZ_API_KEY: z.string().min(1),
-    FEZ_API_BASE_URL: z.string().url(),
+    FEZ_API_BASE_URL: z.url(),
     FEZ_WEBHOOK_SECRET: z.string().min(1),
-    SENTRY_DSN: z.string().url(),
+    SENTRY_DSN: z.url(),
   },
   client: {
     NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN: z.string().min(1),
