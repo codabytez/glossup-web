@@ -5,7 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --radius: 0.625rem; /* 10px */
+
   /* Brand color scales */
+  --color-primary-975: #43141e;
   --color-primary-950: #510015;
   --color-primary-900: #990b33;
   --color-primary-800: #a90830;
@@ -89,9 +92,10 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
+  --radius-xs: calc(var(--radius) * 0.2);
+  --radius-sm: calc(var(--radius) * 0.4);
+  --radius-md: calc(var(--radius) * 0.6);
+  --radius-lg: calc(var(--radius) * 0.8);
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
@@ -99,7 +103,7 @@
 }
 
 :root {
-  --background: var(--color-grey-50);
+  --background: #ffffff;
   --foreground: var(--color-grey-950);
   --card: #ffffff;
   --card-foreground: var(--color-grey-950);
@@ -122,7 +126,6 @@
   --chart-3: var(--color-primary-300);
   --chart-4: var(--color-secondary-300);
   --chart-5: var(--color-grey-400);
-  --radius: 0.625rem;
   --sidebar: var(--color-grey-50);
   --sidebar-foreground: var(--color-grey-950);
   --sidebar-primary: var(--color-primary-900);
@@ -181,4 +184,86 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+
+  /* Global scrollbar */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--color-grey-100);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary-900);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-primary-700);
+  }
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary-900) var(--color-grey-100);
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Price range slider — outside @layer so it wins over browser native styles */
+.price-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  color: transparent;
+  pointer-events: all;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  cursor: pointer;
+}
+.price-slider:focus,
+.price-slider:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+.price-slider::-webkit-slider-runnable-track {
+  -webkit-appearance: none;
+  background: transparent !important;
+  border: none;
+  box-shadow: none;
+  height: 4px;
+}
+.price-slider::-moz-range-thumb {
+  pointer-events: all;
+  width: 16px;
+  height: 16px;
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+.price-slider::-moz-range-track {
+  background: transparent;
+  border: none;
+  height: 4px;
+}
+.price-slider::-moz-range-progress {
+  background: transparent;
 }

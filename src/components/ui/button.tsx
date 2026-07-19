@@ -1,5 +1,6 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
+import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
@@ -8,7 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        default: "bg-secondary-100 text-primary-975 hover:bg-secondary-100/90",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
@@ -18,7 +19,10 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
-        pill: "border-primary-900 text-primary-900 bg-transparent hover:bg-transparent",
+        pill: "border-primary-900 text-primary-900 bg-transparent hover:bg-transparent group-hover/button:text-white transition-colors",
+        primary: "border-0 bg-primary-900 text-secondary-50 hover:opacity-90",
+        glass:
+          "border-white/40 bg-white/10 text-white backdrop-blur-[1px] hover:bg-white/20 hover:text-white",
       },
       size: {
         default:
@@ -33,7 +37,7 @@ const buttonVariants = cva(
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
         "icon-circle": "size-11 rounded-full p-3",
-        pill: "h-auto gap-2 rounded-full px-6 py-3",
+        pill: "h-auto gap-2 rounded-full px-6 py-3 text-base font-medium",
       },
     },
     defaultVariants: {
@@ -43,18 +47,63 @@ const buttonVariants = cva(
   },
 );
 
+interface ButtonProps extends ButtonPrimitive.Props, VariantProps<typeof buttonVariants> {
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  fillOnHover?: boolean;
+  fillVariant?: "primary" | "secondary";
+  href?: string;
+}
+
 function Button({
   className,
   variant = "default",
   size = "default",
+  startIcon,
+  endIcon,
+  fillOnHover,
+  fillVariant = "primary",
+  href,
+  children,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonProps) {
+  const isSecondaryFill = fillOnHover && fillVariant === "secondary";
+  const hoverTextClass = isSecondaryFill
+    ? "transition-colors group-hover/button:text-primary-900 group-hover/button:**:text-primary-900"
+    : "transition-colors group-hover/button:text-white group-hover/button:**:text-white";
+
   return (
     <ButtonPrimitive
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        fillOnHover && "relative overflow-hidden",
+      )}
+      {...(href ? { nativeButton: false, render: <Link href={href} /> } : {})}
       {...props}
-    />
+    >
+      {fillOnHover && (
+        <span
+          className={cn(
+            "absolute inset-x-0 bottom-0 h-0 transition-[height] duration-300 group-hover/button:h-full",
+            isSecondaryFill ? "bg-secondary-200" : "bg-primary-900",
+          )}
+        />
+      )}
+      {startIcon && (
+        <span data-icon="inline-start" className={cn("relative", fillOnHover && hoverTextClass)}>
+          {startIcon}
+        </span>
+      )}
+      <span className={cn(fillOnHover && "relative", fillOnHover && hoverTextClass)}>
+        {children}
+      </span>
+      {endIcon && (
+        <span data-icon="inline-end" className={cn("relative", fillOnHover && hoverTextClass)}>
+          {endIcon}
+        </span>
+      )}
+    </ButtonPrimitive>
   );
 }
 
