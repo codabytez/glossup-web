@@ -7,6 +7,7 @@ export interface CartItem {
   price: string;
   originalPrice?: string;
   size: string;
+  sizes?: string[];
   quantity: number;
 }
 
@@ -28,6 +29,7 @@ interface CartStore {
   addItem: (item: Omit<CartItem, "quantity">) => void;
   removeItem: (slug: string, size: string) => void;
   updateQuantity: (slug: string, size: string, quantity: number) => void;
+  changeSize: (slug: string, oldSize: string, newSize: string) => void;
 }
 
 export const useCartStore = create<CartStore>((set, get) => ({
@@ -57,5 +59,28 @@ export const useCartStore = create<CartStore>((set, get) => ({
     set({
       items: get().items.map((i) => (i.slug === slug && i.size === size ? { ...i, quantity } : i)),
     });
+  },
+  changeSize: (slug, oldSize, newSize) => {
+    if (oldSize === newSize) return;
+    const items = get().items;
+    const source = items.find((i) => i.slug === slug && i.size === oldSize);
+    if (!source) return;
+    const targetIdx = items.findIndex((i) => i.slug === slug && i.size === newSize);
+    if (targetIdx >= 0) {
+      // Merge quantities into the existing new-size item
+      set({
+        items: items
+          .map((i, idx) =>
+            idx === targetIdx ? { ...i, quantity: i.quantity + source.quantity } : i,
+          )
+          .filter((i) => !(i.slug === slug && i.size === oldSize)),
+      });
+    } else {
+      set({
+        items: items.map((i) =>
+          i.slug === slug && i.size === oldSize ? { ...i, size: newSize } : i,
+        ),
+      });
+    }
   },
 }));

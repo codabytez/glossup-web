@@ -13,7 +13,9 @@ import { ProductCard } from "@/components/product/product-card";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { FilterIcon } from "@/components/icons/filter-icon";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { XIcon } from "lucide-react";
 import { gridContainer, gridItem } from "@/lib/motion";
 import categories from "@/data/categories.json";
 import products from "@/data/products.json";
@@ -54,16 +56,16 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
   return (
     <main className="flex flex-1 flex-col pt-24">
       {/* Header */}
-      <div className="px-4 pt-8 sm:px-8 sm:pt-10 lg:px-10 lg:pt-8 xl:px-20">
+      <div className="px-4 pt-6 sm:px-8 sm:pt-10 lg:px-10 lg:pt-8 xl:px-20">
         <div className="flex flex-col gap-6 lg:gap-8 2xl:mx-auto 2xl:max-w-384">
           <Breadcrumb items={breadcrumbItems} />
 
-          <div className="flex flex-col gap-6 lg:gap-8">
-            <h1 className="text-grey-950 text-4xl font-light tracking-[-0.96px] sm:text-5xl sm:tracking-[-1.2px] lg:text-[64px] lg:leading-[1.13] lg:tracking-[-1.28px]">
+          <div className="flex flex-col gap-4 lg:gap-8">
+            <h1 className="text-grey-950 text-[40px] font-light tracking-[-0.8px] sm:text-5xl sm:tracking-[-1.2px] lg:text-[64px] lg:leading-[1.13] lg:tracking-[-1.28px]">
               {label}
             </h1>
 
-            <div className="-mx-4 flex scrollbar-none gap-3 overflow-x-auto px-4 pb-1 sm:-mx-8 sm:px-8 lg:-mx-10 lg:gap-4 lg:px-10 xl:-mx-20 xl:px-20">
+            <div className="flex flex-wrap gap-4 lg:-mx-10 lg:scrollbar-none lg:flex-nowrap lg:overflow-x-auto lg:px-10 lg:pb-1 xl:-mx-20 xl:px-20">
               {categories.map((category) => (
                 <Link key={category.slug} href={`/collection/${category.slug}`}>
                   <CategoryPill
@@ -89,12 +91,21 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
 
           {/* Mobile filter drawer */}
           <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
-            <SheetContent side="left" className="w-80 p-0 lg:hidden" showCloseButton={false}>
-              <SheetHeader className="border-grey-100 border-b px-6 py-4">
-                <SheetTitle className="text-grey-950 text-base font-medium">Filters</SheetTitle>
+            <SheetContent side="left" className="p-0 lg:hidden" showCloseButton={false}>
+              <SheetHeader className="border-grey-100 flex-row items-center justify-between border-b px-4 py-4">
+                <div className="flex items-center gap-2">
+                  <FilterIcon className="text-primary-900 size-4" />
+                  <SheetTitle className="text-grey-500 text-sm font-normal uppercase">
+                    Filter by
+                  </SheetTitle>
+                </div>
+                <SheetClose className="text-grey-950 p-1 hover:opacity-70">
+                  <XIcon className="size-5" />
+                  <span className="sr-only">Close</span>
+                </SheetClose>
               </SheetHeader>
               <div className="flex-1 scrollbar-none overflow-y-auto px-6 py-6">
-                <FilterSidebar hideCategory onApply={() => setFilterOpen(false)} />
+                <FilterSidebar hideCategory />
               </div>
             </SheetContent>
           </Sheet>
@@ -140,11 +151,11 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
                     variants={gridContainer}
                     initial="hidden"
                     animate="visible"
-                    className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+                    className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-8 lg:grid-cols-[repeat(auto-fill,minmax(240px,1fr))]"
                   >
                     {paged.map((product) => (
                       <motion.div key={product.slug} variants={gridItem}>
-                        <ProductCard {...product} />
+                        <ProductCard {...product} className="w-full" />
                       </motion.div>
                     ))}
                   </motion.div>
