@@ -2,7 +2,6 @@
 
 import { Menu } from "lucide-react";
 import { motion } from "motion/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -10,6 +9,7 @@ import { useEffect, useState } from "react";
 import { BagIcon } from "@/components/icons/bag-icon";
 import { SearchIcon } from "@/components/icons/search-icon";
 import { UserIcon } from "@/components/icons/user-icon";
+import { WordmarkLogo } from "@/components/icons/wordmark";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
 import {
@@ -66,20 +66,14 @@ export function Navbar() {
               />
             }
           >
-            <Menu className="size-6" />
+            <Menu className="size-5 sm:size-6" />
             <span className="sr-only">Open menu</span>
           </SheetTrigger>
           <SheetContent side="left" className="text-grey-950 gap-0 bg-white p-0 sm:max-w-xs">
             <SheetHeader className="border-grey-100 border-b">
               <SheetTitle>
-                <Link href="/" className="relative block h-6 w-40">
-                  <Image
-                    src="/logos/primary-logo-black.png"
-                    alt="Gloss Up"
-                    fill
-                    sizes="160px"
-                    className="object-contain object-left"
-                  />
+                <Link href="/" className="block">
+                  <WordmarkLogo className="h-6 w-40" color="#990B33" />
                 </Link>
               </SheetTitle>
             </SheetHeader>
@@ -112,19 +106,8 @@ export function Navbar() {
           </SheetContent>
         </Sheet>
 
-        <Link href="/" className="relative hidden h-6 w-40 lg:block">
-          <Image
-            src={
-              scrolled || !isHome
-                ? "/logos/primary-logo-black.png"
-                : "/logos/primary-logo-white.png"
-            }
-            alt="Gloss Up"
-            fill
-            priority
-            sizes="160px"
-            className="object-contain object-left"
-          />
+        <Link href="/" className="hidden lg:block">
+          <WordmarkLogo className="h-6 w-40" color={scrolled || !isHome ? "#990B33" : "#ffffff"} />
         </Link>
         <ul className="hidden items-center gap-6 text-sm font-medium lg:flex">
           {navLinks.map((link) => {
@@ -169,7 +152,7 @@ export function Navbar() {
             aria-label="Search"
             className="hover:text-primary-900 text-current transition-[color,transform] active:scale-90 lg:hidden"
           >
-            <SearchIcon className="size-6 shrink-0" />
+            <SearchIcon className="size-5 shrink-0 sm:size-6" />
           </button>
           <Link
             href="/account"
@@ -183,12 +166,12 @@ export function Navbar() {
             data-cart-icon
             aria-label={`Cart${items.length > 0 ? ` (${items.length} items)` : ""}`}
             onClick={toggleCart}
-            className="hover:text-primary-900 relative text-current transition-[color,transform] active:scale-90"
+            className="hover:text-primary-900 relative size-6 text-current transition-[color,transform] active:scale-90"
           >
             <BagIcon className="size-6 shrink-0" />
             {items.length > 0 && (
-              <span className="bg-primary-900 absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full text-[10px] font-medium text-white">
-                {items.length}
+              <span className="text-grey-900 absolute top-2.5 left-2 flex size-2 items-center justify-center overflow-hidden rounded-full text-[8px] font-semibold">
+                {items.length > 9 ? "9+" : items.length}
               </span>
             )}
           </button>

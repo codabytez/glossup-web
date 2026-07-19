@@ -1,13 +1,31 @@
-import { ChevronDownIcon } from "@/components/icons/chevron-down-icon";
 import { FilterIcon } from "@/components/icons/filter-icon";
+import { Dropdown } from "@/components/ui/dropdown";
+
+export const SORT_OPTIONS = [
+  "Lowest price",
+  "Highest price",
+  "Featured first",
+  "Newest first",
+  "Oldest first",
+  "Product: A - Z",
+  "Product: Z - A",
+] as const;
+
+export type SortOption = (typeof SORT_OPTIONS)[number];
 
 interface ShopFilterBarProps {
   onFilterClick?: () => void;
   onSidebarToggle?: () => void;
-  onSortClick?: () => void;
+  onSort?: (value: SortOption) => void;
+  onSortOpenChange?: (open: boolean) => void;
 }
 
-export function ShopFilterBar({ onFilterClick, onSidebarToggle, onSortClick }: ShopFilterBarProps) {
+export function ShopFilterBar({
+  onFilterClick,
+  onSidebarToggle,
+  onSort,
+  onSortOpenChange,
+}: ShopFilterBarProps) {
   return (
     <div className="flex items-center justify-between">
       {/* Mobile: opens drawer */}
@@ -30,14 +48,12 @@ export function ShopFilterBar({ onFilterClick, onSidebarToggle, onSortClick }: S
         <span className="text-body-base font-normal">FILTER BY</span>
       </button>
 
-      <button
-        type="button"
-        onClick={onSortClick}
-        className="bg-grey-100 border-grey-300 text-grey-800 hover:bg-grey-200 flex items-center gap-1 rounded-full border py-1 pr-3 pl-4 text-sm transition-colors"
-      >
-        <span className="text-body-base leading-[1.4] font-normal">Sort</span>
-        <ChevronDownIcon className="size-4" />
-      </button>
+      <Dropdown
+        options={[...SORT_OPTIONS]}
+        placeholder="Sort"
+        onSelect={(v) => onSort?.(v as SortOption)}
+        onOpenChange={onSortOpenChange}
+      />
     </div>
   );
 }

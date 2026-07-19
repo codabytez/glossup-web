@@ -28,7 +28,7 @@ export function Reviews() {
         <motion.div variants={fadeUpItem} className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <Image src="/icons/star-feedback.svg" alt="" width={16} height={16} />
-            <span className="text-grey-500 text-sm font-medium">
+            <span className="text-grey-500 text-sm font-medium uppercase">
               highlights from over 1.5k customers
             </span>
           </div>

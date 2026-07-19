@@ -184,11 +184,10 @@ interface FilterState {
 }
 
 interface FilterSidebarProps {
-  onApply?: (filters: FilterState) => void;
   hideCategory?: boolean;
 }
 
-export function FilterSidebar({ onApply, hideCategory }: FilterSidebarProps) {
+export function FilterSidebar({ hideCategory }: FilterSidebarProps) {
   const [filters, setFilters] = useState<FilterState>({
     categories: [],
     priceMin: 0,
@@ -216,19 +215,22 @@ export function FilterSidebar({ onApply, hideCategory }: FilterSidebarProps) {
   return (
     <div className="flex flex-col gap-8 pb-6">
       {!hideCategory && (
-        <FilterSection title="Category">
-          <div className="flex flex-col pl-4">
-            {CATEGORY_ITEMS.map((item) => (
-              <CheckboxItem
-                key={item.label}
-                label={item.label}
-                count={item.count}
-                checked={filters.categories.includes(item.label)}
-                onChange={() => toggleCategory(item.label)}
-              />
-            ))}
-          </div>
-        </FilterSection>
+        <>
+          <FilterSection title="Category">
+            <div className="flex flex-col pl-4">
+              {CATEGORY_ITEMS.map((item) => (
+                <CheckboxItem
+                  key={item.label}
+                  label={item.label}
+                  count={item.count}
+                  checked={filters.categories.includes(item.label)}
+                  onChange={() => toggleCategory(item.label)}
+                />
+              ))}
+            </div>
+          </FilterSection>
+          <div className="bg-grey-200 h-px w-full shrink-0" />
+        </>
       )}
 
       <FilterSection title="Price">
@@ -239,10 +241,12 @@ export function FilterSidebar({ onApply, hideCategory }: FilterSidebarProps) {
           onMaxChange={(v) => setFilters((f) => ({ ...f, priceMax: v }))}
         />
       </FilterSection>
+      <div className="bg-grey-200 h-px w-full shrink-0" />
 
       <FilterSection title="Ingredients">
         <IngredientsFilter selected={filters.ingredients} onToggle={toggleIngredient} />
       </FilterSection>
+      <div className="bg-grey-200 h-px w-full shrink-0" />
 
       <FilterSection title="Ratings">
         <div className="flex flex-col gap-2 pl-4">
@@ -261,15 +265,24 @@ export function FilterSidebar({ onApply, hideCategory }: FilterSidebarProps) {
           ))}
         </div>
       </FilterSection>
+      <div className="bg-grey-200 h-px w-full shrink-0" />
 
       <Button
         variant="pill"
         size="pill"
         fillOnHover
-        onClick={() => onApply?.(filters)}
-        className="border-grey-950 text-grey-950 mt-4 w-fit"
+        onClick={() => {
+          setFilters({
+            categories: [],
+            priceMin: 0,
+            priceMax: 400250,
+            ingredients: [],
+            rating: "all",
+          });
+        }}
+        className="border-grey-400 text-grey-800 w-fit"
       >
-        Apply filter
+        Clear filters
       </Button>
     </div>
   );

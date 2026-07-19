@@ -5,20 +5,51 @@ import { useState } from "react";
 import { motion } from "motion/react";
 
 import { FilterSidebar } from "@/components/shop/filter-sidebar";
-import { ShopFilterBar } from "@/components/shop/shop-filter-bar";
+import { ShopFilterBar, type SortOption } from "@/components/shop/shop-filter-bar";
 import { ShopHeader } from "@/components/shop/shop-header";
 import { ProductCard } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { FilterIcon } from "@/components/icons/filter-icon";
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { XIcon } from "lucide-react";
 import { gridContainer, gridItem } from "@/lib/motion";
 import categories from "@/data/categories.json";
 import products from "@/data/products.json";
 
 const PRODUCTS_PER_PAGE = 21;
 
+function parsePrice(price: string) {
+  return parseInt(price.replace(/[₦,]/g, ""), 10);
+}
+
+function sortProducts(list: typeof products, sort: SortOption | undefined) {
+  if (!sort) return list;
+  const copy = [...list];
+  switch (sort) {
+    case "Lowest price":
+      return copy.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+    case "Highest price":
+      return copy.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+    case "Featured first":
+      return copy.sort((a, b) => b.rating - a.rating);
+    case "Newest first":
+      return copy.reverse();
+    case "Oldest first":
+      return copy;
+    case "Product: A - Z":
+      return copy.sort((a, b) => a.name.localeCompare(b.name));
+    case "Product: Z - A":
+      return copy.sort((a, b) => b.name.localeCompare(a.name));
+    default:
+      return copy;
+  }
+}
+
 export function ShopView() {
   const [activeCategory, setActiveCategory] = useState<string | undefined>();
+  const [sortOption, setSortOption] = useState<SortOption | undefined>();
+  const [sortOpen, setSortOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -26,8 +57,9 @@ export function ShopView() {
   const filtered = activeCategory
     ? products.filter((p) => p.slug.startsWith(activeCategory))
     : products;
-  const totalPages = Math.ceil(filtered.length / PRODUCTS_PER_PAGE);
-  const paged = filtered.slice(
+  const sorted = sortProducts(filtered, sortOption);
+  const totalPages = Math.ceil(sorted.length / PRODUCTS_PER_PAGE);
+  const paged = sorted.slice(
     (currentPage - 1) * PRODUCTS_PER_PAGE,
     currentPage * PRODUCTS_PER_PAGE,
   );
@@ -48,16 +80,30 @@ export function ShopView() {
           <ShopFilterBar
             onFilterClick={() => setFilterOpen(true)}
             onSidebarToggle={() => setSidebarOpen((prev) => !prev)}
+            onSort={(v) => {
+              setSortOption(v);
+              setCurrentPage(1);
+            }}
+            onSortOpenChange={setSortOpen}
           />
 
           {/* Mobile filter drawer */}
           <Sheet open={filterOpen} onOpenChange={setFilterOpen}>
-            <SheetContent side="left" className="w-80 p-0 lg:hidden" showCloseButton={false}>
-              <SheetHeader className="border-grey-100 border-b px-6 py-4">
-                <SheetTitle className="text-grey-950 text-base font-medium">Filters</SheetTitle>
+            <SheetContent side="left" className="p-0 lg:hidden" showCloseButton={false}>
+              <SheetHeader className="border-grey-100 flex-row items-center justify-between border-b px-4 py-4">
+                <div className="flex items-center gap-2">
+                  <FilterIcon className="text-primary-900 size-4" />
+                  <SheetTitle className="text-grey-500 text-sm font-normal uppercase">
+                    Filter by
+                  </SheetTitle>
+                </div>
+                <SheetClose className="text-grey-950 p-1 hover:opacity-70">
+                  <XIcon className="size-5" />
+                  <span className="sr-only">Close</span>
+                </SheetClose>
               </SheetHeader>
               <div className="flex-1 scrollbar-none overflow-y-auto px-6 py-6">
-                <FilterSidebar onApply={() => setFilterOpen(false)} />
+                <FilterSidebar />
               </div>
             </SheetContent>
           </Sheet>
@@ -99,15 +145,15 @@ export function ShopView() {
               ) : (
                 <>
                   <motion.div
-                    key={`${currentPage}-${activeCategory}`}
+                    key={`${currentPage}-${activeCategory}-${sortOption}`}
                     variants={gridContainer}
                     initial="hidden"
                     animate="visible"
-                    className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+                    className={`grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-8 lg:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] ${sortOpen ? "pointer-events-none" : ""}`}
                   >
                     {paged.map((product) => (
                       <motion.div key={product.slug} variants={gridItem}>
-                        <ProductCard {...product} />
+                        <ProductCard {...product} className="w-full" />
                       </motion.div>
                     ))}
                   </motion.div>

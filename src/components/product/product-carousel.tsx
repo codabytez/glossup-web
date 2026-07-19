@@ -65,7 +65,7 @@ export function ProductCarousel({
         {badge && (
           <div className="flex items-center gap-2">
             <Image src={badge.icon} alt="" width={16} height={16} />
-            <span className="text-grey-500 text-sm font-medium">{badge.label}</span>
+            <span className="text-grey-500 text-sm font-medium uppercase">{badge.label}</span>
           </div>
         )}
         <div className="flex items-baseline gap-4">
@@ -80,11 +80,11 @@ export function ProductCarousel({
         ref={scrollRef}
         variants={fadeUpItem}
         onScroll={onScroll}
-        className="-mx-4 mt-9 flex snap-x snap-mandatory scroll-pr-4 scroll-pl-4 scrollbar-none gap-8 overflow-x-auto scroll-smooth pr-4 pb-2 pl-4 sm:-mx-8 sm:scroll-pr-8 sm:scroll-pl-8 sm:pr-8 sm:pl-8 lg:-mx-10 lg:scroll-pr-10 lg:scroll-pl-10 lg:pr-10 lg:pl-10 xl:-mx-20 xl:scroll-pr-20 xl:scroll-pl-20 xl:pr-20 xl:pl-20 2xl:scroll-pl-[max(5rem,calc(50vw-48rem))] 2xl:pl-[max(5rem,calc(50vw-48rem))]"
+        className="-mx-4 mt-9 flex snap-x snap-mandatory scroll-pr-4 scroll-pl-4 scrollbar-none gap-4 overflow-x-auto scroll-smooth pr-4 pb-2 pl-4 sm:-mx-8 sm:scroll-pr-8 sm:scroll-pl-8 sm:pr-8 sm:pl-8 lg:-mx-10 lg:scroll-pr-10 lg:scroll-pl-10 lg:gap-8 lg:pr-10 lg:pl-10 xl:-mx-20 xl:scroll-pr-20 xl:scroll-pl-20 xl:pr-20 xl:pl-20 2xl:scroll-pl-[max(5rem,calc(50vw-48rem))] 2xl:pl-[max(5rem,calc(50vw-48rem))]"
       >
         {products.map((product) => (
           <div key={product.slug} className="snap-start">
-            <ProductCard {...product} />
+            <ProductCard {...product} className="w-50 lg:w-74" />
           </div>
         ))}
       </motion.div>
