@@ -150,8 +150,8 @@ export function Dropdown({
             borderRadius: 32,
             height: 20,
             width: collapsedW,
-            backgroundColor: "transparent",
-            borderColor: "transparent",
+            backgroundColor: "rgba(0,0,0,0)",
+            borderColor: "rgba(0,0,0,0)",
           }
         : null;
 
@@ -189,8 +189,8 @@ export function Dropdown({
                         borderRadius: [32, 14, 14],
                         height: [20, h, h],
                         width: [collapsedW!, expandedWidth, expandedWidth],
-                        backgroundColor: ["transparent", expandedBg],
-                        borderColor: ["transparent", expandedBorder],
+                        backgroundColor: ["rgba(0,0,0,0)", expandedBg],
+                        borderColor: ["rgba(0,0,0,0)", expandedBorder],
                       }
                     : closedLinkState
                 }
