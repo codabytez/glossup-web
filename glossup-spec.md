@@ -4,6 +4,38 @@
 
 ---
 
+## Contents
+
+- [1. Project Overview](#1-project-overview)
+  - [1.1 Team](#11-team)
+  - [1.2 MVP Scope](#12-mvp-scope)
+  - [1.3 Tech Stack](#13-tech-stack)
+- [2. Repository & Project Setup](#2-repository--project-setup)
+  - [2.1 Repository](#21-repository)
+  - [2.2 Branch Strategy](#22-branch-strategy)
+  - [2.3 Commit Convention](#23-commit-convention)
+  - [2.4 CI/CD Pipeline](#24-cicd-pipeline)
+- [3. Tooling & Configuration](#3-tooling--configuration)
+  - [3.1 Dependencies](#31-dependencies)
+  - [3.2 Husky Hooks](#32-husky-hooks)
+  - [3.3 Environment Variables](#33-environment-variables)
+- [4. Folder Structure](#4-folder-structure)
+- [5. Architecture & Data Flow](#5-architecture--data-flow)
+  - [5.1 Shopify Integration Strategy](#51-shopify-integration-strategy)
+  - [5.2 Order Tracking Flow](#52-order-tracking-flow)
+  - [5.3 Cart State](#53-cart-state)
+- [6. Pages & Components](#6-pages--components)
+  - [6.1 Landing Page `/`](#61-landing-page-)
+  - [6.2 Product Page `/products/[handle]`](#62-product-page-productshandle)
+  - [6.3 Cart `/cart`](#63-cart-cart)
+  - [6.4 Order Tracking `/track-order`](#64-order-tracking-track-order)
+- [7. Component Design Principles](#7-component-design-principles)
+- [8. SEO](#8-seo)
+- [9. Error Handling & Monitoring](#9-error-handling--monitoring)
+- [10. Deployment](#10-deployment)
+
+---
+
 ## 1. Project Overview
 
 GlossUp is a Nigerian cosmetics e-commerce brand delivering a premium shopping experience through a Next.js storefront backed by Shopify. The platform targets customers across Nigeria, initially focusing on Lagos and Abuja.
@@ -67,7 +99,7 @@ GlossUp is a Nigerian cosmetics e-commerce brand delivering a premium shopping e
 
 All commits must follow [Conventional Commits](https://www.conventionalcommits.org/) format, enforced via Commitlint + Husky:
 
-```
+```text
 feat: add order tracking page
 fix: resolve cart quantity update bug
 chore: configure ESLint rules
@@ -150,7 +182,7 @@ All env vars are validated at build time using `@t3-oss/env-nextjs`. The app wil
 
 > Every UI element must be broken into the smallest meaningful reusable component. No monolithic page files.
 
-```
+```text
 glossup-web/
 ├── src/
 │   ├── app/
@@ -362,4 +394,4 @@ glossup-web/
 
 ---
 
-_GlossUp Technical Specification v1.0 — Confidential_
+> _GlossUp Technical Specification v1.0 — Confidential_
