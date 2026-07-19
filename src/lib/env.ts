@@ -6,8 +6,9 @@ export const env = createEnv({
     SHOPIFY_STORE_DOMAIN: z.string().min(1),
     SHOPIFY_ADMIN_API_KEY: z.string().min(1),
     SHOPIFY_ADMIN_API_VERSION: z.string().min(1),
-    GIG_API_KEY: z.string().min(1),
-    GIG_API_BASE_URL: z.string().url(),
+    FEZ_API_KEY: z.string().min(1),
+    FEZ_API_BASE_URL: z.string().url(),
+    FEZ_WEBHOOK_SECRET: z.string().min(1),
     SENTRY_DSN: z.string().url(),
   },
   client: {
