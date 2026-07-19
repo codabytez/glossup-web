@@ -149,7 +149,7 @@ export function ShopView() {
                     variants={gridContainer}
                     initial="hidden"
                     animate="visible"
-                    className={`grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-8 lg:grid-cols-[repeat(auto-fill,minmax(240px,1fr))]${sortOpen ? "pointer-events-none" : ""}`}
+                    className={`grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-8 lg:grid-cols-[repeat(auto-fill,minmax(240px,1fr))] ${sortOpen ? "pointer-events-none" : ""}`}
                   >
                     {paged.map((product) => (
                       <motion.div key={product.slug} variants={gridItem}>

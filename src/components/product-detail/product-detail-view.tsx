@@ -167,6 +167,7 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
       originalPrice: product.originalPrice,
       size: selectedSize,
       sizes: SIZES,
+      quantity,
     });
     open();
   };

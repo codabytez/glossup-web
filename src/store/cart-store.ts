@@ -26,7 +26,7 @@ interface CartStore {
   open: () => void;
   close: () => void;
   toggle: () => void;
-  addItem: (item: Omit<CartItem, "quantity">) => void;
+  addItem: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
   removeItem: (slug: string, size: string) => void;
   updateQuantity: (slug: string, size: string, quantity: number) => void;
   changeSize: (slug: string, oldSize: string, newSize: string) => void;
@@ -39,14 +39,15 @@ export const useCartStore = create<CartStore>((set, get) => ({
   close: () => set({ isOpen: false }),
   toggle: () => set((s) => ({ isOpen: !s.isOpen })),
   addItem: (item) => {
+    const qty = item.quantity ?? 1;
     const items = get().items;
     const idx = items.findIndex((i) => i.slug === item.slug && i.size === item.size);
     if (idx >= 0) {
       set({
-        items: items.map((i, index) => (index === idx ? { ...i, quantity: i.quantity + 1 } : i)),
+        items: items.map((i, index) => (index === idx ? { ...i, quantity: i.quantity + qty } : i)),
       });
     } else {
-      set({ items: [...items, { ...item, quantity: 1 }] });
+      set({ items: [...items, { ...item, quantity: qty }] });
     }
   },
   removeItem: (slug, size) =>
