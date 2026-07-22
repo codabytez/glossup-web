@@ -78,7 +78,12 @@ export function Footer() {
                   aria-label={social.alt}
                   className="flex size-8 items-center justify-center rounded-full border border-white/20 transition-[background-color,border-color,transform] hover:border-white/40 hover:bg-white/10 active:scale-90"
                 >
-                  <Image src={social.icon} alt="" width={social.width} height={social.height} />
+                  <Image
+                    src={social.icon}
+                    alt={social.alt}
+                    width={social.width}
+                    height={social.height}
+                  />
                 </a>
               ))}
             </div>

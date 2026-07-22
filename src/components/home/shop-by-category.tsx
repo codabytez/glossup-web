@@ -26,7 +26,7 @@ export function ShopByCategory() {
     >
       <motion.div variants={fadeUpItem} className="flex flex-col gap-4 2xl:mx-auto 2xl:max-w-384">
         <div className="flex items-center gap-2">
-          <Image src="/icons/tag.svg" alt="" width={16} height={16} />
+          <Image src="/icons/tag.svg" alt="Tag icon" width={16} height={16} />
           <span className="text-grey-500 text-sm font-medium uppercase">Shop by category</span>
         </div>
         <div className="flex items-baseline gap-4">
