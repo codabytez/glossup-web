@@ -27,7 +27,7 @@ export function Reviews() {
       <div className="flex w-full flex-col gap-16 2xl:mx-auto 2xl:max-w-384">
         <motion.div variants={fadeUpItem} className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
-            <Image src="/icons/star-feedback.svg" alt="" width={16} height={16} />
+            <Image src="/icons/star-feedback.svg" alt="Star feedback icon" width={16} height={16} />
             <span className="text-grey-500 text-sm font-medium uppercase">
               highlights from over 1.5k customers
             </span>
@@ -70,7 +70,7 @@ export function Reviews() {
               <div className="relative">
                 <Image
                   src="/icons/quote.svg"
-                  alt=""
+                  alt="Quote icon"
                   width={42}
                   height={32}
                   className="absolute -top-1 left-0 h-6 w-7.75 sm:h-7 sm:w-9.25 lg:h-8 lg:w-10.5"

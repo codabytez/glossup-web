@@ -64,7 +64,7 @@ export function ProductCarousel({
       <motion.div variants={fadeUpItem} className="flex flex-col gap-4 2xl:mx-auto 2xl:max-w-384">
         {badge && (
           <div className="flex items-center gap-2">
-            <Image src={badge.icon} alt="" width={16} height={16} />
+            <Image src={badge.icon} alt={badge.label} width={16} height={16} />
             <span className="text-grey-500 text-sm font-medium uppercase">{badge.label}</span>
           </div>
         )}

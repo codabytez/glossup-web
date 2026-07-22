@@ -24,6 +24,7 @@ interface ProductInfoPanelProps {
   originalPrice?: string;
   rating: number;
   reviewCount: string;
+  onShare: () => void;
 }
 
 export function ProductInfoPanel({
@@ -35,6 +36,7 @@ export function ProductInfoPanel({
   originalPrice,
   rating,
   reviewCount,
+  onShare,
 }: ProductInfoPanelProps) {
   const [selectedSize, setSelectedSize] = useState(SIZES[2]);
   const [quantity, setQuantity] = useState(2);
@@ -55,6 +57,7 @@ export function ProductInfoPanel({
               <motion.button
                 type="button"
                 aria-label="Share product"
+                onClick={onShare}
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
                 className="text-grey-700 hover:bg-secondary-100 hover:text-grey-950 rounded-full p-2 transition-colors"

@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { HeartIcon } from "@/components/icons/heart-icon";
 import { ShareIcon } from "@/components/icons/share-icon";
+import { ShareModal } from "@/components/product-detail/share-modal";
 import { StarRating } from "@/components/product/star-rating";
 import { TRANSITION } from "@/lib/motion";
 import { useCartStore } from "@/store/cart-store";
@@ -46,9 +47,16 @@ interface MobileImageCarouselProps {
   name: string;
   isSaved: boolean;
   onSavedChange: (saved: boolean) => void;
+  onShare: () => void;
 }
 
-function MobileImageCarousel({ image, name, isSaved, onSavedChange }: MobileImageCarouselProps) {
+function MobileImageCarousel({
+  image,
+  name,
+  isSaved,
+  onSavedChange,
+  onShare,
+}: MobileImageCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -105,6 +113,7 @@ function MobileImageCarousel({ image, name, isSaved, onSavedChange }: MobileImag
           <motion.button
             type="button"
             aria-label="Share product"
+            onClick={onShare}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             className="text-grey-700 flex items-center justify-center rounded-full border-[0.5px] border-white bg-white p-2 backdrop-blur-[1px]"
@@ -150,6 +159,7 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
   const [selectedSize, setSelectedSize] = useState(SIZES[2]);
   const [quantity, setQuantity] = useState(1);
   const [isSaved, setIsSaved] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const { addItem, open } = useCartStore();
 
   const breadcrumbItems = [
@@ -173,122 +183,128 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
   };
 
   return (
-    <main className="flex flex-1 flex-col pb-40 lg:pb-0">
-      {/* ── Mobile layout (< lg) ── */}
-      <div className="flex flex-col lg:hidden">
-        <div className="pt-13">
-          {/* Breadcrumb */}
-          <div className="px-4 py-6">
-            <Breadcrumb items={breadcrumbItems} />
-          </div>
-
-          {/* Swipeable image carousel */}
-          <MobileImageCarousel
-            image={product.image}
-            name={product.name}
-            isSaved={isSaved}
-            onSavedChange={setIsSaved}
-          />
-
-          {/* Product info */}
-          <div className="flex flex-col gap-6 px-4 pt-6 pb-8">
-            <p className="text-grey-950 text-2xl font-normal">{product.name}</p>
-
-            {/* Price + Rating on same row */}
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-baseline gap-2">
-                <p className="text-grey-950 text-2xl font-semibold">{product.price}</p>
-                {product.originalPrice && (
-                  <p className="text-grey-500 text-sm font-normal line-through">
-                    {product.originalPrice}
-                  </p>
-                )}
-              </div>
-              <StarRating rating={product.rating} reviewCount={product.reviewCount} />
+    <>
+      <main className="flex flex-1 flex-col pb-40 lg:pb-0">
+        {/* ── Mobile layout (< lg) ── */}
+        <div className="flex flex-col lg:hidden">
+          <div className="pt-13">
+            {/* Breadcrumb */}
+            <div className="px-4 py-6">
+              <Breadcrumb items={breadcrumbItems} />
             </div>
 
-            <p className="text-grey-700 text-sm leading-[1.4]">{product.description}</p>
-
-            {/* Size selector */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center gap-2 text-sm">
-                <span className="text-grey-950">Size</span>
-                <span className="text-grey-400">• {selectedSize}</span>
-              </div>
-              <div className="flex flex-wrap gap-3">
-                {SIZES.map((size) => (
-                  <Badge
-                    key={size}
-                    render={<button type="button" onClick={() => setSelectedSize(size)} />}
-                    variant={selectedSize === size ? "filter-active" : "filter"}
-                    className="py-2"
-                  >
-                    {size}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-
-            <div className="bg-grey-100 h-px" />
-
-            <ProductFeatures />
-          </div>
-        </div>
-      </div>
-
-      {/* ── Desktop layout (lg+) ── */}
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={container}
-        className="hidden flex-col pt-24 pb-20 lg:flex lg:px-20"
-      >
-        <div className="2xl:mx-auto 2xl:max-w-384">
-          <motion.div variants={item} className="pt-8">
-            <Breadcrumb items={breadcrumbItems} />
-          </motion.div>
-
-          <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:mt-10 lg:grid-cols-2 lg:gap-8">
-            <motion.div variants={item}>
-              <ProductImageGallery image={product.image} name={product.name} />
-            </motion.div>
-
-            <motion.div variants={item} className="lg:sticky lg:top-28 lg:self-start">
-              <ProductInfoPanel
-                slug={product.slug}
-                name={product.name}
-                image={product.image}
-                description={product.description}
-                price={product.price}
-                originalPrice={product.originalPrice}
-                rating={product.rating}
-                reviewCount={product.reviewCount}
-              />
-            </motion.div>
-          </div>
-        </div>
-      </motion.div>
-
-      <RelatedProducts currentSlug={slug} />
-      <ProductReviews />
-
-      {/* ── Mobile sticky CTA ── */}
-      <div className="border-grey-100 fixed inset-x-0 bottom-0 z-40 border-t bg-white lg:hidden">
-        <div className="flex flex-col gap-4 px-4 py-6">
-          <div className="flex gap-4">
-            <QuantityStepper value={quantity} onChange={setQuantity} />
-            <AddToBagButton
-              price={product.price}
-              fillColor="primary"
-              className="border-grey-800 flex-1 rounded-[1px] border px-5 py-3 sm:px-6"
-              onClick={handleAddToCart}
+            {/* Swipeable image carousel */}
+            <MobileImageCarousel
+              image={product.image}
+              name={product.name}
+              isSaved={isSaved}
+              onSavedChange={setIsSaved}
+              onShare={() => setShareOpen(true)}
             />
+
+            {/* Product info */}
+            <div className="flex flex-col gap-6 px-4 pt-6 pb-8">
+              <p className="text-grey-950 text-2xl font-normal">{product.name}</p>
+
+              {/* Price + Rating on same row */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-baseline gap-2">
+                  <p className="text-grey-950 text-2xl font-semibold">{product.price}</p>
+                  {product.originalPrice && (
+                    <p className="text-grey-500 text-sm font-normal line-through">
+                      {product.originalPrice}
+                    </p>
+                  )}
+                </div>
+                <StarRating rating={product.rating} reviewCount={product.reviewCount} />
+              </div>
+
+              <p className="text-grey-700 text-sm leading-[1.4]">{product.description}</p>
+
+              {/* Size selector */}
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-2 text-sm">
+                  <span className="text-grey-950">Size</span>
+                  <span className="text-grey-400">• {selectedSize}</span>
+                </div>
+                <div className="flex flex-wrap gap-3">
+                  {SIZES.map((size) => (
+                    <Badge
+                      key={size}
+                      render={<button type="button" onClick={() => setSelectedSize(size)} />}
+                      variant={selectedSize === size ? "filter-active" : "filter"}
+                      className="py-2"
+                    >
+                      {size}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-grey-100 h-px" />
+
+              <ProductFeatures />
+            </div>
           </div>
-          <Button variant="primary" size="pill" className="w-full" onClick={handleAddToCart}>
-            Buy now
-          </Button>
         </div>
-      </div>
-    </main>
+
+        {/* ── Desktop layout (lg+) ── */}
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={container}
+          className="hidden flex-col pt-24 pb-20 lg:flex lg:px-20"
+        >
+          <div className="2xl:mx-auto 2xl:max-w-384">
+            <motion.div variants={item} className="pt-8">
+              <Breadcrumb items={breadcrumbItems} />
+            </motion.div>
+
+            <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:mt-10 lg:grid-cols-2 lg:gap-8">
+              <motion.div variants={item}>
+                <ProductImageGallery image={product.image} name={product.name} />
+              </motion.div>
+
+              <motion.div variants={item} className="lg:sticky lg:top-28 lg:self-start">
+                <ProductInfoPanel
+                  slug={product.slug}
+                  name={product.name}
+                  image={product.image}
+                  description={product.description}
+                  price={product.price}
+                  originalPrice={product.originalPrice}
+                  rating={product.rating}
+                  reviewCount={product.reviewCount}
+                  onShare={() => setShareOpen(true)}
+                />
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        <RelatedProducts currentSlug={slug} />
+        <ProductReviews />
+
+        {/* ── Mobile sticky CTA ── */}
+        <div className="border-grey-100 fixed inset-x-0 bottom-0 z-40 border-t bg-white lg:hidden">
+          <div className="flex flex-col gap-4 px-4 py-6">
+            <div className="flex gap-4">
+              <QuantityStepper value={quantity} onChange={setQuantity} />
+              <AddToBagButton
+                price={product.price}
+                fillColor="primary"
+                className="border-grey-800 flex-1 rounded-[1px] border px-5 py-3 sm:px-6"
+                onClick={handleAddToCart}
+              />
+            </div>
+            <Button variant="primary" size="pill" className="w-full" onClick={handleAddToCart}>
+              Buy now
+            </Button>
+          </div>
+        </div>
+      </main>
+
+      <ShareModal open={shareOpen} onOpenChange={setShareOpen} />
+    </>
   );
 }

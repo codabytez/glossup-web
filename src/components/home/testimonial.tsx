@@ -37,7 +37,7 @@ export function Testimonial() {
           className="flex w-full flex-col items-start gap-4 px-4 sm:relative sm:-ml-36.5 sm:w-115 lg:relative lg:-ml-46.5 lg:w-156 2xl:w-182"
         >
           <div className="flex items-center gap-2">
-            <Image src="/icons/home.svg" alt="" width={16} height={16} />
+            <Image src="/icons/home.svg" alt="Home icon" width={16} height={16} />
             <span className="text-header-h4 text-secondary-50 font-medium tracking-wide uppercase">
               We make glow possible
             </span>
