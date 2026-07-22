@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { Button } from "@/components/ui/button";
 import { Dropdown } from "@/components/ui/dropdown";
 import { CheckIcon } from "@/components/icons/check-icon";
 import { ShieldIcon } from "@/components/icons/shield-icon";
@@ -168,23 +169,26 @@ export function CartDrawer() {
 
           {/* Action buttons */}
           <div className="flex flex-col gap-4 sm:flex-row">
-            <button
-              type="button"
+            <Button
+              variant="ghost"
+              size="pill"
               onClick={close}
-              className="bg-grey-100 text-grey-950 flex flex-1 items-center justify-center rounded-full px-6 py-3 text-base transition-opacity hover:opacity-80"
+              className="bg-grey-100 text-grey-950 hover:bg-grey-100 flex-1 hover:opacity-80"
             >
               Continue shopping
-            </button>
-            <button
-              type="button"
-              className="bg-primary-900 flex flex-1 items-center justify-between rounded-full px-8 py-3 transition-opacity hover:opacity-90"
-            >
-              <span className="text-secondary-25 flex items-center gap-1 font-medium">
-                <ShieldIcon className="size-4 shrink-0" />
-                Checkout
-              </span>
-              <span className="text-secondary-25 font-semibold">{total}</span>
-            </button>
+            </Button>
+            <Button
+              variant="primary"
+              size="pill"
+              startIcon={
+                <span className="flex items-center gap-1 font-medium">
+                  <ShieldIcon className="size-4 shrink-0" />
+                  Checkout
+                </span>
+              }
+              endIcon={<span className="font-semibold">{total}</span>}
+              className="text-secondary-25 flex-1 justify-between gap-0 px-8"
+            />
           </div>
         </div>
       </SheetContent>

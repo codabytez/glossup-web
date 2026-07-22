@@ -53,7 +53,7 @@ function FlyingItem({ item }: { item: FlyItem }) {
       }}
       className="bg-grey-50 overflow-hidden rounded-full"
     >
-      <Image src={item.image} alt="" fill className="object-contain" />
+      <Image src={item.image} alt="Flying item" fill className="object-contain" />
     </motion.div>
   );
 }

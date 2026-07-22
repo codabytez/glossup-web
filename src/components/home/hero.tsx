@@ -61,7 +61,7 @@ export function Hero() {
         >
           <Image
             src="/hero/hero-bg.png"
-            alt=""
+            alt="Gloss Up hero background"
             fill
             priority
             sizes="100vw"
@@ -110,7 +110,13 @@ export function Hero() {
             </div>
 
             <motion.div variants={itemVariants} className="flex items-center gap-2">
-              <Image src="/hero/lab-tested-icon.svg" alt="" width={40} height={40} unoptimized />
+              <Image
+                src="/hero/lab-tested-icon.svg"
+                alt="Lab-tested icon"
+                width={40}
+                height={40}
+                unoptimized
+              />
               <div className="flex flex-col justify-center">
                 <span className="text-sm font-semibold text-white">100%</span>
                 <span className="text-xs text-white/90">Lab&#8209;tested formulas</span>
@@ -123,10 +129,10 @@ export function Hero() {
               <div className="h-px flex-1 bg-white/40" />
               <div className="flex items-center gap-2">
                 <button type="button" aria-label="Previous product" onClick={showPrev}>
-                  <Image src="/hero/arrow-prev.svg" alt="" width={24} height={24} />
+                  <Image src="/hero/arrow-prev.svg" alt="Previous product" width={24} height={24} />
                 </button>
                 <button type="button" aria-label="Next product" onClick={showNext}>
-                  <Image src="/hero/arrow-next.svg" alt="" width={24} height={24} />
+                  <Image src="/hero/arrow-next.svg" alt="Next product" width={24} height={24} />
                 </button>
               </div>
             </div>
@@ -157,7 +163,7 @@ export function Hero() {
                 </div>
                 <div className="flex items-center gap-0.5">
                   <span className="text-grey-950 text-sm font-medium">View</span>
-                  <Image src="/hero/arrow-right-2.svg" alt="" width={12} height={12} />
+                  <Image src="/hero/arrow-right-2.svg" alt="View product" width={12} height={12} />
                 </div>
               </div>
             </motion.div>
