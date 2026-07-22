@@ -47,7 +47,7 @@ const FAQS = [
   {
     q: "Are your products suitable for all skin types?",
     a: "Yes! The Wash is formulated to be gentle enough for all skin types, including sensitive skin. Its blend of natural moisturizers and botanical extracts nourishes without causing irritation.",
-    defaultOpen: true,
+    defaultOpen: false,
   },
   {
     q: "What ingredients are in your formulas?",
@@ -68,7 +68,7 @@ interface FeatureSectionProps {
   defaultOpen?: boolean;
 }
 
-function FeatureSection({ title, icon, children, defaultOpen = true }: FeatureSectionProps) {
+function FeatureSection({ title, icon, children, defaultOpen = false }: FeatureSectionProps) {
   const [open, setOpen] = useState(defaultOpen);
 
   return (
@@ -228,7 +228,7 @@ const QuestionIcon = () => (
 );
 
 export function ProductFeatures() {
-  const [showAllIngredients, setShowAllIngredients] = useState(true);
+  const [showAllIngredients, setShowAllIngredients] = useState(false);
 
   return (
     <div className="flex flex-col gap-8">

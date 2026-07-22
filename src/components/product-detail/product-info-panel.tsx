@@ -44,7 +44,7 @@ export function ProductInfoPanel({
   const { addItem, open } = useCartStore();
 
   return (
-    <div className="mx-auto flex w-full max-w-100 flex-col gap-14">
+    <div className="mx-auto flex w-full max-w-100 flex-col gap-14 2xl:w-100">
       {/* Product specs */}
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
@@ -135,7 +135,7 @@ export function ProductInfoPanel({
           <QuantityStepper value={quantity} onChange={setQuantity} className="w-fit" />
           <AddToBagButton
             price={price}
-            fillColor="primary"
+            fillColor="secondary"
             className="border-grey-800 w-full rounded-[1px] border px-6 py-3.5 sm:flex-1"
             onClick={() => {
               addItem({ slug, name, image, price, originalPrice, size: selectedSize });

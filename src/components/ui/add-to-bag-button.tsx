@@ -31,7 +31,7 @@ const AddToBagButton = forwardRef<HTMLButtonElement, AddToBagButtonProps>(functi
       />
       <span
         className={cn(
-          "text-body-base relative font-normal whitespace-nowrap transition-colors duration-300",
+          "text-body-base relative min-w-px flex-1 font-normal whitespace-nowrap transition-colors duration-300",
           fillColor === "primary" && "group-hover/add-bag:text-white",
           "text-grey-900",
         )}
