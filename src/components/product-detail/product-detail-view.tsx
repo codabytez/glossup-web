@@ -292,7 +292,7 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
               <QuantityStepper value={quantity} onChange={setQuantity} />
               <AddToBagButton
                 price={product.price}
-                fillColor="primary"
+                fillColor="secondary"
                 className="border-grey-800 flex-1 rounded-[1px] border px-5 py-3 sm:px-6"
                 onClick={handleAddToCart}
               />
