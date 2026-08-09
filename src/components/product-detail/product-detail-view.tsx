@@ -5,13 +5,9 @@ import Image from "next/image";
 import { motion } from "motion/react";
 
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import {
-  ProductImageGallery,
-  GALLERY_IMAGES,
-} from "@/components/product-detail/product-image-gallery";
+import { ProductImageGallery } from "@/components/product-detail/product-image-gallery";
 import { ProductInfoPanel } from "@/components/product-detail/product-info-panel";
 import { ProductFeatures } from "@/components/product-detail/product-features";
-import { RelatedProducts } from "@/components/product-detail/related-products";
 import { ProductReviews } from "@/components/product-detail/product-reviews";
 import { ProductImageLightbox } from "@/components/product-detail/product-image-lightbox";
 import { AddToBagButton } from "@/components/ui/add-to-bag-button";
@@ -23,13 +19,14 @@ import { ShareIcon } from "@/components/icons/share-icon";
 import { ShareModal } from "@/components/product-detail/share-modal";
 import { StarRating } from "@/components/product/star-rating";
 import { TRANSITION } from "@/lib/motion";
-import { useCartStore } from "@/store/cart-store";
+import { useAddToCart } from "@/hooks/use-cart";
+import { useSession } from "@/hooks/use-session";
+import { useToggleWishlist, useWishlist } from "@/hooks/use-wishlist";
 import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
-import products from "@/data/products.json";
-import SIZES from "@/data/product-sizes.json";
 
 interface ProductDetailViewProps {
-  slug: string;
+  product: ProductDetail;
+  relatedProducts: React.ReactNode;
 }
 
 const container = {
@@ -43,25 +40,23 @@ const item = {
 };
 
 interface MobileImageCarouselProps {
-  image: string;
+  images: string[];
   name: string;
   isSaved: boolean;
-  onSavedChange: (saved: boolean) => void;
+  onToggleSaved: () => void;
   onShare: () => void;
 }
 
 function MobileImageCarousel({
-  image,
+  images,
   name,
   isSaved,
-  onSavedChange,
+  onToggleSaved,
   onShare,
 }: MobileImageCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  const images = [image, ...GALLERY_IMAGES.filter((img) => img !== image)].slice(0, 6);
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -124,7 +119,7 @@ function MobileImageCarousel({
             type="button"
             aria-label={isSaved ? "Remove from wishlist" : "Save to wishlist"}
             aria-pressed={isSaved}
-            onClick={() => onSavedChange(!isSaved)}
+            onClick={onToggleSaved}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             className="text-grey-700 flex items-center justify-center rounded-full border-[0.5px] border-white bg-white p-2 backdrop-blur-[1px]"
@@ -154,18 +149,25 @@ function MobileImageCarousel({
   );
 }
 
-export function ProductDetailView({ slug }: ProductDetailViewProps) {
-  const product = products.find((p) => p.slug === slug) ?? products[0];
-  const [selectedSize, setSelectedSize] = useState(SIZES[2]);
+export function ProductDetailView({ product, relatedProducts }: ProductDetailViewProps) {
+  const [selectedVariant, setSelectedVariant] = useState(
+    product.variants[2] ?? product.variants[0],
+  );
   const [quantity, setQuantity] = useState(1);
-  const [isSaved, setIsSaved] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const { addItem, open } = useCartStore();
+  const addToCart = useAddToCart();
+  const { data: session } = useSession();
+  const { data: wishlistHandles = [] } = useWishlist();
+  const toggleWishlist = useToggleWishlist();
   const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+  const isSaved = wishlistHandles.includes(product.slug);
 
-  const toggleSaved = (next: boolean) => {
-    if (next) triggerSignInPrompt();
-    setIsSaved(next);
+  const toggleSaved = () => {
+    if (!session) {
+      triggerSignInPrompt();
+      return;
+    }
+    toggleWishlist.mutate(product.slug);
   };
 
   const breadcrumbItems = [
@@ -175,17 +177,12 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
   ];
 
   const handleAddToCart = () => {
-    addItem({
-      slug,
-      name: product.name,
-      image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
-      size: selectedSize,
-      sizes: SIZES,
-      quantity,
-    });
-    open();
+    addToCart.mutate({ variantId: selectedVariant.id, quantity });
+  };
+
+  const handleBuyNow = async () => {
+    const cart = await addToCart.mutateAsync({ variantId: selectedVariant.id, quantity });
+    if (cart) window.location.href = cart.checkoutUrl;
   };
 
   return (
@@ -201,10 +198,10 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
 
             {/* Swipeable image carousel */}
             <MobileImageCarousel
-              image={product.image}
+              images={product.images}
               name={product.name}
               isSaved={isSaved}
-              onSavedChange={toggleSaved}
+              onToggleSaved={toggleSaved}
               onShare={() => setShareOpen(true)}
             />
 
@@ -215,10 +212,10 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
               {/* Price + Rating on same row */}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-baseline gap-2">
-                  <p className="text-grey-950 text-2xl font-semibold">{product.price}</p>
-                  {product.originalPrice && (
+                  <p className="text-grey-950 text-2xl font-semibold">{selectedVariant.price}</p>
+                  {selectedVariant.compareAtPrice && (
                     <p className="text-grey-500 text-sm font-normal line-through">
-                      {product.originalPrice}
+                      {selectedVariant.compareAtPrice}
                     </p>
                   )}
                 </div>
@@ -231,17 +228,17 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-2 text-sm">
                   <span className="text-grey-950">Size</span>
-                  <span className="text-grey-400">• {selectedSize}</span>
+                  <span className="text-grey-400">• {selectedVariant.size}</span>
                 </div>
                 <div className="flex flex-wrap gap-3">
-                  {SIZES.map((size) => (
+                  {product.variants.map((variant) => (
                     <Badge
-                      key={size}
-                      render={<button type="button" onClick={() => setSelectedSize(size)} />}
-                      variant={selectedSize === size ? "filter-active" : "filter"}
+                      key={variant.id}
+                      render={<button type="button" onClick={() => setSelectedVariant(variant)} />}
+                      variant={selectedVariant.id === variant.id ? "filter-active" : "filter"}
                       className="py-2"
                     >
-                      {size}
+                      {variant.size}
                     </Badge>
                   ))}
                 </div>
@@ -249,7 +246,7 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
 
               <div className="bg-grey-100 h-px" />
 
-              <ProductFeatures />
+              <ProductFeatures {...product.features} />
             </div>
           </div>
         </div>
@@ -268,19 +265,18 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
 
             <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:mt-10 lg:grid-cols-2 lg:gap-8">
               <motion.div variants={item}>
-                <ProductImageGallery image={product.image} name={product.name} />
+                <ProductImageGallery images={product.images} name={product.name} />
               </motion.div>
 
               <motion.div variants={item} className="lg:sticky lg:top-28 lg:self-start">
                 <ProductInfoPanel
                   slug={product.slug}
                   name={product.name}
-                  image={product.image}
                   description={product.description}
-                  price={product.price}
-                  originalPrice={product.originalPrice}
                   rating={product.rating}
                   reviewCount={product.reviewCount}
+                  features={product.features}
+                  variants={product.variants}
                   onShare={() => setShareOpen(true)}
                 />
               </motion.div>
@@ -288,7 +284,7 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
           </div>
         </motion.div>
 
-        <RelatedProducts currentSlug={slug} />
+        {relatedProducts}
         <ProductReviews />
 
         {/* ── Mobile sticky CTA ── */}
@@ -297,13 +293,13 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
             <div className="flex gap-4">
               <QuantityStepper value={quantity} onChange={setQuantity} />
               <AddToBagButton
-                price={product.price}
+                price={selectedVariant.price}
                 fillColor="secondary"
                 className="border-grey-800 flex-1 rounded-[1px] border px-5 py-3 sm:px-6"
                 onClick={handleAddToCart}
               />
             </div>
-            <Button variant="primary" size="pill" className="w-full" onClick={handleAddToCart}>
+            <Button variant="primary" size="pill" className="w-full" onClick={handleBuyNow}>
               Buy now
             </Button>
           </div>

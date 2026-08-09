@@ -1,14 +1,16 @@
 import { ProductCarousel } from "@/components/product/product-carousel";
-import products from "@/data/products.json";
+import { getProducts } from "@/queries/products";
 
 const HOME_PRODUCT_COUNT = 8;
 
-export function TopEssentials() {
+export async function TopEssentials() {
+  const products = await getProducts(HOME_PRODUCT_COUNT);
+
   return (
     <ProductCarousel
       title="Top essentials"
       badge={{ icon: "/icons/trophy.svg", label: "Featured" }}
-      products={products.slice(0, HOME_PRODUCT_COUNT)}
+      products={products}
       ctaLabel="View all products"
       ctaHref="/products"
     />

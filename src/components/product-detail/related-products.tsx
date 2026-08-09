@@ -1,12 +1,19 @@
 import { ProductCarousel } from "@/components/product/product-carousel";
-import products from "@/data/products.json";
+import { getProducts } from "@/queries/products";
 
 interface RelatedProductsProps {
   currentSlug: string;
+  currentCategories: string[];
 }
 
-export function RelatedProducts({ currentSlug }: RelatedProductsProps) {
-  const related = (products as Product[]).filter((p) => p.slug !== currentSlug).slice(0, 10);
+export async function RelatedProducts({ currentSlug, currentCategories }: RelatedProductsProps) {
+  const products = await getProducts();
+  const others = products.filter((p) => p.slug !== currentSlug);
+  const sameCategory = others.filter((p) =>
+    (p.categories ?? []).some((c) => currentCategories.includes(c)),
+  );
+  const rest = others.filter((p) => !sameCategory.includes(p));
+  const related = [...sameCategory, ...rest].slice(0, 10);
 
   return (
     <ProductCarousel

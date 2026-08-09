@@ -5,20 +5,29 @@ import { Eye, EyeOff } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { WordmarkLogo } from "@/components/icons/wordmark";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import reviews from "@/data/reviews.json";
+import { useLogIn, useSignUp } from "@/hooks/use-session";
 import { TRANSITION } from "@/lib/motion";
 
 const TESTIMONIAL_INTERVAL_MS = 5500;
 
 export function SignUpView() {
+  const router = useRouter();
   const [mode, setMode] = useState<"sign-up" | "log-in">("sign-up");
   const [showPassword, setShowPassword] = useState(false);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const testimonial = reviews[testimonialIndex];
+  const signUp = useSignUp();
+  const logIn = useLogIn();
+  const pending = signUp.isPending || logIn.isPending;
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,6 +35,21 @@ export function SignUpView() {
     }, TESTIMONIAL_INTERVAL_MS);
     return () => clearInterval(interval);
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMessage(null);
+    const result =
+      mode === "sign-up"
+        ? await signUp.mutateAsync({ email, password })
+        : await logIn.mutateAsync({ email, password });
+    if (result.success) {
+      router.refresh();
+      router.push("/account");
+    } else {
+      setErrorMessage(result.errors[0]?.message ?? "Something went wrong. Please try again.");
+    }
+  };
 
   const inputClassName =
     "border-grey-100 bg-[#fcfcfc] h-12 rounded-[1px] px-4 text-sm placeholder:text-grey-500";
@@ -60,11 +84,13 @@ export function SignUpView() {
               </p>
             </div>
 
-            <form onSubmit={(e) => e.preventDefault()} className="flex w-full flex-col gap-8">
+            <form onSubmit={handleSubmit} className="flex w-full flex-col gap-8">
               <div className="flex flex-col gap-2">
                 <Input
                   type="email"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Email address"
                   className={inputClassName}
                 />
@@ -73,6 +99,8 @@ export function SignUpView() {
                     type={showPassword ? "text" : "password"}
                     required
                     minLength={8}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder={mode === "sign-up" ? "Create password" : "Password"}
                     className={`${inputClassName} pr-10`}
                   />
@@ -87,9 +115,21 @@ export function SignUpView() {
                 </div>
               </div>
 
+              {errorMessage && (
+                <p className="text-sm font-medium text-red-600" role="alert">
+                  {errorMessage}
+                </p>
+              )}
+
               <div className="flex flex-col items-center gap-6">
-                <Button type="submit" variant="primary" size="pill" className="w-full">
-                  {mode === "sign-up" ? "Sign Up" : "Log In"}
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="pill"
+                  className="w-full"
+                  disabled={pending}
+                >
+                  {pending ? "Please wait…" : mode === "sign-up" ? "Sign Up" : "Log In"}
                 </Button>
 
                 {mode === "log-in" && (

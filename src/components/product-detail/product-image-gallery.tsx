@@ -6,24 +6,15 @@ import { motion, AnimatePresence } from "motion/react";
 
 import { ProductImageLightbox } from "@/components/product-detail/product-image-lightbox";
 
-export const GALLERY_IMAGES = [
-  "/products/the-wash.png",
-  "/products/the-scrub.png",
-  "/products/the-cream.png",
-  "/products/hand-cream.png",
-  "/products/gallery-5.png",
-  "/products/gallery-6.png",
-];
-
 interface ProductImageGalleryProps {
-  image: string;
+  images: string[];
   name: string;
 }
 
-export function ProductImageGallery({ image, name }: ProductImageGalleryProps) {
+export function ProductImageGallery({ images, name }: ProductImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  const thumbnails = [image, ...GALLERY_IMAGES.filter((img) => img !== image)].slice(0, 6);
+  const thumbnails = images;
 
   return (
     <>

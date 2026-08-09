@@ -18,13 +18,13 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/comp
 import { XIcon } from "lucide-react";
 import { gridContainer, gridItem } from "@/lib/motion";
 import { DEFAULT_PRODUCT_FILTERS, filterProducts } from "@/lib/product-filters";
-import categories from "@/data/categories.json";
-import products from "@/data/products.json";
 
 const PRODUCTS_PER_PAGE = 21;
 
 interface CollectionDetailViewProps {
   slug: string;
+  products: Product[];
+  categories: Category[];
 }
 
 function slugToLabel(slug: string) {
@@ -34,7 +34,7 @@ function slugToLabel(slug: string) {
     .join(" ");
 }
 
-export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
+export function CollectionDetailView({ slug, products, categories }: CollectionDetailViewProps) {
   const [filters, setFilters] = useState(DEFAULT_PRODUCT_FILTERS);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -49,7 +49,7 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
   ];
 
   const collectionProducts = filterProducts(
-    products.filter((p) => p.category === slug),
+    products.filter((p) => (p.categories ?? []).includes(slug)),
     filters,
   );
   const totalPages = Math.ceil(collectionProducts.length / PRODUCTS_PER_PAGE);
@@ -115,7 +115,13 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
                 </SheetClose>
               </SheetHeader>
               <div className="flex-1 scrollbar-none overflow-y-auto px-6 py-6">
-                <FilterSidebar filters={filters} onFiltersChange={updateFilters} hideCategory />
+                <FilterSidebar
+                  filters={filters}
+                  onFiltersChange={updateFilters}
+                  products={products}
+                  categories={categories}
+                  hideCategory
+                />
               </div>
             </SheetContent>
           </Sheet>
@@ -125,7 +131,13 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
             <aside
               className={`hidden w-74 shrink-0 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:scrollbar-none lg:overflow-x-hidden lg:overflow-y-auto ${sidebarOpen ? "lg:block" : "lg:hidden"}`}
             >
-              <FilterSidebar filters={filters} onFiltersChange={updateFilters} hideCategory />
+              <FilterSidebar
+                filters={filters}
+                onFiltersChange={updateFilters}
+                products={products}
+                categories={categories}
+                hideCategory
+              />
             </aside>
 
             {/* Product grid */}
