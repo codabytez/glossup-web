@@ -1,4 +1,4 @@
-export function BagIcon({ className }: { className?: string }) {
+export function BagIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 19.4951 21" fill="none" aria-hidden className={className}>
       <path
