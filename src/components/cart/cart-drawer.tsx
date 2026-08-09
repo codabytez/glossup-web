@@ -5,8 +5,7 @@ import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { Dropdown } from "@/components/ui/dropdown";
-import { CheckIcon } from "@/components/icons/check-icon";
-import { ShieldIcon } from "@/components/icons/shield-icon";
+import { BagIcon } from "@/components/icons/bag-icon";
 import { UserIcon } from "@/components/icons/user-icon";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
@@ -103,9 +102,49 @@ function CartItemRow({ item }: { item: CartItem }) {
   );
 }
 
+function EmptyCart() {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-18 px-4 py-12 sm:px-8">
+      <Image
+        src="/cart/empty-bag.svg"
+        alt=""
+        width={302}
+        height={240}
+        className="h-auto w-full max-w-75.5"
+      />
+
+      <div className="flex w-full max-w-100 flex-col items-center gap-8">
+        <div className="flex flex-col items-center gap-2 text-center">
+          <p className="text-grey-950 text-header-h2 font-medium">Your bag is empty</p>
+          <p className="text-body-large leading-6 font-normal text-[#343332]">
+            Browse our collection and add items to your bag
+          </p>
+        </div>
+
+        <div className="flex w-full flex-col gap-4 sm:flex-row">
+          <Button
+            href="/account"
+            variant="ghost"
+            size="pill"
+            fillOnHover
+            fillVariant="secondary"
+            className="bg-grey-100 w-full font-normal sm:flex-1"
+          >
+            Sign In
+          </Button>
+          <Button href="/products" variant="primary" size="pill" className="w-full sm:flex-1">
+            Browse products
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function CartDrawer() {
   const { items, isOpen, close } = useCartStore();
   const total = formatCartTotal(items);
+  const isEmpty = items.length === 0;
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && close()}>
@@ -118,8 +157,10 @@ export function CartDrawer() {
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between px-4 pt-6 pb-4 sm:px-8 sm:pt-8 sm:pb-6">
           <div className="flex items-center gap-2">
-            <CheckIcon className="size-6" />
-            <h2 className="text-header-h2 text-grey-950 font-normal">Added to bag</h2>
+            <BagIcon className="text-grey-950 size-5" />
+            <h2 className="text-header-h2 text-grey-950 font-normal">
+              Your bag{items.length > 0 ? ` (${items.length})` : ""}
+            </h2>
           </div>
           <SheetClose
             render={
@@ -141,56 +182,66 @@ export function CartDrawer() {
           </SheetClose>
         </div>
 
-        {/* Items */}
-        <div className="flex-1 overflow-y-auto px-4 sm:px-8">
-          {items.length === 0 ? (
-            <p className="text-grey-400 py-12 text-center text-sm">Your bag is empty.</p>
-          ) : (
-            <div className="divide-grey-100 divide-y">
-              {items.map((item) => (
-                <CartItemRow key={`${item.slug}-${item.size}`} item={item} />
-              ))}
+        {isEmpty ? (
+          <EmptyCart />
+        ) : (
+          <>
+            {/* Items */}
+            <div className="flex-1 overflow-y-auto px-4 sm:px-8">
+              <div className="divide-grey-100 divide-y">
+                {items.map((item) => (
+                  <CartItemRow key={`${item.slug}-${item.size}`} item={item} />
+                ))}
+              </div>
             </div>
-          )}
-        </div>
 
-        {/* Footer */}
-        <div className="flex shrink-0 flex-col gap-6 px-4 pt-4 pb-6 sm:px-8 sm:pt-6 sm:pb-8">
-          {/* Sign in prompt */}
-          <div className="flex items-center justify-center gap-2">
-            <UserIcon className="text-grey-600 size-5 shrink-0" />
-            <p className="text-body-base">
-              <Link href="/account" className="text-grey-950 font-medium hover:underline">
-                Sign In • Create account
-              </Link>
-              <span className="text-grey-600 font-normal"> to check out quickly</span>
-            </p>
-          </div>
+            {/* Footer */}
+            <div className="flex shrink-0 flex-col gap-6 px-4 pt-4 pb-6 sm:px-8 sm:pt-6 sm:pb-8">
+              {/* Sign in prompt */}
+              <div className="flex items-center justify-center gap-2">
+                <UserIcon className="text-grey-600 size-5 shrink-0" />
+                <p className="text-body-base">
+                  <Link href="/account" className="text-grey-950 font-medium hover:underline">
+                    Sign In • Create account
+                  </Link>
+                  <span className="text-grey-600 font-normal"> to check out quickly</span>
+                </p>
+              </div>
 
-          {/* Action buttons */}
-          <div className="flex flex-col gap-4 sm:flex-row">
-            <Button
-              variant="ghost"
-              size="pill"
-              onClick={close}
-              className="bg-grey-100 text-grey-950 hover:bg-grey-100 flex-1 hover:opacity-80"
-            >
-              Continue shopping
-            </Button>
-            <Button
-              variant="primary"
-              size="pill"
-              startIcon={
-                <span className="flex items-center gap-1 font-medium">
-                  <ShieldIcon className="size-4 shrink-0" />
-                  Checkout
-                </span>
-              }
-              endIcon={<span className="font-semibold">{total}</span>}
-              className="text-secondary-25 flex-1 justify-between gap-0 px-8"
-            />
-          </div>
-        </div>
+              {/* Action buttons */}
+              <div className="flex flex-col gap-4 sm:flex-row">
+                <Button
+                  variant="ghost"
+                  size="pill"
+                  fillOnHover
+                  fillVariant="secondary"
+                  onClick={close}
+                  className="bg-grey-100 text-grey-950 flex-1"
+                >
+                  Continue shopping
+                </Button>
+                <Button
+                  variant="primary"
+                  size="pill"
+                  startIcon={
+                    <span className="flex items-center gap-1 font-medium">
+                      <Image
+                        src="/icons/shield.svg"
+                        alt=""
+                        width={16}
+                        height={16}
+                        className="shrink-0"
+                      />
+                      Checkout
+                    </span>
+                  }
+                  endIcon={<span className="font-semibold">{total}</span>}
+                  className="text-secondary-25 flex-1 justify-between gap-0 px-8"
+                />
+              </div>
+            </div>
+          </>
+        )}
       </SheetContent>
     </Sheet>
   );
