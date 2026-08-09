@@ -1,4 +1,4 @@
-export function StarIcon({ className }: { className?: string }) {
+export function StarIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 8 8" fill="none" className={className} aria-hidden>
       <path

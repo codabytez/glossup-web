@@ -1,6 +1,7 @@
 interface Review {
-  quote: string;
-  author: string;
-  image: string;
-  cornerImage: string;
+  name: string;
+  initials: string;
+  rating: number;
+  date: string;
+  text: string;
 }

@@ -457,12 +457,14 @@ SHOPIFY_ADMIN_API_KEY=your-admin-api-key-here
 SHOPIFY_ADMIN_API_VERSION=2026-04
 
 # Fez Delivery API (server-only — never expose to browser)
-FEZ_API_KEY=your-fez-api-key-here
+FEZ_SECRET_KEY=your-fez-secret-key-here
+FEZ_USER_ID=your-fez-user-id-here
+FEZ_PASSWORD=your-fez-password-here
 FEZ_API_BASE_URL=https://apisandbox.fezdelivery.co/v1
 FEZ_WEBHOOK_SECRET=your-fez-webhook-secret-here
 ```
 
-> `NEXT_PUBLIC_*` variables are safe to expose to the browser. The Admin API key, Fez API key, and webhook secrets must never be used in client-side code. Replace `FEZ_API_BASE_URL` with the production URL once Fez approves your business account.
+> `NEXT_PUBLIC_*` variables are safe to expose to the browser. Shopify Admin API keys and all Fez credentials must never be used in client-side code. Replace `FEZ_API_BASE_URL` with the production URL once Fez approves your business account.
 
 ---
 
@@ -491,12 +493,38 @@ Services relevant to GlossUp: local doorstep delivery, real-time tracking, same-
 
 ## 13. Fez — Account Setup
 
+### Sandbox (development)
+
+Contact Fez directly (see Section 12) to request a sandbox account. They will provide:
+
+- A **User ID**
+- A **password** for the sandbox account
+- A **secret-key** (org identifier) — visible in the sandbox dashboard under **Developers → Manage Keys**
+
+Store all three in `.env.local` as `FEZ_USER_ID`, `FEZ_PASSWORD`, and `FEZ_SECRET_KEY` (see Section 11).
+
+### Production
+
 1. Register a business account at [businessportal.fezdelivery.co](https://businessportal.fezdelivery.co/)
 2. Complete onboarding and KYC
-3. Go to **Developers → Manage Keys** and generate your API key
-4. Store the key in `.env.local` (see Section 11)
+3. Get your `secret-key` from **Developers → Manage Keys**
+4. Your `user_id` and `password` are the credentials you log in with
+5. Replace `FEZ_API_BASE_URL` in `.env` with the production URL Fez provides after approval
 
-> During development use the sandbox base URL: `https://apisandbox.fezdelivery.co/v1`. Fez will provide the production URL after account approval.
+### How auth works
+
+Fez uses **2-step bearer token auth** — not a static API key. On every server start (and every ~3 hours), the app calls `POST /user/authenticate` with `user_id` + `password` + `secret-key` header to get a short-lived bearer token. This is handled automatically by `src/lib/fez/client.ts` — no manual token management needed.
+
+### Webhook registration
+
+After deploying, register your webhook URL once:
+
+```bash
+POST https://apisandbox.fezdelivery.co/v1/webhooks/store
+{ "webhook": "https://your-domain.com/api/fez/webhook" }
+```
+
+The sandbox is already registered to `https://glossup.vercel.app/api/fez/webhook`.
 
 ---
 
@@ -541,24 +569,30 @@ Team opens the order on the Admin Dashboard, clicks **Create Shipment**, enters 
 #### Step A — Create shipment on Fez
 
 ```json
-POST /v1/shipments
+POST /order
 
-{
-  "pickup_address": "store address",
-  "delivery_address": "customer delivery address from Shopify order",
-  "package_weight": 0.5,
-  "recipient_name": "customer name",
-  "recipient_phone": "customer phone",
-  "order_reference": "#1001"
-}
+[{
+  "uniqueID": "<shopify-order-id>",
+  "BatchID": "<shopify-order-id>",
+  "recipientName": "customer name",
+  "recipientPhone": "customer phone",
+  "recipientAddress": "customer delivery address",
+  "recipientState": "Lagos",
+  "valueOfItem": "15000",
+  "weight": 1,
+  "pickUpDate": "2026-07-30",
+  "itemDescription": "Cosmetics"
+}]
 
 Response:
 {
-  "tracking_number": "FEZ-XXXXXXXX",
-  "estimated_delivery": "2026-07-22",
-  "status": "shipment_created"
+  "status": "Success",
+  "description": "Order Successfully Created",
+  "orderNos": { "<shopify-order-id>": "JHAZ27012319" }
 }
 ```
+
+> `uniqueID` and `BatchID` are both set to the Shopify order ID. This lets us map the Fez order number (`JHAZ27012319`) back to the Shopify order. `pickUpDate` is set by the admin at dispatch time — Fez sends one rider to collect all orders scheduled for that date.
 
 #### Step B — Mark order as fulfilled on Shopify
 
@@ -566,9 +600,9 @@ Response:
 POST /admin/api/2026-04/orders/{id}/fulfillments.json
 
 {
-  "tracking_number": "FEZ-XXXXXXXX",
+  "tracking_number": "JHAZ27012319",
   "tracking_company": "Fez Delivery",
-  "tracking_url": "https://fezdelivery.co/track/FEZ-XXXXXXXX",
+  "tracking_url": "https://fezdelivery.co/track/JHAZ27012319",
   "notify_customer": true
 }
 ```
@@ -581,15 +615,13 @@ Order status is now: **Fulfilled**
 
 Fez dispatches a rider to collect from the store. The package moves through their network with status updates at each checkpoint.
 
-| Status             | Description                              |
-| ------------------ | ---------------------------------------- |
-| `shipment_created` | Shipment booked, awaiting pickup         |
-| `picked_up`        | Package collected from store             |
-| `in_transit`       | Package moving through Fez network       |
-| `at_hub`           | Package at a Fez sorting hub             |
-| `out_for_delivery` | Rider on the way to customer             |
-| `delivered`        | Package handed to customer               |
-| `failed_delivery`  | Delivery attempted, customer unavailable |
+| Status            | Description                        |
+| ----------------- | ---------------------------------- |
+| `Pending Pick-Up` | Shipment booked, awaiting pickup   |
+| `Picked-Up`       | Package collected from store       |
+| `Dispatched`      | Package moving through Fez network |
+| `Delivered`       | Package handed to customer         |
+| `Returned`        | Package returned to sender         |
 
 ### Stage 6 — Customer tracks their order
 
@@ -598,27 +630,22 @@ The customer can track via the link in the shipping email, or by going to `/trac
 Behind the scenes:
 
 1. Next.js server action receives order number + email
-2. Calls Shopify Admin API to fetch fulfillment details (including Fez tracking number)
-3. Calls Fez API: `GET /track/{tracking_number}`
-4. Returns: current status, checkpoints, estimated delivery
+2. Calls Shopify Admin API to fetch fulfillment details (including Fez order number)
+3. Calls Fez API: `GET /order/track/{orderNumber}`
+4. Returns: current status + full history timeline
 5. Renders a branded tracking timeline on the page
 
-Fallback: if Fez API is unavailable, show the last known Shopify fulfillment status and a direct link to `fezdelivery.co/track/{tracking_number}`.
+Fallback: if Fez API is unavailable, show the last known Shopify fulfillment status and a direct link to `fezdelivery.co/track/{orderNumber}`.
 
 ### Stage 7 — Delivery and auto-update
 
 When Fez delivers, they fire a webhook to `/api/fez/webhook`:
 
 ```json
-{
-  "event": "shipment.delivered",
-  "tracking_number": "FEZ-XXXXXXXX",
-  "delivered_at": "2026-07-22T14:30:00Z",
-  "recipient": "Customer Name"
-}
+{ "orderNumber": "JHAZ27012319", "status": "Delivered" }
 ```
 
-Your app receives this, validates the webhook signature, and logs the delivery on the Shopify order. No manual action from the team required.
+Your app receives this at `/api/fez/webhook`, verifies the HMAC-SHA256 signature using `FEZ_WEBHOOK_SECRET`, and updates the Shopify order accordingly. No manual action from the team required.
 
 ### Summary
 
@@ -641,48 +668,79 @@ Your app receives this, validates the webhook signature, and logs the delivery o
 
 ## 15. Fez API Reference
 
-### Authentication
+Base URL (sandbox): `https://apisandbox.fezdelivery.co/v1`
 
-All requests require the API key in the header:
+All requests require two headers:
 
 ```text
-Authorization: Bearer YOUR_FEZ_API_KEY
-Content-Type: application/json
+Authorization: Bearer <token>
+secret-key: <org-secret-key>
 ```
 
-### Endpoints
+The bearer token is obtained by calling the authenticate endpoint (2-step auth). The token expires after ~3 hours. In GlossUp, this is handled automatically by `src/lib/fez/client.ts` — it caches the token and refreshes it 60 seconds before expiry.
 
-| Method | Endpoint                   | Purpose                                    |
-| ------ | -------------------------- | ------------------------------------------ |
-| `POST` | `/shipments`               | Create a shipment, returns tracking number |
-| `GET`  | `/track/{tracking_number}` | Get live tracking status and checkpoints   |
+Full docs: [fez-delivery-co.gitbook.io/fezcorporate-api-docs](https://fez-delivery-co.gitbook.io/fezcorporate-api-docs)
 
-### Create Shipment — Response
+### Auth
+
+| Method | Endpoint               | Purpose                         | Hook / File             |
+| ------ | ---------------------- | ------------------------------- | ----------------------- |
+| `POST` | `/user/authenticate`   | Get bearer token (auto-managed) | `src/lib/fez/client.ts` |
+| `POST` | `/user/changePassword` | Change Fez account password     | `useChangePassword`     |
+
+### Orders
+
+| Method | Endpoint                         | Purpose                             | Hook                      |
+| ------ | -------------------------------- | ----------------------------------- | ------------------------- |
+| `POST` | `/order`                         | Create order(s) — body is array     | `useCreateOrder`          |
+| `GET`  | `/orders/{orderId}`              | Get a single order by ID            | `useOrders(orderId)`      |
+| `PUT`  | `/order`                         | Update order(s) — body is array     | `useUpdateOrder`          |
+| `POST` | `/order/cancel`                  | Cancel an order                     | `useCancelOrder`          |
+| `POST` | `/orders/search`                 | Search orders with filters + paging | `useSearchOrders`         |
+| `GET`  | `/order/track/{orderNumber}`     | Track order status + history        | `useTrackOrder(orderNo)`  |
+| `GET`  | `/orders/{orderNo}/manifest-url` | Get printable manifest PDF URL      | `useManifestUrl(orderNo)` |
+| `POST` | `/orders/statsWithDateRange`     | Order stats over a date range       | `useStatsWithDateRange`   |
+
+### Delivery
+
+| Method | Endpoint                  | Purpose                        | Hook                      |
+| ------ | ------------------------- | ------------------------------ | ------------------------- |
+| `POST` | `/order/cost`             | Calculate delivery cost        | `useDeliveryCost`         |
+| `POST` | `/delivery-time-estimate` | Estimated delivery time (ETA)  | `useDeliveryTimeEstimate` |
+| `GET`  | `/states`                 | List all 37 deliverable states | `useStates`               |
+
+### Key request/response notes
+
+**Create/Update order** — body must be an array even for a single order:
+
+```json
+[{ "recipientAddress": "...", "recipientState": "Lagos", ... }]
+```
+
+**Search orders** — paginated (max 50/page), supports filtering by status, date range, recipient, or agent:
+
+```json
+{ "startDate": "2026-01-01", "endDate": "2026-07-29", "page": 1, "orderStatus": "Delivered" }
+```
+
+**Track order** — returns current status + full history:
 
 ```json
 {
-  "tracking_number": "FEZ-12345678",
-  "estimated_delivery": "2026-07-22",
-  "status": "shipment_created"
+  "order": { "orderNo": "...", "orderStatus": "Delivered", ... },
+  "history": [{ "orderStatus": "Picked-Up", "statusCreationDate": "...", "statusDescription": "..." }]
 }
 ```
 
-### Track Shipment — Response
+**Delivery cost** — returns cost breakdown including VAT:
 
 ```json
 {
-  "tracking_number": "FEZ-12345678",
-  "status": "in_transit",
-  "estimated_delivery": "2026-07-22",
-  "checkpoints": [
-    { "status": "shipment_created", "timestamp": "2026-07-19T14:00:00Z", "location": "Lagos" },
-    { "status": "picked_up", "timestamp": "2026-07-20T10:30:00Z", "location": "Lagos" },
-    { "status": "in_transit", "timestamp": "2026-07-20T14:00:00Z", "location": "Ibadan" }
-  ]
+  "cost": { "state": "Lagos", "cost": 1500 },
+  "vat": { "vatAmount": 112.5, "vatPercent": "7.5%" },
+  "totalCost": 1612.5
 }
 ```
-
-> The exact request/response shapes above are based on the designed fulfillment flow. Confirm field names against the full Fez API docs during onboarding — available at: [fez-delivery-co.gitbook.io/fezcorporate-api-docs](https://fez-delivery-co.gitbook.io/fezcorporate-api-docs)
 
 ---
 

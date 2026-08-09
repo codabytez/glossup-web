@@ -3,13 +3,13 @@ import { CategoryPill } from "@/components/shop/category-pill";
 
 interface ShopHeaderProps {
   categories: Category[];
-  activeCategory?: string;
-  onCategoryChange?: (slug: string) => void;
+  activeCategories: string[];
+  onCategoryToggle: (slug: string) => void;
 }
 
 const breadcrumbItems = [{ label: "Home", href: "/" }, { label: "Shop" }];
 
-export function ShopHeader({ categories, activeCategory, onCategoryChange }: ShopHeaderProps) {
+export function ShopHeader({ categories, activeCategories, onCategoryToggle }: ShopHeaderProps) {
   return (
     <div className="px-4 pt-6 sm:px-8 sm:pt-10 lg:px-10 lg:pt-8 xl:px-20">
       <div className="flex flex-col gap-6 lg:gap-8 2xl:mx-auto 2xl:max-w-384">
@@ -28,8 +28,8 @@ export function ShopHeader({ categories, activeCategory, onCategoryChange }: Sho
                 label={category.name}
                 count={category.count}
                 image={category.image}
-                active={activeCategory === category.slug}
-                onClick={() => onCategoryChange?.(category.slug)}
+                active={activeCategories.includes(category.slug)}
+                onClick={() => onCategoryToggle(category.slug)}
               />
             ))}
           </div>

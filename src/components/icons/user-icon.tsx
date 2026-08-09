@@ -1,4 +1,4 @@
-export function UserIcon({ className }: { className?: string }) {
+export function UserIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 15.8794 19" fill="none" aria-hidden className={className}>
       <path

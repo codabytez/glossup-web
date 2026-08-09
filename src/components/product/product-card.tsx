@@ -7,6 +7,7 @@ import { useRef, useState } from "react";
 
 import { useFlyToCart } from "@/components/cart/fly-to-cart";
 import { useCartStore } from "@/store/cart-store";
+import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 import { HeartIcon } from "@/components/icons/heart-icon";
 import { StarRating } from "@/components/product/star-rating";
 import { AddToBagButton } from "@/components/ui/add-to-bag-button";
@@ -67,6 +68,13 @@ export function ProductCard({
   const desktopImageRef = useRef<HTMLDivElement>(null);
   const fly = useFlyToCart();
   const addItem = useCartStore((s) => s.addItem);
+  const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+
+  const toggleSaved = () =>
+    setIsSaved((prev) => {
+      if (!prev) triggerSignInPrompt();
+      return !prev;
+    });
 
   const handleAddToCart = () => {
     addItem({
@@ -155,7 +163,7 @@ export function ProductCard({
             variant="outline"
             aria-label={isSaved ? "Remove from wishlist" : "Save to wishlist"}
             aria-pressed={isSaved}
-            onClick={() => setIsSaved((prev) => !prev)}
+            onClick={toggleSaved}
             whileHover={{ scale: 1.15 }}
             whileTap={{ scale: 0.9 }}
             className="hover:bg-secondary-100 h-auto w-auto rounded-full! border-0 bg-white p-2 backdrop-blur-[1px]"

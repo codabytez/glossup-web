@@ -8,7 +8,8 @@
     "rating": 4.2,
     "reviewCount": "1.4k",
     "category": "skincare",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub",
@@ -19,7 +20,8 @@
     "rating": 4.5,
     "reviewCount": "980",
     "category": "skincare",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   },
   {
     "slug": "the-cream",
@@ -30,7 +32,8 @@
     "rating": 4.7,
     "reviewCount": "2.1k",
     "category": "skincare",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Hyaluronic Acid", "Retinol", "Peptides"]
   },
   {
     "slug": "gloss-up-hand-cream",
@@ -41,7 +44,8 @@
     "rating": 4.3,
     "reviewCount": "760",
     "category": "skincare",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Vitamin C", "Zinc Oxide", "Hyaluronic Acid"]
   },
   {
     "slug": "the-wash-2",
@@ -52,7 +56,8 @@
     "rating": 4.1,
     "reviewCount": "1.1k",
     "category": "skincare",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub-2",
@@ -63,7 +68,8 @@
     "rating": 4.6,
     "reviewCount": "830",
     "category": "body-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   },
   {
     "slug": "the-cream-2",
@@ -74,7 +80,8 @@
     "rating": 4.4,
     "reviewCount": "1.7k",
     "category": "body-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Hyaluronic Acid", "Retinol", "Peptides"]
   },
   {
     "slug": "gloss-up-hand-cream-2",
@@ -85,7 +92,8 @@
     "rating": 4.2,
     "reviewCount": "540",
     "category": "body-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Vitamin C", "Zinc Oxide", "Hyaluronic Acid"]
   },
   {
     "slug": "the-wash-3",
@@ -96,7 +104,8 @@
     "rating": 4.3,
     "reviewCount": "1.2k",
     "category": "body-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub-3",
@@ -104,10 +113,11 @@
     "description": "Exfoliating body scrub",
     "price": "₦22,900",
     "image": "/products/the-scrub.png",
-    "rating": 4.0,
+    "rating": 4,
     "reviewCount": "470",
     "category": "body-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   },
   {
     "slug": "the-cream-3",
@@ -118,7 +128,8 @@
     "rating": 4.8,
     "reviewCount": "3.2k",
     "category": "targeted-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Hyaluronic Acid", "Retinol", "Peptides"]
   },
   {
     "slug": "gloss-up-hand-cream-3",
@@ -129,7 +140,8 @@
     "rating": 4.5,
     "reviewCount": "690",
     "category": "targeted-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Vitamin C", "Zinc Oxide", "Hyaluronic Acid"]
   },
   {
     "slug": "the-wash-4",
@@ -140,7 +152,8 @@
     "rating": 4.2,
     "reviewCount": "900",
     "category": "targeted-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub-4",
@@ -151,7 +164,8 @@
     "rating": 4.4,
     "reviewCount": "1.0k",
     "category": "targeted-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   },
   {
     "slug": "the-cream-4",
@@ -162,7 +176,8 @@
     "rating": 4.6,
     "reviewCount": "1.5k",
     "category": "targeted-care",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Hyaluronic Acid", "Retinol", "Peptides"]
   },
   {
     "slug": "gloss-up-hand-cream-4",
@@ -173,7 +188,8 @@
     "rating": 4.1,
     "reviewCount": "320",
     "category": "soap",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Vitamin C", "Zinc Oxide", "Hyaluronic Acid"]
   },
   {
     "slug": "the-wash-5",
@@ -184,7 +200,8 @@
     "rating": 4.7,
     "reviewCount": "2.0k",
     "category": "soap",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub-5",
@@ -195,7 +212,8 @@
     "rating": 4.3,
     "reviewCount": "610",
     "category": "soap",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   },
   {
     "slug": "the-cream-5",
@@ -206,7 +224,8 @@
     "rating": 4.5,
     "reviewCount": "1.3k",
     "category": "soap",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Hyaluronic Acid", "Retinol", "Peptides"]
   },
   {
     "slug": "gloss-up-hand-cream-5",
@@ -217,7 +236,8 @@
     "rating": 4.2,
     "reviewCount": "410",
     "category": "soap",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Vitamin C", "Zinc Oxide", "Hyaluronic Acid"]
   },
   {
     "slug": "the-wash-6",
@@ -225,10 +245,11 @@
     "description": "Gentle & hydrating body wash",
     "price": "₦22,900",
     "image": "/products/the-wash.png",
-    "rating": 4.0,
+    "rating": 4,
     "reviewCount": "580",
     "category": "fragrance",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub-6",
@@ -239,7 +260,8 @@
     "rating": 4.6,
     "reviewCount": "1.6k",
     "category": "fragrance",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   },
   {
     "slug": "the-cream-6",
@@ -250,7 +272,8 @@
     "rating": 4.3,
     "reviewCount": "870",
     "category": "fragrance",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Hyaluronic Acid", "Retinol", "Peptides"]
   },
   {
     "slug": "gloss-up-hand-cream-6",
@@ -261,7 +284,8 @@
     "rating": 4.7,
     "reviewCount": "1.9k",
     "category": "fragrance",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Vitamin C", "Zinc Oxide", "Hyaluronic Acid"]
   },
   {
     "slug": "the-wash-7",
@@ -272,7 +296,8 @@
     "rating": 4.4,
     "reviewCount": "730",
     "category": "fragrance",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub-7",
@@ -283,7 +308,8 @@
     "rating": 4.1,
     "reviewCount": "390",
     "category": "essential-oils",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   },
   {
     "slug": "the-cream-7",
@@ -294,7 +320,8 @@
     "rating": 4.9,
     "reviewCount": "4.1k",
     "category": "essential-oils",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Hyaluronic Acid", "Retinol", "Peptides"]
   },
   {
     "slug": "gloss-up-hand-cream-7",
@@ -305,7 +332,8 @@
     "rating": 4.3,
     "reviewCount": "550",
     "category": "essential-oils",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Vitamin C", "Zinc Oxide", "Hyaluronic Acid"]
   },
   {
     "slug": "the-wash-8",
@@ -316,7 +344,8 @@
     "rating": 4.5,
     "reviewCount": "1.8k",
     "category": "essential-oils",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Niacinamide", "Tea Tree Oil", "Ceramides"]
   },
   {
     "slug": "the-scrub-8",
@@ -327,6 +356,7 @@
     "rating": 4.2,
     "reviewCount": "620",
     "category": "essential-oils",
-    "originalPrice": "₦54,300"
+    "originalPrice": "₦54,300",
+    "ingredients": ["Glycolic Acid", "Lactic Acid", "Salicylic Acid"]
   }
 ]
