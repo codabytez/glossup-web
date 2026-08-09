@@ -8,4 +8,5 @@ interface Product {
   rating: number;
   reviewCount: string;
   category?: string;
+  ingredients?: string[];
 }
