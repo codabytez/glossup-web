@@ -12,6 +12,7 @@ import { UserIcon } from "@/components/icons/user-icon";
 import { WordmarkLogo } from "@/components/icons/wordmark";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/store/cart-store";
+import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 import {
   Sheet,
   SheetClose,
@@ -33,6 +34,7 @@ export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const { toggle: toggleCart, items } = useCartStore();
+  const openSignInPrompt = useSignInPromptStore((s) => s.open);
   const [scrollY, setScrollY] = useState(0);
   const scrolled = !isHome || scrollY > 80;
 
@@ -154,13 +156,14 @@ export function Navbar() {
           >
             <SearchIcon className="size-5 shrink-0 sm:size-6" />
           </button>
-          <Link
-            href="/account"
+          <button
+            type="button"
             aria-label="Account"
+            onClick={openSignInPrompt}
             className="hover:text-primary-900 text-current transition-[color,transform] active:scale-90"
           >
             <UserIcon className="size-6 shrink-0" />
-          </Link>
+          </button>
           <button
             type="button"
             data-cart-icon

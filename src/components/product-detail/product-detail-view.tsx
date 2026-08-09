@@ -24,7 +24,9 @@ import { ShareModal } from "@/components/product-detail/share-modal";
 import { StarRating } from "@/components/product/star-rating";
 import { TRANSITION } from "@/lib/motion";
 import { useCartStore } from "@/store/cart-store";
+import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 import products from "@/data/products.json";
+import SIZES from "@/data/product-sizes.json";
 
 interface ProductDetailViewProps {
   slug: string;
@@ -39,8 +41,6 @@ const item = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: TRANSITION },
 };
-
-const SIZES = ["25ml", "50ml", "75ml"];
 
 interface MobileImageCarouselProps {
   image: string;
@@ -161,6 +161,12 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
   const [isSaved, setIsSaved] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const { addItem, open } = useCartStore();
+  const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+
+  const toggleSaved = (next: boolean) => {
+    if (next) triggerSignInPrompt();
+    setIsSaved(next);
+  };
 
   const breadcrumbItems = [
     { label: "Home", href: "/" },
@@ -198,7 +204,7 @@ export function ProductDetailView({ slug }: ProductDetailViewProps) {
               image={product.image}
               name={product.name}
               isSaved={isSaved}
-              onSavedChange={setIsSaved}
+              onSavedChange={toggleSaved}
               onShare={() => setShareOpen(true)}
             />
 

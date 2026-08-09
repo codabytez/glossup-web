@@ -1,11 +1,24 @@
+"use client";
+
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right-icon";
 import { Button } from "@/components/ui/button";
+import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 import { WordmarkLogo } from "../icons/wordmark";
 
+const POST_PURCHASE_PROMPT_DELAY_MS = 1500;
+
 export function CheckoutSuccessView() {
+  const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+
+  useEffect(() => {
+    const timer = setTimeout(triggerSignInPrompt, POST_PURCHASE_PROMPT_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [triggerSignInPrompt]);
+
   return (
     <div className="flex min-h-full flex-col">
       <nav className="border-grey-100 sticky top-0 z-50 border-b bg-white px-4 py-6 sm:px-8 lg:px-20">
