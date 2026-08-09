@@ -1,3 +1,4 @@
+import { Faqs } from "@/components/home/faqs";
 import { Hero } from "@/components/home/hero";
 import { Reviews } from "@/components/home/reviews";
 import { ShopByCategory } from "@/components/home/shop-by-category";
@@ -12,6 +13,7 @@ export function HomeView() {
       <ShopByCategory />
       <Testimonial />
       <Reviews />
+      <Faqs />
     </main>
   );
 }

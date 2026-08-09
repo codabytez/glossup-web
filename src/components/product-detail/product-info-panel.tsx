@@ -11,9 +11,9 @@ import { AddToBagButton } from "@/components/ui/add-to-bag-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
+import SIZES from "@/data/product-sizes.json";
 import { useCartStore } from "@/store/cart-store";
-
-const SIZES = ["25ml", "50ml", "75ml"];
+import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 
 interface ProductInfoPanelProps {
   slug: string;
@@ -42,6 +42,13 @@ export function ProductInfoPanel({
   const [quantity, setQuantity] = useState(2);
   const [isSaved, setIsSaved] = useState(false);
   const { addItem, open } = useCartStore();
+  const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+
+  const toggleSaved = () =>
+    setIsSaved((prev) => {
+      if (!prev) triggerSignInPrompt();
+      return !prev;
+    });
 
   return (
     <div className="mx-auto flex w-full max-w-100 flex-col gap-14 2xl:w-100">
@@ -68,7 +75,7 @@ export function ProductInfoPanel({
                 type="button"
                 aria-label={isSaved ? "Remove from wishlist" : "Save to wishlist"}
                 aria-pressed={isSaved}
-                onClick={() => setIsSaved((s) => !s)}
+                onClick={toggleSaved}
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
                 className="text-grey-700 hover:bg-secondary-100 hover:text-grey-950 rounded-full p-2 transition-colors"

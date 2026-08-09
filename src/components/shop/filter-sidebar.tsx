@@ -10,7 +10,18 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { PriceRangeSlider } from "@/components/shop/price-range-slider";
+import categories from "@/data/categories.json";
+import products from "@/data/products.json";
+import { DEFAULT_PRODUCT_FILTERS, type ProductFilters } from "@/lib/product-filters";
 import { cn } from "@/lib/utils";
+
+const CATEGORY_ITEMS = categories.map((c) => ({
+  slug: c.slug,
+  label: c.name,
+  count: products.filter((p) => p.category === c.slug).length,
+}));
+
+const INGREDIENT_PILLS = [...new Set(products.flatMap((p) => p.ingredients ?? []))].sort();
 
 interface FilterSectionProps {
   title: string;
@@ -113,28 +124,6 @@ function RatingItem({ stars, checked, onChange }: RatingItemProps) {
   );
 }
 
-const CATEGORY_ITEMS = [
-  { label: "Skincare", count: "45" },
-  { label: "Haircare", count: "30" },
-  { label: "Makeup", count: "60" },
-  { label: "Fragrance", count: "25" },
-  { label: "Body Care", count: "40" },
-  { label: "Essential oils", count: "20" },
-];
-
-const INGREDIENT_PILLS = [
-  "Hyaluronic Acid",
-  "Retinol",
-  "Vitamin C",
-  "Niacinamide",
-  "Salicylic Acid",
-  "Glycolic Acid",
-  "Peptides",
-  "Zinc Oxide",
-  "Tea Tree Oil",
-  "Ceramides",
-  "Lactic Acid",
-];
 const INGREDIENTS_PREVIEW = 8;
 
 interface IngredientsFilterProps {
@@ -175,42 +164,28 @@ function IngredientsFilter({ selected, onToggle }: IngredientsFilterProps) {
   );
 }
 
-interface FilterState {
-  categories: string[];
-  priceMin: number;
-  priceMax: number;
-  ingredients: string[];
-  rating: number | "all";
-}
-
 interface FilterSidebarProps {
+  filters: ProductFilters;
+  onFiltersChange: (filters: ProductFilters) => void;
   hideCategory?: boolean;
 }
 
-export function FilterSidebar({ hideCategory }: FilterSidebarProps) {
-  const [filters, setFilters] = useState<FilterState>({
-    categories: [],
-    priceMin: 0,
-    priceMax: 400250,
-    ingredients: [],
-    rating: "all",
-  });
-
-  const toggleCategory = (label: string) =>
-    setFilters((f) => ({
-      ...f,
-      categories: f.categories.includes(label)
-        ? f.categories.filter((c) => c !== label)
-        : [...f.categories, label],
-    }));
+export function FilterSidebar({ filters, onFiltersChange, hideCategory }: FilterSidebarProps) {
+  const toggleCategory = (slug: string) =>
+    onFiltersChange({
+      ...filters,
+      categories: filters.categories.includes(slug)
+        ? filters.categories.filter((c) => c !== slug)
+        : [...filters.categories, slug],
+    });
 
   const toggleIngredient = (label: string) =>
-    setFilters((f) => ({
-      ...f,
-      ingredients: f.ingredients.includes(label)
-        ? f.ingredients.filter((i) => i !== label)
-        : [...f.ingredients, label],
-    }));
+    onFiltersChange({
+      ...filters,
+      ingredients: filters.ingredients.includes(label)
+        ? filters.ingredients.filter((i) => i !== label)
+        : [...filters.ingredients, label],
+    });
 
   return (
     <div className="flex flex-col gap-8 pb-6">
@@ -220,11 +195,11 @@ export function FilterSidebar({ hideCategory }: FilterSidebarProps) {
             <div className="flex flex-col pl-4">
               {CATEGORY_ITEMS.map((item) => (
                 <CheckboxItem
-                  key={item.label}
+                  key={item.slug}
                   label={item.label}
                   count={item.count}
-                  checked={filters.categories.includes(item.label)}
-                  onChange={() => toggleCategory(item.label)}
+                  checked={filters.categories.includes(item.slug)}
+                  onChange={() => toggleCategory(item.slug)}
                 />
               ))}
             </div>
@@ -237,8 +212,8 @@ export function FilterSidebar({ hideCategory }: FilterSidebarProps) {
         <PriceRangeSlider
           min={filters.priceMin}
           max={filters.priceMax}
-          onMinChange={(v) => setFilters((f) => ({ ...f, priceMin: v }))}
-          onMaxChange={(v) => setFilters((f) => ({ ...f, priceMax: v }))}
+          onMinChange={(v) => onFiltersChange({ ...filters, priceMin: v })}
+          onMaxChange={(v) => onFiltersChange({ ...filters, priceMax: v })}
         />
       </FilterSection>
       <div className="bg-grey-200 h-px w-full shrink-0" />
@@ -253,14 +228,14 @@ export function FilterSidebar({ hideCategory }: FilterSidebarProps) {
           <RatingItem
             stars="all"
             checked={filters.rating === "all"}
-            onChange={() => setFilters((f) => ({ ...f, rating: "all" }))}
+            onChange={() => onFiltersChange({ ...filters, rating: "all" })}
           />
           {[4, 3, 2, 1].map((n) => (
             <RatingItem
               key={n}
               stars={n}
               checked={filters.rating === n}
-              onChange={() => setFilters((f) => ({ ...f, rating: n }))}
+              onChange={() => onFiltersChange({ ...filters, rating: n })}
             />
           ))}
         </div>
@@ -271,15 +246,7 @@ export function FilterSidebar({ hideCategory }: FilterSidebarProps) {
         variant="pill"
         size="pill"
         fillOnHover
-        onClick={() => {
-          setFilters({
-            categories: [],
-            priceMin: 0,
-            priceMax: 400250,
-            ingredients: [],
-            rating: "all",
-          });
-        }}
+        onClick={() => onFiltersChange(DEFAULT_PRODUCT_FILTERS)}
         className="border-grey-400 text-grey-800 w-fit"
       >
         Clear filters

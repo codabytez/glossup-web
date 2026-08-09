@@ -1,0 +1,39 @@
+{
+  "benefits": [
+    "Gently cleanses skin",
+    "Deeply nourishes and hydrates",
+    "Enriched with natural moisturizers",
+    "Infused with botanical extracts",
+    "Leaves skin soft and smooth",
+    "Provides a refreshed feeling all day long"
+  ],
+  "coreIngredients": [
+    { "percent": "3.5%", "name": "Niacinamide" },
+    { "percent": "2.0%", "name": "Hyaluronic Acid" },
+    { "percent": "1.5%", "name": "Alpha Arbutin" },
+    { "percent": "2.5%", "name": "Vitamin C" },
+    { "percent": "2.2%", "name": "Zinc PCA" },
+    { "percent": "5.0%", "name": "Coenzyme Q10" }
+  ],
+  "allIngredients": "Niacinamide • Hyaluronic Acid • Alpha Arbutin • Vitamin C • Zinc PCA • Coenzyme Q10 • Retinol • Ceramides • Glycerin • Aloe Vera • Peptides • Squalane",
+  "howToUse": [
+    { "num": "01", "text": "Wet your face with warm water to prepare your skin for cleansing." },
+    {
+      "num": "02",
+      "text": "Apply a small amount to your skin, massaging gently in circular motions."
+    },
+    {
+      "num": "04",
+      "text": "Work the cleanser into a rich lather, focusing on areas that need extra nourishment."
+    },
+    { "num": "05", "text": "Rinse thoroughly with lukewarm water until all residue is removed." },
+    {
+      "num": "06",
+      "text": "Pat dry with a clean towel to help your skin retain its natural moisture."
+    },
+    {
+      "num": "07",
+      "text": "Follow up with your favorite moisturizer to lock in hydration and softness."
+    }
+  ]
+}

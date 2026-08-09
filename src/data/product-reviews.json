@@ -1,0 +1,83 @@
+{
+  "reviews": [
+    {
+      "name": "Solo Makinde",
+      "initials": "SM",
+      "rating": 5,
+      "date": "2 years ago",
+      "text": "My routine went from five random steps to three products that actually work. My dark spots are fading and my skin finally feels calm and consistent."
+    },
+    {
+      "name": "Jacob White",
+      "initials": "JW",
+      "rating": 4,
+      "date": "Aug 2026",
+      "text": "Been using The Wash for two months and the difference is real. My face feels clean without that tight, stripped feeling from my old cleanser."
+    },
+    {
+      "name": "David Kim",
+      "initials": "DK",
+      "rating": 4,
+      "date": "Jun 2026",
+      "text": "My hyperpigmentation has visibly reduced since I started. The niacinamide and vitamin C combo is doing serious work on my uneven skin tone."
+    },
+    {
+      "name": "Sophia Patel",
+      "initials": "SP",
+      "rating": 5,
+      "date": "May 2026",
+      "text": "Finally found a cleanser that doesn't break out my combination skin. The lather is luxurious and my skin is genuinely glowing post-wash."
+    },
+    {
+      "name": "Olivia Brown",
+      "initials": "OB",
+      "rating": 4,
+      "date": "Sep 2026",
+      "text": "The scent is subtle and clean, not overwhelming at all. My skin tone has evened out noticeably in just six weeks of consistent use."
+    },
+    {
+      "name": "Emily Wong",
+      "initials": "EW",
+      "rating": 5,
+      "date": "Jul 2026",
+      "text": "Switched from a popular drugstore cleanser and this blows it out of the water. Skin is softer, brighter, and I barely need foundation anymore."
+    },
+    {
+      "name": "Marcus Li",
+      "initials": "ML",
+      "rating": 3,
+      "date": "Apr 2026",
+      "text": "Good product overall. The packaging is beautiful and it cleanses well. Took off two stars because I expected more dramatic brightening for the price."
+    },
+    {
+      "name": "Ethan Davis",
+      "initials": "ED",
+      "rating": 5,
+      "date": "Oct 2026",
+      "text": "I was skeptical but the results after 30 days are undeniable. Skin texture is noticeably smoother and the uneven patches on my cheeks have calmed down."
+    },
+    {
+      "name": "Lara Chen",
+      "initials": "LC",
+      "rating": 4,
+      "date": "Mar 2026",
+      "text": "I switched to a clean beauty regimen and my complexion has never been clearer. It's refreshing to finally see my skin breathe again."
+    },
+    {
+      "name": "Mia Wilson",
+      "initials": "MW",
+      "rating": 4,
+      "date": "Nov 2026",
+      "text": "Love how my skin feels after using this — soft, hydrated, and genuinely glowing. The 75ml size lasts a solid three months with daily double cleansing."
+    }
+  ],
+  "distribution": [
+    { "stars": 5, "count": 68 },
+    { "stars": 4, "count": 28 },
+    { "stars": 3, "count": 20 },
+    { "stars": 2, "count": 14 },
+    { "stars": 1, "count": 6 }
+  ],
+  "average": 4.31,
+  "total": 136
+}

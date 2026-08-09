@@ -1,4 +1,5 @@
-import { FilterIcon } from "@/components/icons/filter-icon";
+import Image from "next/image";
+
 import { Dropdown } from "@/components/ui/dropdown";
 
 export const SORT_OPTIONS = [
@@ -34,7 +35,7 @@ export function ShopFilterBar({
         onClick={onFilterClick}
         className="text-grey-950 flex items-center gap-2 transition-opacity hover:opacity-70 lg:hidden"
       >
-        <FilterIcon className="text-primary-900 size-4" />
+        <Image src="/icons/filter.svg" alt="" width={16} height={16} />
         <span className="text-body-base font-normal">FILTER BY</span>
       </button>
 
@@ -44,7 +45,7 @@ export function ShopFilterBar({
         onClick={onSidebarToggle}
         className="text-grey-950 hidden items-center gap-2 transition-opacity hover:opacity-70 lg:flex"
       >
-        <FilterIcon className="text-primary-900 size-4" />
+        <Image src="/icons/filter.svg" alt="" width={16} height={16} />
         <span className="text-body-base font-normal">FILTER BY</span>
       </button>
 

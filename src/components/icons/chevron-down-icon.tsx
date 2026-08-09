@@ -1,4 +1,4 @@
-export function ChevronDownIcon({ className }: { className?: string }) {
+export function ChevronDownIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden className={className}>
       <path

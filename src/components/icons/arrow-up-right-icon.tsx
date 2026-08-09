@@ -1,4 +1,4 @@
-export function ArrowUpRightIcon({ className }: { className?: string }) {
+export function ArrowUpRightIcon({ className }: IconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

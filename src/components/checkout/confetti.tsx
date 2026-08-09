@@ -1,4 +1,4 @@
-export function Confetti({ className }: { className?: string }) {
+export function Confetti({ className }: IconProps) {
   return (
     <svg
       width="100%"

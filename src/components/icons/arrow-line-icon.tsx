@@ -1,4 +1,4 @@
-export function ArrowLineIcon({ className }: { className?: string }) {
+export function ArrowLineIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 13 8" fill="none" aria-hidden className={className}>
       <path
