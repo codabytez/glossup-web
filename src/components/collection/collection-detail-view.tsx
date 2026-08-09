@@ -4,19 +4,20 @@ import { useState } from "react";
 
 import { motion } from "motion/react";
 
+import Image from "next/image";
 import Link from "next/link";
 
 import { CategoryPill } from "@/components/shop/category-pill";
 import { FilterSidebar } from "@/components/shop/filter-sidebar";
+import { NoProductsFound } from "@/components/shop/no-products-found";
 import { ShopFilterBar } from "@/components/shop/shop-filter-bar";
 import { ProductCard } from "@/components/product/product-card";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
-import { FilterIcon } from "@/components/icons/filter-icon";
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { XIcon } from "lucide-react";
 import { gridContainer, gridItem } from "@/lib/motion";
+import { DEFAULT_PRODUCT_FILTERS, filterProducts } from "@/lib/product-filters";
 import categories from "@/data/categories.json";
 import products from "@/data/products.json";
 
@@ -34,6 +35,7 @@ function slugToLabel(slug: string) {
 }
 
 export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
+  const [filters, setFilters] = useState(DEFAULT_PRODUCT_FILTERS);
   const [currentPage, setCurrentPage] = useState(1);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -46,12 +48,20 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
     { label: label },
   ];
 
-  const collectionProducts = products.filter((p) => p.category === slug);
+  const collectionProducts = filterProducts(
+    products.filter((p) => p.category === slug),
+    filters,
+  );
   const totalPages = Math.ceil(collectionProducts.length / PRODUCTS_PER_PAGE);
   const paged = collectionProducts.slice(
     (currentPage - 1) * PRODUCTS_PER_PAGE,
     currentPage * PRODUCTS_PER_PAGE,
   );
+
+  const updateFilters = (next: typeof filters) => {
+    setFilters(next);
+    setCurrentPage(1);
+  };
 
   return (
     <main className="flex flex-1 flex-col pt-24">
@@ -94,7 +104,7 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
             <SheetContent side="left" className="p-0 lg:hidden" showCloseButton={false}>
               <SheetHeader className="border-grey-100 flex-row items-center justify-between border-b px-4 py-4">
                 <div className="flex items-center gap-2">
-                  <FilterIcon className="text-primary-900 size-4" />
+                  <Image src="/icons/filter.svg" alt="" width={16} height={16} />
                   <SheetTitle className="text-grey-500 text-sm font-normal uppercase">
                     Filter by
                   </SheetTitle>
@@ -105,7 +115,7 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
                 </SheetClose>
               </SheetHeader>
               <div className="flex-1 scrollbar-none overflow-y-auto px-6 py-6">
-                <FilterSidebar hideCategory />
+                <FilterSidebar filters={filters} onFiltersChange={updateFilters} hideCategory />
               </div>
             </SheetContent>
           </Sheet>
@@ -115,35 +125,19 @@ export function CollectionDetailView({ slug }: CollectionDetailViewProps) {
             <aside
               className={`hidden w-74 shrink-0 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:scrollbar-none lg:overflow-x-hidden lg:overflow-y-auto ${sidebarOpen ? "lg:block" : "lg:hidden"}`}
             >
-              <FilterSidebar hideCategory />
+              <FilterSidebar filters={filters} onFiltersChange={updateFilters} hideCategory />
             </aside>
 
             {/* Product grid */}
             <div className="flex min-w-0 flex-1 flex-col">
               {paged.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 16 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="flex flex-col items-center gap-5 py-24 text-center"
-                >
-                  <span className="text-5xl">🛍️</span>
-                  <div className="flex flex-col gap-2">
-                    <p className="text-grey-950 text-xl font-medium">No products found</p>
-                    <p className="text-grey-500 text-body-base max-w-xs">
-                      Try a different category or browse everything we have.
-                    </p>
-                  </div>
-                  <Button
-                    variant="pill"
-                    size="pill"
-                    fillOnHover
-                    href="/collection"
-                    className="border-grey-950 text-grey-950 mt-2"
-                  >
-                    Browse all collections
-                  </Button>
-                </motion.div>
+                <NoProductsFound
+                  clearAction={{
+                    label: "Clear filters",
+                    onClick: () => updateFilters(DEFAULT_PRODUCT_FILTERS),
+                  }}
+                  continueAction={{ label: "Continue shopping", href: "/products" }}
+                />
               ) : (
                 <>
                   <motion.div

@@ -220,7 +220,7 @@
   appearance: none;
   background: transparent;
   color: transparent;
-  pointer-events: all;
+  pointer-events: none;
   outline: none;
   box-shadow: none;
   border: none;
@@ -234,6 +234,7 @@
 .price-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
+  pointer-events: all;
   width: 16px;
   height: 16px;
   border-radius: 9999px;
