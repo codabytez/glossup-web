@@ -10,18 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { PriceRangeSlider } from "@/components/shop/price-range-slider";
-import categories from "@/data/categories.json";
-import products from "@/data/products.json";
 import { DEFAULT_PRODUCT_FILTERS, type ProductFilters } from "@/lib/product-filters";
 import { cn } from "@/lib/utils";
-
-const CATEGORY_ITEMS = categories.map((c) => ({
-  slug: c.slug,
-  label: c.name,
-  count: products.filter((p) => p.category === c.slug).length,
-}));
-
-const INGREDIENT_PILLS = [...new Set(products.flatMap((p) => p.ingredients ?? []))].sort();
 
 interface FilterSectionProps {
   title: string;
@@ -127,13 +117,14 @@ function RatingItem({ stars, checked, onChange }: RatingItemProps) {
 const INGREDIENTS_PREVIEW = 8;
 
 interface IngredientsFilterProps {
+  pills: string[];
   selected: string[];
   onToggle: (pill: string) => void;
 }
 
-function IngredientsFilter({ selected, onToggle }: IngredientsFilterProps) {
+function IngredientsFilter({ pills, selected, onToggle }: IngredientsFilterProps) {
   const [showAll, setShowAll] = useState(false);
-  const visible = showAll ? INGREDIENT_PILLS : INGREDIENT_PILLS.slice(0, INGREDIENTS_PREVIEW);
+  const visible = showAll ? pills : pills.slice(0, INGREDIENTS_PREVIEW);
 
   return (
     <div className="flex flex-col gap-2">
@@ -167,10 +158,26 @@ function IngredientsFilter({ selected, onToggle }: IngredientsFilterProps) {
 interface FilterSidebarProps {
   filters: ProductFilters;
   onFiltersChange: (filters: ProductFilters) => void;
+  products: Product[];
+  categories: Category[];
   hideCategory?: boolean;
 }
 
-export function FilterSidebar({ filters, onFiltersChange, hideCategory }: FilterSidebarProps) {
+export function FilterSidebar({
+  filters,
+  onFiltersChange,
+  products,
+  categories,
+  hideCategory,
+}: FilterSidebarProps) {
+  const categoryItems = categories.map((c) => ({
+    slug: c.slug,
+    label: c.name,
+    count: products.filter((p) => (p.categories ?? []).includes(c.slug)).length,
+  }));
+
+  const ingredientPills = [...new Set(products.flatMap((p) => p.ingredients ?? []))].sort();
+
   const toggleCategory = (slug: string) =>
     onFiltersChange({
       ...filters,
@@ -193,7 +200,7 @@ export function FilterSidebar({ filters, onFiltersChange, hideCategory }: Filter
         <>
           <FilterSection title="Category">
             <div className="flex flex-col pl-4">
-              {CATEGORY_ITEMS.map((item) => (
+              {categoryItems.map((item) => (
                 <CheckboxItem
                   key={item.slug}
                   label={item.label}
@@ -219,7 +226,11 @@ export function FilterSidebar({ filters, onFiltersChange, hideCategory }: Filter
       <div className="bg-grey-200 h-px w-full shrink-0" />
 
       <FilterSection title="Ingredients">
-        <IngredientsFilter selected={filters.ingredients} onToggle={toggleIngredient} />
+        <IngredientsFilter
+          pills={ingredientPills}
+          selected={filters.ingredients}
+          onToggle={toggleIngredient}
+        />
       </FilterSection>
       <div className="bg-grey-200 h-px w-full shrink-0" />
 

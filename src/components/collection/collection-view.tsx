@@ -1,10 +1,12 @@
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { ProductCarousel } from "@/components/product/product-carousel";
-import products from "@/data/products.json";
+import { getProducts } from "@/queries/products";
 
 const breadcrumbItems = [{ label: "Home", href: "/" }, { label: "Collections" }];
 
-export function CollectionView() {
+export async function CollectionView() {
+  const products = await getProducts();
+
   return (
     <main className="flex flex-1 flex-col pt-24">
       <div className="px-4 pt-8 sm:px-8 sm:pt-10 lg:px-10 lg:pt-8 xl:px-20">

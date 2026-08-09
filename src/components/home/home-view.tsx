@@ -4,13 +4,16 @@ import { Reviews } from "@/components/home/reviews";
 import { ShopByCategory } from "@/components/home/shop-by-category";
 import { Testimonial } from "@/components/home/testimonial";
 import { TopEssentials } from "@/components/home/top-essentials";
+import { getCollections } from "@/queries/collections";
 
-export function HomeView() {
+export async function HomeView() {
+  const categories = await getCollections();
+
   return (
     <main className="flex flex-1 flex-col">
       <Hero />
       <TopEssentials />
-      <ShopByCategory />
+      <ShopByCategory categories={categories} />
       <Testimonial />
       <Reviews />
       <Faqs />

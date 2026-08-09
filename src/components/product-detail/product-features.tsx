@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 
 import { ChevronDownIcon } from "@/components/icons/chevron-down-icon";
-import { benefits, coreIngredients, allIngredients, howToUse } from "@/data/product-features.json";
 import { TRANSITION } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -56,7 +55,12 @@ function FeatureSection({ title, icon, children, defaultOpen = false }: FeatureS
   );
 }
 
-export function ProductFeatures() {
+export function ProductFeatures({
+  benefits,
+  coreIngredients,
+  allIngredients,
+  howToUse,
+}: ProductFeatureContent) {
   const [showAllIngredients, setShowAllIngredients] = useState(false);
 
   return (

@@ -23,8 +23,9 @@ export function parsePrice(price: string) {
 
 export function filterProducts(list: Product[], filters: ProductFilters): Product[] {
   return list.filter((p) => {
-    if (filters.categories.length > 0 && !filters.categories.includes(p.category ?? "")) {
-      return false;
+    if (filters.categories.length > 0) {
+      const productCategories = p.categories ?? (p.category ? [p.category] : []);
+      if (!filters.categories.some((c) => productCategories.includes(c))) return false;
     }
 
     const price = parsePrice(p.price);

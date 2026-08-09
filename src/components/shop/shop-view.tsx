@@ -15,8 +15,6 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle } from "@/comp
 import { XIcon } from "lucide-react";
 import { gridContainer, gridItem } from "@/lib/motion";
 import { DEFAULT_PRODUCT_FILTERS, filterProducts, parsePrice } from "@/lib/product-filters";
-import categories from "@/data/categories.json";
-import products from "@/data/products.json";
 
 const PRODUCTS_PER_PAGE = 21;
 
@@ -43,7 +41,12 @@ function sortProducts(list: Product[], sort: SortOption | undefined) {
   }
 }
 
-export function ShopView() {
+interface ShopViewProps {
+  products: Product[];
+  categories: Category[];
+}
+
+export function ShopView({ products, categories }: ShopViewProps) {
   const [filters, setFilters] = useState(DEFAULT_PRODUCT_FILTERS);
   const [sortOption, setSortOption] = useState<SortOption | undefined>();
   const [sortOpen, setSortOpen] = useState(false);
@@ -110,7 +113,12 @@ export function ShopView() {
                 </SheetClose>
               </SheetHeader>
               <div className="flex-1 scrollbar-none overflow-y-auto px-6 py-6">
-                <FilterSidebar filters={filters} onFiltersChange={updateFilters} />
+                <FilterSidebar
+                  filters={filters}
+                  onFiltersChange={updateFilters}
+                  products={products}
+                  categories={categories}
+                />
               </div>
             </SheetContent>
           </Sheet>
@@ -120,7 +128,12 @@ export function ShopView() {
             <aside
               className={`hidden w-74 shrink-0 lg:sticky lg:top-28 lg:max-h-[calc(100vh-7rem)] lg:scrollbar-none lg:overflow-x-hidden lg:overflow-y-auto ${sidebarOpen ? "lg:block" : "lg:hidden"}`}
             >
-              <FilterSidebar filters={filters} onFiltersChange={updateFilters} />
+              <FilterSidebar
+                filters={filters}
+                onFiltersChange={updateFilters}
+                products={products}
+                categories={categories}
+              />
             </aside>
 
             {/* Product grid */}
