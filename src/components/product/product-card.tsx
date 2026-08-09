@@ -3,10 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, type MotionProps } from "motion/react";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { useFlyToCart } from "@/components/cart/fly-to-cart";
-import { useCartStore } from "@/store/cart-store";
+import { useAddToCart } from "@/hooks/use-cart";
+import { useSession } from "@/hooks/use-session";
+import { useToggleWishlist, useWishlist } from "@/hooks/use-wishlist";
 import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 import { HeartIcon } from "@/components/icons/heart-icon";
 import { StarRating } from "@/components/product/star-rating";
@@ -54,37 +56,38 @@ const saveVariants = {
 };
 
 export function ProductCard({
-  slug,
   image,
   name,
   description,
   price,
   rating,
   reviewCount,
+  variants,
+  slug,
   className,
 }: Product & { className?: string }) {
-  const [isSaved, setIsSaved] = useState(false);
   const mobileImageRef = useRef<HTMLDivElement>(null);
   const desktopImageRef = useRef<HTMLDivElement>(null);
   const fly = useFlyToCart();
-  const addItem = useCartStore((s) => s.addItem);
+  const addToCart = useAddToCart();
+  const { data: session } = useSession();
+  const { data: wishlistHandles = [] } = useWishlist();
+  const toggleWishlist = useToggleWishlist();
   const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+  const isSaved = wishlistHandles.includes(slug);
 
-  const toggleSaved = () =>
-    setIsSaved((prev) => {
-      if (!prev) triggerSignInPrompt();
-      return !prev;
-    });
+  const toggleSaved = () => {
+    if (!session) {
+      triggerSignInPrompt();
+      return;
+    }
+    toggleWishlist.mutate(slug);
+  };
 
   const handleAddToCart = () => {
-    addItem({
-      slug,
-      name,
-      image,
-      price,
-      size: "50 ml",
-      sizes: ["25 ml", "50 ml", "75 ml", "100 ml", "150 ml", "200 ml", "250 ml"],
-    });
+    const defaultVariant = variants.find((v) => v.availableForSale) ?? variants[0];
+    if (!defaultVariant) return;
+    addToCart.mutate({ variantId: defaultVariant.id });
     const activeRef = window.innerWidth < 1024 ? mobileImageRef : desktopImageRef;
     if (activeRef.current) fly(image, activeRef.current.getBoundingClientRect());
   };

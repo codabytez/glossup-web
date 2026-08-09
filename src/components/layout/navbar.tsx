@@ -11,6 +11,8 @@ import { SearchIcon } from "@/components/icons/search-icon";
 import { UserIcon } from "@/components/icons/user-icon";
 import { WordmarkLogo } from "@/components/icons/wordmark";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/hooks/use-cart";
+import { useSession } from "@/hooks/use-session";
 import { useCartStore } from "@/store/cart-store";
 import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 import {
@@ -33,8 +35,12 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === "/";
-  const { toggle: toggleCart, items } = useCartStore();
+  const toggleCart = useCartStore((s) => s.toggle);
+  const { data: cart } = useCart();
+  const itemCount = cart?.totalQuantity ?? 0;
   const openSignInPrompt = useSignInPromptStore((s) => s.open);
+  const { data: session } = useSession();
+  const initial = (session?.firstName?.[0] ?? session?.email?.[0] ?? "U").toUpperCase();
   const [scrollY, setScrollY] = useState(0);
   const scrolled = !isHome || scrollY > 80;
 
@@ -156,25 +162,35 @@ export function Navbar() {
           >
             <SearchIcon className="size-5 shrink-0 sm:size-6" />
           </button>
-          <button
-            type="button"
-            aria-label="Account"
-            onClick={openSignInPrompt}
-            className="hover:text-primary-900 text-current transition-[color,transform] active:scale-90"
-          >
-            <UserIcon className="size-6 shrink-0" />
-          </button>
+          {session ? (
+            <Link
+              href="/account"
+              aria-label="My account"
+              className="text-primary-50 flex size-6 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[linear-gradient(226deg,#A90830_0%,#FFD2D2_100%)] text-sm font-medium transition-transform active:scale-90"
+            >
+              {initial}
+            </Link>
+          ) : (
+            <button
+              type="button"
+              aria-label="Account"
+              onClick={openSignInPrompt}
+              className="hover:text-primary-900 text-current transition-[color,transform] active:scale-90"
+            >
+              <UserIcon className="size-6 shrink-0" />
+            </button>
+          )}
           <button
             type="button"
             data-cart-icon
-            aria-label={`Cart${items.length > 0 ? ` (${items.length} items)` : ""}`}
+            aria-label={`Cart${itemCount > 0 ? ` (${itemCount} items)` : ""}`}
             onClick={toggleCart}
             className="hover:text-primary-900 relative size-6 text-current transition-[color,transform] active:scale-90"
           >
             <BagIcon className="size-6 shrink-0" />
-            {items.length > 0 && (
+            {itemCount > 0 && (
               <span className="text-grey-900 absolute top-2.5 left-2 flex size-2 items-center justify-center overflow-hidden rounded-full text-[8px] font-semibold">
-                {items.length > 9 ? "9+" : items.length}
+                {itemCount > 9 ? "9+" : itemCount}
               </span>
             )}
           </button>

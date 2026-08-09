@@ -6,13 +6,16 @@ import Link from "next/link";
 
 import { CategoryCard } from "@/components/home/category-card";
 import { CarouselArrows } from "@/components/ui/carousel-arrows";
-import categories from "@/data/categories.json";
 import { useScrollCarousel } from "@/hooks/use-scroll-carousel";
 import { fadeUpContainer, fadeUpItem } from "@/lib/motion";
 
 const SCROLL_AMOUNT = 296 + 16; // card width + gap
 
-export function ShopByCategory() {
+interface ShopByCategoryProps {
+  categories: Category[];
+}
+
+export function ShopByCategory({ categories }: ShopByCategoryProps) {
   const { scrollRef, canScrollPrev, canScrollNext, onScroll, scrollPrev, scrollNext } =
     useScrollCarousel(SCROLL_AMOUNT);
 

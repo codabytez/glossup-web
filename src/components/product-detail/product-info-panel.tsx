@@ -11,44 +11,48 @@ import { AddToBagButton } from "@/components/ui/add-to-bag-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
-import SIZES from "@/data/product-sizes.json";
-import { useCartStore } from "@/store/cart-store";
+import { useAddToCart } from "@/hooks/use-cart";
+import { useSession } from "@/hooks/use-session";
+import { useToggleWishlist, useWishlist } from "@/hooks/use-wishlist";
 import { useSignInPromptStore } from "@/store/sign-in-prompt-store";
 
 interface ProductInfoPanelProps {
   slug: string;
   name: string;
-  image: string;
   description: string;
-  price: string;
-  originalPrice?: string;
   rating: number;
   reviewCount: string;
+  features: ProductFeatureContent;
+  variants: ProductVariant[];
   onShare: () => void;
 }
 
 export function ProductInfoPanel({
   slug,
   name,
-  image,
   description,
-  price,
-  originalPrice,
   rating,
   reviewCount,
+  features,
+  variants,
   onShare,
 }: ProductInfoPanelProps) {
-  const [selectedSize, setSelectedSize] = useState(SIZES[2]);
+  const [selectedVariant, setSelectedVariant] = useState(variants[2] ?? variants[0]);
   const [quantity, setQuantity] = useState(2);
-  const [isSaved, setIsSaved] = useState(false);
-  const { addItem, open } = useCartStore();
+  const addToCart = useAddToCart();
+  const { data: session } = useSession();
+  const { data: wishlistHandles = [] } = useWishlist();
+  const toggleWishlist = useToggleWishlist();
   const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+  const isSaved = wishlistHandles.includes(slug);
 
-  const toggleSaved = () =>
-    setIsSaved((prev) => {
-      if (!prev) triggerSignInPrompt();
-      return !prev;
-    });
+  const toggleSaved = () => {
+    if (!session) {
+      triggerSignInPrompt();
+      return;
+    }
+    toggleWishlist.mutate(slug);
+  };
 
   return (
     <div className="mx-auto flex w-full max-w-100 flex-col gap-14 2xl:w-100">
@@ -100,11 +104,11 @@ export function ProductInfoPanel({
         {/* Price */}
         <div className="flex h-6 items-baseline gap-2">
           <p className="text-header-h3 text-grey-950 leading-[1.2] font-semibold whitespace-nowrap">
-            {price}
+            {selectedVariant.price}
           </p>
-          {originalPrice && (
+          {selectedVariant.compareAtPrice && (
             <p className="text-body-base text-grey-500 leading-[1.4] font-normal line-through">
-              {originalPrice}
+              {selectedVariant.compareAtPrice}
             </p>
           )}
         </div>
@@ -116,17 +120,17 @@ export function ProductInfoPanel({
         <div className="flex flex-col gap-2">
           <div className="text-body-base flex items-center gap-2">
             <span className="text-grey-950">Size</span>
-            <span className="text-grey-400">• {selectedSize}</span>
+            <span className="text-grey-400">• {selectedVariant.size}</span>
           </div>
           <div className="flex flex-wrap gap-4">
-            {SIZES.map((size) => (
+            {variants.map((variant) => (
               <Badge
-                key={size}
-                render={<button type="button" onClick={() => setSelectedSize(size)} />}
-                variant={selectedSize === size ? "filter-active" : "filter"}
+                key={variant.id}
+                render={<button type="button" onClick={() => setSelectedVariant(variant)} />}
+                variant={selectedVariant.id === variant.id ? "filter-active" : "filter"}
                 className="py-2"
               >
-                {size}
+                {variant.size}
               </Badge>
             ))}
           </div>
@@ -141,17 +145,25 @@ export function ProductInfoPanel({
         <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center">
           <QuantityStepper value={quantity} onChange={setQuantity} className="w-fit" />
           <AddToBagButton
-            price={price}
+            price={selectedVariant.price}
             fillColor="secondary"
             className="border-grey-800 w-full rounded-[1px] border px-6 py-3.5 sm:flex-1"
-            onClick={() => {
-              addItem({ slug, name, image, price, originalPrice, size: selectedSize });
-              open();
-            }}
+            onClick={() => addToCart.mutate({ variantId: selectedVariant.id, quantity })}
           />
         </div>
 
-        <Button variant="primary" size="pill" className="w-full">
+        <Button
+          variant="primary"
+          size="pill"
+          className="w-full"
+          onClick={async () => {
+            const cart = await addToCart.mutateAsync({
+              variantId: selectedVariant.id,
+              quantity,
+            });
+            if (cart) window.location.href = cart.checkoutUrl;
+          }}
+        >
           Buy now
         </Button>
       </div>
@@ -160,7 +172,7 @@ export function ProductInfoPanel({
       <div className="bg-grey-100 h-px w-full" />
 
       {/* Feature sections */}
-      <ProductFeatures />
+      <ProductFeatures {...features} />
     </div>
   );
 }

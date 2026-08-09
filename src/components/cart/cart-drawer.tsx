@@ -9,20 +9,33 @@ import { BagIcon } from "@/components/icons/bag-icon";
 import { UserIcon } from "@/components/icons/user-icon";
 import { QuantityStepper } from "@/components/ui/quantity-stepper";
 import { Sheet, SheetClose, SheetContent } from "@/components/ui/sheet";
-import { formatCartTotal, useCartStore, type CartItem } from "@/store/cart-store";
+import {
+  useCart,
+  useChangeCartLineSize,
+  useRemoveCartLine,
+  useUpdateCartLineQuantity,
+} from "@/hooks/use-cart";
+import { parsePrice } from "@/lib/product-filters";
+import { toNaira } from "@/lib/utils";
+import { useCartStore } from "@/store/cart-store";
 
-function CartItemRow({ item }: { item: CartItem }) {
-  const { removeItem, updateQuantity, changeSize } = useCartStore();
+function CartItemRow({ line }: { line: CartLine }) {
+  const updateQuantity = useUpdateCartLineQuantity();
+  const removeLine = useRemoveCartLine();
+  const changeSize = useChangeCartLineSize();
 
   const sizeDropdown = (
     <Dropdown
-      key={item.size}
+      key={line.size}
       variant="link"
-      options={item.sizes ?? [item.size]}
+      options={line.productVariants.map((v) => v.size)}
       placeholder="Size"
-      defaultValue={item.size}
+      defaultValue={line.size}
       expandedWidth={100}
-      onSelect={(newSize) => changeSize(item.slug, item.size, newSize)}
+      onSelect={(newSize) => {
+        const newVariantId = line.productVariants.find((v) => v.size === newSize)?.id;
+        if (newVariantId) changeSize.mutate({ lineId: line.id, newVariantId });
+      }}
     />
   );
 
@@ -31,8 +44,8 @@ function CartItemRow({ item }: { item: CartItem }) {
       {/* Product image */}
       <div className="bg-grey-50 relative size-14 shrink-0 sm:size-38">
         <Image
-          src={item.image}
-          alt={item.name}
+          src={line.image}
+          alt={line.name}
           fill
           sizes="(max-width: 640px) 56px, 152px"
           className="object-contain"
@@ -43,22 +56,18 @@ function CartItemRow({ item }: { item: CartItem }) {
       <div className="flex min-w-0 flex-1 items-start sm:hidden">
         {/* Left: name / size / remove */}
         <div className="flex min-w-0 flex-1 flex-col">
-          <p className="text-grey-950 truncate text-xs font-normal">{item.name}</p>
+          <p className="text-grey-950 truncate text-xs font-normal">{line.name}</p>
           {sizeDropdown}
-          <button
-            type="button"
-            onClick={() => removeItem(item.slug, item.size)}
-            className="mt-0.5 w-fit"
-          >
+          <button type="button" onClick={() => removeLine.mutate(line.id)} className="mt-0.5 w-fit">
             <span className="text-grey-800 text-xs font-medium underline">Remove</span>
           </button>
         </div>
         {/* Right: price (top) / qty stepper (bottom) */}
         <div className="flex h-full shrink-0 flex-col items-end justify-between">
-          <p className="text-grey-950 text-xs font-medium whitespace-nowrap">{item.price}</p>
+          <p className="text-grey-950 text-xs font-medium whitespace-nowrap">{line.price}</p>
           <QuantityStepper
-            value={item.quantity}
-            onChange={(q) => updateQuantity(item.slug, item.size, q)}
+            value={line.quantity}
+            onChange={(q) => updateQuantity.mutate({ lineId: line.id, quantity: q })}
           />
         </div>
       </div>
@@ -68,16 +77,16 @@ function CartItemRow({ item }: { item: CartItem }) {
         {/* Name + price */}
         <div className="flex items-start justify-between gap-5">
           <div className="flex flex-col gap-2">
-            <p className="text-body-base text-grey-950 line-clamp-2 font-medium">{item.name}</p>
+            <p className="text-body-base text-grey-950 line-clamp-2 font-medium">{line.name}</p>
             {sizeDropdown}
           </div>
           <div className="flex flex-col items-end gap-0.5">
             <p className="text-body-base text-grey-950 font-medium whitespace-nowrap">
-              {item.price}
+              {line.price}
             </p>
-            {item.originalPrice && (
+            {line.compareAtPrice && (
               <p className="text-body-caption text-grey-500 font-normal line-through">
-                {item.originalPrice}
+                {line.compareAtPrice}
               </p>
             )}
           </div>
@@ -85,12 +94,12 @@ function CartItemRow({ item }: { item: CartItem }) {
         {/* Qty + remove */}
         <div className="flex items-center justify-between">
           <QuantityStepper
-            value={item.quantity}
-            onChange={(q) => updateQuantity(item.slug, item.size, q)}
+            value={line.quantity}
+            onChange={(q) => updateQuantity.mutate({ lineId: line.id, quantity: q })}
           />
           <button
             type="button"
-            onClick={() => removeItem(item.slug, item.size)}
+            onClick={() => removeLine.mutate(line.id)}
             className="group relative py-0.5"
           >
             <span className="text-body-base text-grey-600 font-medium">Remove</span>
@@ -142,9 +151,14 @@ function EmptyCart() {
 }
 
 export function CartDrawer() {
-  const { items, isOpen, close } = useCartStore();
-  const total = formatCartTotal(items);
-  const isEmpty = items.length === 0;
+  const isOpen = useCartStore((s) => s.isOpen);
+  const close = useCartStore((s) => s.close);
+  const { data: cart } = useCart();
+  const lines = cart?.lines ?? [];
+  const total = toNaira(
+    lines.reduce((sum, line) => sum + parsePrice(line.price) * line.quantity, 0),
+  );
+  const isEmpty = lines.length === 0;
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && close()}>
@@ -159,7 +173,7 @@ export function CartDrawer() {
           <div className="flex items-center gap-2">
             <BagIcon className="text-grey-950 size-5" />
             <h2 className="text-header-h2 text-grey-950 font-normal">
-              Your bag{items.length > 0 ? ` (${items.length})` : ""}
+              Your bag{lines.length > 0 ? ` (${lines.length})` : ""}
             </h2>
           </div>
           <SheetClose
@@ -189,8 +203,8 @@ export function CartDrawer() {
             {/* Items */}
             <div className="flex-1 overflow-y-auto px-4 sm:px-8">
               <div className="divide-grey-100 divide-y">
-                {items.map((item) => (
-                  <CartItemRow key={`${item.slug}-${item.size}`} item={item} />
+                {lines.map((line) => (
+                  <CartItemRow key={line.id} line={line} />
                 ))}
               </div>
             </div>
@@ -223,6 +237,7 @@ export function CartDrawer() {
                 <Button
                   variant="primary"
                   size="pill"
+                  href={cart?.checkoutUrl}
                   startIcon={
                     <span className="flex items-center gap-1 font-medium">
                       <Image
