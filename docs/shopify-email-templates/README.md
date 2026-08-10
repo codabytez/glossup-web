@@ -53,14 +53,13 @@ they feel like one system:
 
 ## TODO
 
-The reset link in `password-reset.liquid` currently points at
-`http://localhost:3000` via:
+The reset link in `password-reset.liquid` currently points at the Vercel
+deployment domain:
 
 ```liquid
-{{ customer.reset_password_url | replace: shop.url, 'http://localhost:3000' }}
+{{ customer.reset_password_url | replace: shop.url, 'https://glossup.vercel.app' }}
 ```
 
-**Update this to the real production domain (matching `SITE_URL` in
-`.env.example`, e.g. `https://glossup.com`) once the storefront is deployed
-publicly** — otherwise password-reset emails sent to real customers will link
-to a dead localhost URL.
+**Update this once a custom domain (e.g. `glossup.com`, matching `SITE_URL` in
+`.env.example`) is connected in Vercel** — otherwise password-reset emails
+keep linking to the `.vercel.app` domain instead of the real storefront URL.
