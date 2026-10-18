@@ -9,7 +9,9 @@ import {
   getCustomerByToken,
   recoverCustomerPassword,
   resetCustomerPassword,
+  updateCustomer,
   type CreateCustomerInput,
+  type UpdateCustomerInput,
 } from "@/queries/customer";
 
 const SESSION_COOKIE = "glossup_customer_token";
@@ -67,6 +69,20 @@ export async function resetPassword(
     return { success: false, errors };
   }
   await setSessionCookie(accessToken, expiresAt);
+  return { success: true, errors: [] };
+}
+
+export async function updateProfile(input: UpdateCustomerInput): Promise<AuthResult> {
+  const token = await getSessionToken();
+  if (!token) {
+    return { success: false, errors: [{ field: null, message: "Not signed in" }] };
+  }
+
+  const { accessToken, expiresAt, errors } = await updateCustomer(token, input);
+  if (errors.length > 0) {
+    return { success: false, errors };
+  }
+  if (accessToken && expiresAt) await setSessionCookie(accessToken, expiresAt);
   return { success: true, errors: [] };
 }
 

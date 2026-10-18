@@ -2,9 +2,11 @@ import "server-only";
 
 import { shopify } from "@/lib/shopify";
 import { toNaira } from "@/lib/utils";
+import { getAllProductRatings, getProductReviews } from "@/queries/reviews";
 
 const PRODUCT_CARD_FRAGMENT = `#graphql
   fragment ProductCard on Product {
+    id
     handle
     title
     description
@@ -26,12 +28,6 @@ const PRODUCT_CARD_FRAGMENT = `#graphql
       nodes {
         handle
       }
-    }
-    rating: metafield(namespace: "custom", key: "rating") {
-      value
-    }
-    reviewCount: metafield(namespace: "custom", key: "review_count") {
-      value
     }
     coreIngredients: metafield(namespace: "custom", key: "core_ingredients") {
       value
@@ -102,6 +98,7 @@ interface VariantNode {
 }
 
 interface ProductCardNode {
+  id: string;
   handle: string;
   title: string;
   description: string;
@@ -109,11 +106,14 @@ interface ProductCardNode {
   priceRange: { minVariantPrice: { amount: string } };
   compareAtPriceRange: { minVariantPrice: { amount: string } } | null;
   collections: { nodes: { handle: string }[] };
-  rating: { value: string } | null;
-  reviewCount: { value: string } | null;
   coreIngredients: { value: string } | null;
   shortDescription: { value: string } | null;
   variants: { nodes: VariantNode[] };
+}
+
+/** Shopify GID (e.g. "gid://shopify/Product/123") -> numeric id, matching Judge.me's external_id. */
+function shopifyNumericId(gid: string): string {
+  return gid.split("/").pop() ?? gid;
 }
 
 interface ProductDetailNode extends ProductCardNode {
@@ -145,7 +145,10 @@ function mapVariant(node: VariantNode): ProductVariant {
   };
 }
 
-function mapProductCard(node: ProductCardNode): Product {
+function mapProductCard(
+  node: ProductCardNode,
+  rating: { rating: number; reviewCount: number } | undefined,
+): Product {
   const coreIngredients = parseJsonMetafield<{ percent: string; name: string }[]>(
     node.coreIngredients?.value,
     [],
@@ -161,8 +164,8 @@ function mapProductCard(node: ProductCardNode): Product {
     price: toNaira(price),
     originalPrice: compareAt && Number(compareAt) > Number(price) ? toNaira(compareAt) : undefined,
     image: node.featuredImage?.url ?? "",
-    rating: node.rating ? Number(node.rating.value) : 0,
-    reviewCount: node.reviewCount?.value ?? "0",
+    rating: rating?.rating ?? 0,
+    reviewCount: String(rating?.reviewCount ?? 0),
     category: categories[0],
     categories,
     variants: node.variants.nodes.map(mapVariant),
@@ -171,14 +174,20 @@ function mapProductCard(node: ProductCardNode): Product {
 }
 
 export async function getProducts(first = 50): Promise<Product[]> {
-  const { data, errors } = await shopify.request<{ products: { nodes: ProductCardNode[] } }>(
-    PRODUCTS_QUERY,
-    { variables: { first } },
-  );
+  const [{ data, errors }, ratings] = await Promise.all([
+    shopify.request<{ products: { nodes: ProductCardNode[] } }>(PRODUCTS_QUERY, {
+      variables: { first },
+    }),
+    getAllProductRatings(),
+  ]);
   if (errors) {
     console.error("getProducts GraphQL error:", errors);
   }
-  return data?.products.nodes.map(mapProductCard) ?? [];
+  return (
+    data?.products.nodes.map((node) =>
+      mapProductCard(node, ratings.get(shopifyNumericId(node.id))),
+    ) ?? []
+  );
 }
 
 export async function getProductByHandle(handle: string): Promise<ProductDetail | null> {
@@ -191,8 +200,13 @@ export async function getProductByHandle(handle: string): Promise<ProductDetail 
   }
   if (!data?.product) return null;
 
+  const reviewSummary = await getProductReviews(shopifyNumericId(data.product.id));
+
   return {
-    ...mapProductCard(data.product),
+    ...mapProductCard(data.product, {
+      rating: reviewSummary.average,
+      reviewCount: reviewSummary.total,
+    }),
     description: data.product.description,
     images: data.product.images.nodes.map((img) => img.url),
     features: {
@@ -207,5 +221,6 @@ export async function getProductByHandle(handle: string): Promise<ProductDetail 
         [],
       ),
     },
+    reviewSummary,
   };
 }

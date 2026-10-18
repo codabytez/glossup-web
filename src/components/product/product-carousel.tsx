@@ -4,9 +4,10 @@ import { motion } from "motion/react";
 import Image from "next/image";
 
 import { ArrowUpRightIcon } from "@/components/icons/arrow-up-right-icon";
-import { ProductCard } from "@/components/product/product-card";
+import { ProductCard, ProductCardSkeleton } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
 import { CarouselArrows } from "@/components/ui/carousel-arrows";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useScrollCarousel } from "@/hooks/use-scroll-carousel";
 import { fadeUpContainer, fadeUpItem } from "@/lib/motion";
 import { cn } from "@/lib/utils";
@@ -93,5 +94,21 @@ export function ProductCarousel({
         {actions}
       </motion.div>
     </motion.section>
+  );
+}
+
+export function ProductCarouselSkeleton({ className }: { className?: string }) {
+  return (
+    <section className={cn("px-4 py-14 sm:px-8 sm:py-20 lg:px-10 lg:py-20 xl:px-20", className)}>
+      <div className="flex flex-col gap-4 2xl:mx-auto 2xl:max-w-384">
+        <Skeleton className="h-4 w-32" />
+        <Skeleton className="h-10 w-64" />
+      </div>
+      <div className="mt-9 flex gap-4 overflow-hidden lg:gap-8">
+        {Array.from({ length: 4 }, (_, i) => (
+          <ProductCardSkeleton key={i} className="w-50 lg:w-74" />
+        ))}
+      </div>
+    </section>
   );
 }

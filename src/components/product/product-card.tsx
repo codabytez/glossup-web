@@ -14,6 +14,7 @@ import { HeartIcon } from "@/components/icons/heart-icon";
 import { StarRating } from "@/components/product/star-rating";
 import { AddToBagButton } from "@/components/ui/add-to-bag-button";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { IMAGE_TRANSITION, TRANSITION } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
@@ -73,12 +74,12 @@ export function ProductCard({
   const { data: session } = useSession();
   const { data: wishlistHandles = [] } = useWishlist();
   const toggleWishlist = useToggleWishlist();
-  const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+  const openSignInPrompt = useSignInPromptStore((s) => s.open);
   const isSaved = wishlistHandles.includes(slug);
 
   const toggleSaved = () => {
     if (!session) {
-      triggerSignInPrompt();
+      openSignInPrompt();
       return;
     }
     toggleWishlist.mutate(slug);
@@ -206,6 +207,21 @@ export function ProductCard({
           />
         </motion.div>
       </motion.div>
+    </div>
+  );
+}
+
+export function ProductCardSkeleton({ className }: { className?: string }) {
+  return (
+    <div className={cn("w-74 shrink-0", className)}>
+      <div className="flex flex-col gap-4">
+        <Skeleton className="bg-grey-50 h-44 w-full lg:h-108" />
+        <div className="flex flex-col gap-2 lg:hidden">
+          <Skeleton className="h-4 w-3/4" />
+          <Skeleton className="h-3 w-1/2" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+      </div>
     </div>
   );
 }

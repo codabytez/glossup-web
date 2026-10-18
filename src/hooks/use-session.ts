@@ -2,8 +2,23 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getSession, logIn, logOut, recoverPassword, resetPassword, signUp } from "@/actions/auth";
-import type { CreateCustomerInput } from "@/queries/customer";
+import {
+  getSession,
+  logIn,
+  logOut,
+  recoverPassword,
+  resetPassword,
+  signUp,
+  updateProfile,
+} from "@/actions/auth";
+import { linkCartToCustomer } from "@/actions/cart";
+import type { CreateCustomerInput, UpdateCustomerInput } from "@/queries/customer";
+import { useCartStore } from "@/store/cart-store";
+
+function linkExistingCartToCustomer() {
+  const cartId = useCartStore.getState().cartId;
+  if (cartId) linkCartToCustomer(cartId);
+}
 
 export function useSession() {
   return useQuery({
@@ -18,7 +33,10 @@ export function useLogIn() {
     mutationFn: ({ email, password }: { email: string; password: string }) =>
       logIn(email, password),
     onSuccess: (result) => {
-      if (result.success) queryClient.invalidateQueries({ queryKey: ["session"] });
+      if (result.success) {
+        queryClient.invalidateQueries({ queryKey: ["session"] });
+        linkExistingCartToCustomer();
+      }
     },
   });
 }
@@ -28,7 +46,10 @@ export function useSignUp() {
   return useMutation({
     mutationFn: (input: CreateCustomerInput) => signUp(input),
     onSuccess: (result) => {
-      if (result.success) queryClient.invalidateQueries({ queryKey: ["session"] });
+      if (result.success) {
+        queryClient.invalidateQueries({ queryKey: ["session"] });
+        linkExistingCartToCustomer();
+      }
     },
   });
 }
@@ -44,6 +65,19 @@ export function useResetPassword() {
   return useMutation({
     mutationFn: ({ id, token, password }: { id: string; token: string; password: string }) =>
       resetPassword(id, token, password),
+    onSuccess: (result) => {
+      if (result.success) {
+        queryClient.invalidateQueries({ queryKey: ["session"] });
+        linkExistingCartToCustomer();
+      }
+    },
+  });
+}
+
+export function useUpdateProfile() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: UpdateCustomerInput) => updateProfile(input),
     onSuccess: (result) => {
       if (result.success) queryClient.invalidateQueries({ queryKey: ["session"] });
     },

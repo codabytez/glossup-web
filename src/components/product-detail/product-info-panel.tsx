@@ -43,12 +43,12 @@ export function ProductInfoPanel({
   const { data: session } = useSession();
   const { data: wishlistHandles = [] } = useWishlist();
   const toggleWishlist = useToggleWishlist();
-  const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+  const openSignInPrompt = useSignInPromptStore((s) => s.open);
   const isSaved = wishlistHandles.includes(slug);
 
   const toggleSaved = () => {
     if (!session) {
-      triggerSignInPrompt();
+      openSignInPrompt();
       return;
     }
     toggleWishlist.mutate(slug);

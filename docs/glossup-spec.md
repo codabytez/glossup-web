@@ -70,7 +70,7 @@ GlossUp is a Nigerian cosmetics e-commerce brand delivering a premium shopping e
 | Forms          | React Hook Form + Zod  | Form handling & validation                    |
 | E-Commerce     | Shopify Storefront API | Products, orders, fulfillment                 |
 | Payments       | Paystack (via Shopify) | Nigerian payment processing                   |
-| Logistics      | GIG Logistics API      | Order tracking & fulfillment                  |
+| Logistics      | Fez Delivery API       | Order tracking & fulfillment                  |
 | Deployment     | Vercel                 | Hosting & preview deployments                 |
 | Env Validation | @t3-oss/env-nextjs     | Type-safe environment variables               |
 
@@ -170,8 +170,11 @@ All env vars are validated at build time using `@t3-oss/env-nextjs`. The app wil
 | `SHOPIFY_STORE_DOMAIN`                 | Server | Shopify store domain (`*.myshopify.com`)        |
 | `SHOPIFY_ADMIN_API_KEY`                | Server | Shopify Admin API key (used for order tracking) |
 | `SHOPIFY_ADMIN_API_VERSION`            | Server | API version e.g. `2025-01`                      |
-| `GIG_API_KEY`                          | Server | GIG Logistics API key                           |
-| `GIG_API_BASE_URL`                     | Server | GIG Logistics API base URL                      |
+| `FEZ_API_BASE_URL`                     | Server | Fez Delivery API base URL                       |
+| `FEZ_SECRET_KEY`                       | Server | Fez Delivery API secret key                     |
+| `FEZ_USER_ID`                          | Server | Fez Delivery auth user ID                       |
+| `FEZ_PASSWORD`                         | Server | Fez Delivery auth password                      |
+| `FEZ_WEBHOOK_SECRET`                   | Server | HMAC secret to verify Fez delivery webhooks     |
 | `SENTRY_DSN`                           | Server | Sentry error tracking DSN                       |
 | `NEXT_PUBLIC_SHOPIFY_STORE_DOMAIN`     | Client | Shopify domain for Storefront API calls         |
 | `NEXT_PUBLIC_SHOPIFY_STOREFRONT_TOKEN` | Client | Public Storefront access token                  |
@@ -196,10 +199,11 @@ glossup-web/
 │   │   │   └── track-order/
 │   │   │       └── page.tsx                  # Order tracking page
 │   │   ├── api/
-│   │   │   ├── shopify/
-│   │   │   │   └── route.ts                  # Shopify webhook handler
-│   │   │   └── track/
-│   │   │       └── route.ts                  # Order tracking API endpoint
+│   │   │   └── fez/
+│   │   │       ├── webhook/
+│   │   │       │   └── route.ts              # Fez delivery status webhook
+│   │   │       └── [...path]/
+│   │   │           └── route.ts              # Authenticated proxy to Fez API (used by the separate Admin Dashboard)
 │   │   ├── layout.tsx
 │   │   └── globals.css
 │   ├── components/
@@ -215,8 +219,9 @@ glossup-web/
 │   │   │   ├── client.ts                     # Storefront API client
 │   │   │   ├── queries.ts                    # GraphQL queries
 │   │   │   └── types.ts                      # Shopify TypeScript types
-│   │   ├── gig/
-│   │   │   └── client.ts                     # GIG Logistics API client
+│   │   ├── fez/
+│   │   │   ├── client.ts                     # Fez Delivery API client (auto-refreshing bearer token)
+│   │   │   └── endpoints.ts                  # Fez API endpoint definitions
 │   │   └── env.ts                            # @t3-oss env schema & validation
 │   ├── hooks/                                # useCart, useTrackOrder, useProduct
 │   ├── store/                                # Zustand cart store
@@ -241,16 +246,16 @@ glossup-web/
 | API            | Usage                                       | Called From                      |
 | -------------- | ------------------------------------------- | -------------------------------- |
 | Storefront API | Products, collections, cart creation        | Client (public storefront token) |
-| Admin API      | Order lookup by order number + email        | Server only (route handler)      |
-| Webhooks       | Fulfillment events → trigger status updates | `api/shopify/route.ts`           |
+| Admin API      | Order lookup by order number + email        | Server only (Server Action)      |
+| Fez Webhook    | Delivery status events → update fulfillment | `api/fez/webhook/route.ts`       |
 
 ### 5.2 Order Tracking Flow
 
 1. Customer submits order number + email on `/track-order`
-2. Next.js server action calls Shopify Admin API (server-side only)
-3. Response returns fulfillment status + tracking number + carrier
-4. If carrier is GIG → hit GIG Logistics API with tracking number for granular status
-5. If GIG API is unavailable → show Shopify fulfillment status + deep-link to GIG tracking page with tracking number pre-filled
+2. Next.js Server Action calls the Shopify Admin API (server-side only) to fetch fulfillment details, including the Fez tracking number
+3. Server Action calls the Fez API (`GET /track/{tracking_number}`) for live status + checkpoint history
+4. Returns current status + full history timeline
+5. If the Fez API is unavailable, show the last known Shopify fulfillment status + a deep-link to `fezdelivery.co/track/{orderNumber}`
 6. Render branded status timeline with Framer Motion animations
 
 ### 5.3 Cart State
@@ -375,7 +380,7 @@ glossup-web/
 - `not-found.tsx` for 404 pages
 - API routes return structured JSON with proper HTTP status codes
 - Zod validation errors surface as field-level messages in forms
-- GIG API failure falls back gracefully to tracking URL deep-link
+- Fez API failure falls back gracefully to tracking URL deep-link
 
 ---
 

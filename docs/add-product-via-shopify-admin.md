@@ -10,21 +10,21 @@ For when it's just one or two products and the CSV import (see `product-upload-t
 4. Under **Variants**, click **Add options like size or color** → Option name `Size` → values `25ml`, `50ml`, `75ml`, `100ml`. Shopify creates 4 variants automatically — click into each one and set its **Price** and **Compare-at price**
 5. Set **Product category** / **Type**, and assign it to the right **Collection(s)** in the right-hand sidebar (Skincare, Body Care, Targeted Care, Soap, Fragrance, or Essential Oils — a product can be in more than one)
 6. Scroll down to **Search engine listing** and set the **URL and handle** — lowercase, hyphenated, e.g. `the-cream`. This becomes the product's page address, so keep it short and matching the title
-7. Scroll to the very bottom of the page — the 8 custom fields below all appear automatically as their own labeled inputs, since they're already set up on this store
+7. Scroll to the very bottom of the page — the custom fields below all appear automatically as their own labeled inputs, since they're already set up on this store
 8. Click **Save**
 
-## The 8 custom fields at the bottom of the page
+## The custom fields at the bottom of the page
 
 | Field             | What to enter                                                               |
 | ----------------- | --------------------------------------------------------------------------- |
 | Short Description | One short line for the shop grid cards, e.g. `Gentle & hydrating body wash` |
-| Rating            | `0` for a brand-new product with no reviews yet                             |
-| Review Count      | `0` for a brand-new product                                                 |
 | Benefits          | See below                                                                   |
 | Core Ingredients  | See below                                                                   |
 | All Ingredients   | Plain text, e.g. `Aqua • Niacinamide • Tea Tree Oil • Ceramides`            |
 | How To Use        | See below                                                                   |
 | FAQs              | See below                                                                   |
+
+> You may still see **Rating** and **Review Count** fields further down — ignore/leave them blank. Star ratings and review counts are now pulled live from Judge.me, not from these fields; they're no longer read anywhere on the site.
 
 **Benefits, Core Ingredients, How To Use, and FAQs** are typed as JSON — typing these directly into Shopify is easier than the CSV route, because you don't need to double up quote marks the way a spreadsheet cell requires.
 

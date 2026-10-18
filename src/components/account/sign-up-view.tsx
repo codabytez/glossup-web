@@ -5,10 +5,11 @@ import { Eye, EyeOff } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { WordmarkLogo } from "@/components/icons/wordmark";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import reviews from "@/data/reviews.json";
 import { useLogIn, useSignUp } from "@/hooks/use-session";
@@ -18,11 +19,14 @@ const TESTIMONIAL_INTERVAL_MS = 5500;
 
 export function SignUpView() {
   const router = useRouter();
-  const [mode, setMode] = useState<"sign-up" | "log-in">("sign-up");
+  const searchParams = useSearchParams();
+  const initialMode = searchParams.get("mode") === "log-in" ? "log-in" : "sign-up";
+  const [mode, setMode] = useState<"sign-up" | "log-in">(initialMode);
   const [showPassword, setShowPassword] = useState(false);
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [acceptsMarketing, setAcceptsMarketing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const testimonial = reviews[testimonialIndex];
   const signUp = useSignUp();
@@ -41,7 +45,7 @@ export function SignUpView() {
     setErrorMessage(null);
     const result =
       mode === "sign-up"
-        ? await signUp.mutateAsync({ email, password })
+        ? await signUp.mutateAsync({ email, password, acceptsMarketing })
         : await logIn.mutateAsync({ email, password });
     if (result.success) {
       router.refresh();
@@ -114,6 +118,19 @@ export function SignUpView() {
                   </button>
                 </div>
               </div>
+
+              {mode === "sign-up" && (
+                <button
+                  type="button"
+                  onClick={() => setAcceptsMarketing((v) => !v)}
+                  className="flex items-center gap-2 text-left"
+                >
+                  <Checkbox checked={acceptsMarketing} />
+                  <span className="text-grey-600 text-sm">
+                    Keep me posted on new products and offers
+                  </span>
+                </button>
+              )}
 
               {errorMessage && (
                 <p className="text-sm font-medium text-red-600" role="alert">
