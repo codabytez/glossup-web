@@ -47,7 +47,7 @@ export function PromptSignInModal({ open, onOpenChange }: PromptSignInModalProps
 
           <div className="flex w-full flex-col gap-4">
             <Button
-              href="/account"
+              href="/account?mode=sign-up"
               variant="primary"
               size="pill"
               onClick={() => onOpenChange(false)}
@@ -56,7 +56,7 @@ export function PromptSignInModal({ open, onOpenChange }: PromptSignInModalProps
               Sign Up
             </Button>
             <Button
-              href="/account"
+              href="/account?mode=log-in"
               variant="ghost"
               size="pill"
               fillOnHover

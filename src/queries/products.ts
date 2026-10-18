@@ -1,10 +1,14 @@
 import "server-only";
 
+import { getMockReviews, MOCK_PRODUCTS, type MockProduct } from "@/data/mock-catalog";
+import { USE_MOCK_DATA } from "@/lib/mock";
 import { shopify } from "@/lib/shopify";
 import { toNaira } from "@/lib/utils";
+import { getAllProductRatings, getProductReviews } from "@/queries/reviews";
 
 const PRODUCT_CARD_FRAGMENT = `#graphql
   fragment ProductCard on Product {
+    id
     handle
     title
     description
@@ -26,12 +30,6 @@ const PRODUCT_CARD_FRAGMENT = `#graphql
       nodes {
         handle
       }
-    }
-    rating: metafield(namespace: "custom", key: "rating") {
-      value
-    }
-    reviewCount: metafield(namespace: "custom", key: "review_count") {
-      value
     }
     coreIngredients: metafield(namespace: "custom", key: "core_ingredients") {
       value
@@ -102,6 +100,7 @@ interface VariantNode {
 }
 
 interface ProductCardNode {
+  id: string;
   handle: string;
   title: string;
   description: string;
@@ -109,11 +108,14 @@ interface ProductCardNode {
   priceRange: { minVariantPrice: { amount: string } };
   compareAtPriceRange: { minVariantPrice: { amount: string } } | null;
   collections: { nodes: { handle: string }[] };
-  rating: { value: string } | null;
-  reviewCount: { value: string } | null;
   coreIngredients: { value: string } | null;
   shortDescription: { value: string } | null;
   variants: { nodes: VariantNode[] };
+}
+
+/** Shopify GID (e.g. "gid://shopify/Product/123") -> numeric id, matching Judge.me's external_id. */
+function shopifyNumericId(gid: string): string {
+  return gid.split("/").pop() ?? gid;
 }
 
 interface ProductDetailNode extends ProductCardNode {
@@ -145,7 +147,10 @@ function mapVariant(node: VariantNode): ProductVariant {
   };
 }
 
-function mapProductCard(node: ProductCardNode): Product {
+function mapProductCard(
+  node: ProductCardNode,
+  rating: { rating: number; reviewCount: number } | undefined,
+): Product {
   const coreIngredients = parseJsonMetafield<{ percent: string; name: string }[]>(
     node.coreIngredients?.value,
     [],
@@ -161,8 +166,8 @@ function mapProductCard(node: ProductCardNode): Product {
     price: toNaira(price),
     originalPrice: compareAt && Number(compareAt) > Number(price) ? toNaira(compareAt) : undefined,
     image: node.featuredImage?.url ?? "",
-    rating: node.rating ? Number(node.rating.value) : 0,
-    reviewCount: node.reviewCount?.value ?? "0",
+    rating: rating?.rating ?? 0,
+    reviewCount: String(rating?.reviewCount ?? 0),
     category: categories[0],
     categories,
     variants: node.variants.nodes.map(mapVariant),
@@ -170,18 +175,73 @@ function mapProductCard(node: ProductCardNode): Product {
   };
 }
 
+function summarizeMockReviews(product: MockProduct): ProductReviewSummary {
+  const reviews = getMockReviews(product);
+  const distribution = [5, 4, 3, 2, 1].map((stars) => ({
+    stars,
+    count: reviews.filter((r) => r.rating === stars).length,
+  }));
+  const average = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+  return { reviews, average, total: reviews.length, distribution };
+}
+
+function mapMockProduct(product: MockProduct): Product {
+  const [cheapest] = product.variants;
+  const summary = summarizeMockReviews(product);
+  return {
+    slug: product.slug,
+    name: product.name,
+    description: product.shortDescription,
+    price: toNaira(cheapest?.price ?? 0),
+    originalPrice: cheapest?.compareAtPrice ? toNaira(cheapest.compareAtPrice) : undefined,
+    image: product.image,
+    rating: summary.average,
+    reviewCount: String(summary.total),
+    category: product.categories[0],
+    categories: product.categories,
+    variants: product.variants.map((v) => ({
+      id: v.id,
+      size: v.size,
+      price: toNaira(v.price),
+      compareAtPrice: v.compareAtPrice ? toNaira(v.compareAtPrice) : undefined,
+      availableForSale: true,
+    })),
+    ingredients: product.features.coreIngredients.map((i) => i.name),
+  };
+}
+
 export async function getProducts(first = 50): Promise<Product[]> {
-  const { data, errors } = await shopify.request<{ products: { nodes: ProductCardNode[] } }>(
-    PRODUCTS_QUERY,
-    { variables: { first } },
-  );
+  if (USE_MOCK_DATA) return MOCK_PRODUCTS.slice(0, first).map(mapMockProduct);
+
+  const [{ data, errors }, ratings] = await Promise.all([
+    shopify.request<{ products: { nodes: ProductCardNode[] } }>(PRODUCTS_QUERY, {
+      variables: { first },
+    }),
+    getAllProductRatings(),
+  ]);
   if (errors) {
     console.error("getProducts GraphQL error:", errors);
   }
-  return data?.products.nodes.map(mapProductCard) ?? [];
+  return (
+    data?.products.nodes.map((node) =>
+      mapProductCard(node, ratings.get(shopifyNumericId(node.id))),
+    ) ?? []
+  );
 }
 
 export async function getProductByHandle(handle: string): Promise<ProductDetail | null> {
+  if (USE_MOCK_DATA) {
+    const product = MOCK_PRODUCTS.find((p) => p.slug === handle);
+    if (!product) return null;
+    return {
+      ...mapMockProduct(product),
+      description: product.description,
+      images: product.images,
+      features: product.features,
+      reviewSummary: summarizeMockReviews(product),
+    };
+  }
+
   const { data, errors } = await shopify.request<{ product: ProductDetailNode | null }>(
     PRODUCT_BY_HANDLE_QUERY,
     { variables: { handle } },
@@ -191,8 +251,13 @@ export async function getProductByHandle(handle: string): Promise<ProductDetail 
   }
   if (!data?.product) return null;
 
+  const reviewSummary = await getProductReviews(shopifyNumericId(data.product.id));
+
   return {
-    ...mapProductCard(data.product),
+    ...mapProductCard(data.product, {
+      rating: reviewSummary.average,
+      reviewCount: reviewSummary.total,
+    }),
     description: data.product.description,
     images: data.product.images.nodes.map((img) => img.url),
     features: {
@@ -207,5 +272,6 @@ export async function getProductByHandle(handle: string): Promise<ProductDetail 
         [],
       ),
     },
+    reviewSummary,
   };
 }

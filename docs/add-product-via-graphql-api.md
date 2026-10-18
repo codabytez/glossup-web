@@ -136,7 +136,9 @@ Repeat for a second collection if the product belongs to more than one (e.g. The
 
 ## Step 5 — Set the metafields
 
-There are 7 custom fields the frontend reads (`src/queries/products.ts`). All must exist as **metafield definitions** already (Settings → Custom data → Products in Shopify Admin, or `metafieldDefinitionCreate`) with **Storefront API access set to `PUBLIC_READ`** — otherwise the frontend won't be able to read them, even if the value is set correctly. See the "Metafield access" gotcha below.
+There are 6 custom fields the frontend reads (`src/queries/products.ts`). All must exist as **metafield definitions** already (Settings → Custom data → Products in Shopify Admin, or `metafieldDefinitionCreate`) with **Storefront API access set to `PUBLIC_READ`** — otherwise the frontend won't be able to read them, even if the value is set correctly. See the "Metafield access" gotcha below.
+
+> Note: `custom.rating` and `custom.review_count` still exist as legacy metafield definitions but are **not read by the frontend anymore** — star ratings and review counts are pulled live from Judge.me instead. Don't bother setting them.
 
 ```bash
 curl -s -X POST "https://glossup-dev.myshopify.com/admin/api/2026-04/graphql.json" \
@@ -146,8 +148,7 @@ curl -s -X POST "https://glossup-dev.myshopify.com/admin/api/2026-04/graphql.jso
     "query": "mutation SetMetafields($metafields: [MetafieldsSetInput!]!) { metafieldsSet(metafields: $metafields) { userErrors { field message } } }",
     "variables": {
       "metafields": [
-        { "ownerId": "gid://shopify/Product/YOUR_PRODUCT_ID", "namespace": "custom", "key": "rating", "type": "number_decimal", "value": "4.2" },
-        { "ownerId": "gid://shopify/Product/YOUR_PRODUCT_ID", "namespace": "custom", "key": "review_count", "type": "single_line_text_field", "value": "1.4k" },
+        { "ownerId": "gid://shopify/Product/YOUR_PRODUCT_ID", "namespace": "custom", "key": "short_description", "type": "single_line_text_field", "value": "Gentle & hydrating body wash" },
         { "ownerId": "gid://shopify/Product/YOUR_PRODUCT_ID", "namespace": "custom", "key": "benefits", "type": "json", "value": "[\"Gently cleanses skin\",\"Deeply nourishes and hydrates\"]" },
         { "ownerId": "gid://shopify/Product/YOUR_PRODUCT_ID", "namespace": "custom", "key": "core_ingredients", "type": "json", "value": "[{\"percent\":\"3.5%\",\"name\":\"Niacinamide\"}]" },
         { "ownerId": "gid://shopify/Product/YOUR_PRODUCT_ID", "namespace": "custom", "key": "all_ingredients", "type": "multi_line_text_field", "value": "Aqua • Niacinamide • Tea Tree Oil" },
@@ -172,11 +173,11 @@ curl -s -X POST "https://glossup-dev.myshopify.com/admin/api/2026-04/graphql.jso
   -H "Content-Type: application/json" \
   -d '{
     "query": "mutation CreateDef($def: MetafieldDefinitionInput!) { metafieldDefinitionCreate(definition: $def) { createdDefinition { id } userErrors { field message } } }",
-    "variables": { "def": { "name": "Rating", "namespace": "custom", "key": "rating", "type": "number_decimal", "ownerType": "PRODUCT", "access": { "storefront": "PUBLIC_READ" } } }
+    "variables": { "def": { "name": "Your Field Name", "namespace": "custom", "key": "your_new_key", "type": "single_line_text_field", "ownerType": "PRODUCT", "access": { "storefront": "PUBLIC_READ" } } }
   }'
 ```
 
-The 7 keys this project already uses (`rating`, `review_count`, `benefits`, `core_ingredients`, `all_ingredients`, `how_to_use`, `faqs`) already have definitions with `PUBLIC_READ` set — you only need this step for a genuinely new metafield key.
+The 6 keys this project already uses (`short_description`, `benefits`, `core_ingredients`, `all_ingredients`, `how_to_use`, `faqs`) already have definitions with `PUBLIC_READ` set — you only need this step for a genuinely new metafield key.
 
 ---
 

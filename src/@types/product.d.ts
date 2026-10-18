@@ -31,4 +31,5 @@ interface ProductFeatureContent {
 interface ProductDetail extends Product {
   images: string[];
   features: ProductFeatureContent;
+  reviewSummary: ProductReviewSummary;
 }

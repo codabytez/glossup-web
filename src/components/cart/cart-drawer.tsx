@@ -15,6 +15,7 @@ import {
   useRemoveCartLine,
   useUpdateCartLineQuantity,
 } from "@/hooks/use-cart";
+import { useSession } from "@/hooks/use-session";
 import { parsePrice } from "@/lib/product-filters";
 import { toNaira } from "@/lib/utils";
 import { useCartStore } from "@/store/cart-store";
@@ -111,7 +112,7 @@ function CartItemRow({ line }: { line: CartLine }) {
   );
 }
 
-function EmptyCart() {
+function EmptyCart({ isSignedIn }: { isSignedIn: boolean }) {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-18 px-4 py-12 sm:px-8">
       <Image
@@ -131,16 +132,18 @@ function EmptyCart() {
         </div>
 
         <div className="flex w-full flex-col gap-4 sm:flex-row">
-          <Button
-            href="/account"
-            variant="ghost"
-            size="pill"
-            fillOnHover
-            fillVariant="secondary"
-            className="bg-grey-100 w-full font-normal sm:flex-1"
-          >
-            Sign In
-          </Button>
+          {!isSignedIn && (
+            <Button
+              href="/account"
+              variant="ghost"
+              size="pill"
+              fillOnHover
+              fillVariant="secondary"
+              className="bg-grey-100 w-full font-normal sm:flex-1"
+            >
+              Sign In
+            </Button>
+          )}
           <Button href="/products" variant="primary" size="pill" className="w-full sm:flex-1">
             Browse products
           </Button>
@@ -154,6 +157,7 @@ export function CartDrawer() {
   const isOpen = useCartStore((s) => s.isOpen);
   const close = useCartStore((s) => s.close);
   const { data: cart } = useCart();
+  const { data: session } = useSession();
   const lines = cart?.lines ?? [];
   const total = toNaira(
     lines.reduce((sum, line) => sum + parsePrice(line.price) * line.quantity, 0),
@@ -197,7 +201,7 @@ export function CartDrawer() {
         </div>
 
         {isEmpty ? (
-          <EmptyCart />
+          <EmptyCart isSignedIn={!!session} />
         ) : (
           <>
             {/* Items */}
@@ -211,16 +215,18 @@ export function CartDrawer() {
 
             {/* Footer */}
             <div className="flex shrink-0 flex-col gap-6 px-4 pt-4 pb-6 sm:px-8 sm:pt-6 sm:pb-8">
-              {/* Sign in prompt */}
-              <div className="flex items-center justify-center gap-2">
-                <UserIcon className="text-grey-600 size-5 shrink-0" />
-                <p className="text-body-base">
-                  <Link href="/account" className="text-grey-950 font-medium hover:underline">
-                    Sign In • Create account
-                  </Link>
-                  <span className="text-grey-600 font-normal"> to check out quickly</span>
-                </p>
-              </div>
+              {/* Sign in prompt — only relevant for guests */}
+              {!session && (
+                <div className="flex items-center justify-center gap-2">
+                  <UserIcon className="text-grey-600 size-5 shrink-0" />
+                  <p className="text-body-base">
+                    <Link href="/account" className="text-grey-950 font-medium hover:underline">
+                      Sign In • Create account
+                    </Link>
+                    <span className="text-grey-600 font-normal"> to check out quickly</span>
+                  </p>
+                </div>
+              )}
 
               {/* Action buttons */}
               <div className="flex flex-col gap-4 sm:flex-row">

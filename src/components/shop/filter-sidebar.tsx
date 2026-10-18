@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { PriceRangeSlider } from "@/components/shop/price-range-slider";
+import { Skeleton } from "@/components/ui/skeleton";
 import { DEFAULT_PRODUCT_FILTERS, type ProductFilters } from "@/lib/product-filters";
 import { cn } from "@/lib/utils";
 
@@ -262,6 +263,37 @@ export function FilterSidebar({
       >
         Clear filters
       </Button>
+    </div>
+  );
+}
+
+export function FilterSidebarSkeleton({ hideCategory }: { hideCategory?: boolean }) {
+  return (
+    <div className="flex flex-col gap-8">
+      {!hideCategory && (
+        <>
+          <div className="flex flex-col gap-4">
+            <Skeleton className="h-4 w-20" />
+            <div className="flex flex-col gap-3">
+              {Array.from({ length: 5 }, (_, i) => (
+                <Skeleton key={i} className="h-4 w-32" />
+              ))}
+            </div>
+          </div>
+          <div className="bg-grey-200 h-px w-full shrink-0" />
+        </>
+      )}
+
+      {["Price", "Ingredients", "Ratings"].map((section) => (
+        <div key={section} className="flex flex-col gap-4">
+          <Skeleton className="h-4 w-20" />
+          <div className="flex flex-col gap-3">
+            {Array.from({ length: 4 }, (_, i) => (
+              <Skeleton key={i} className="h-4 w-28" />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

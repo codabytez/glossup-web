@@ -25,11 +25,11 @@ Most columns are self-explanatory:
 
 ## Filling in the trickier columns
 
-These 6 columns are how the actual product page gets its content — ratings, benefits, ingredients, etc. Fill them in **only on the first row of each product** (leave blank on the size rows below).
+These 6 columns are how the actual product page gets its content — benefits, ingredients, etc. Fill them in **only on the first row of each product** (leave blank on the size rows below).
 
 **Short Description** — one short line, shown on the shop grid cards. Example: `Gentle & hydrating body wash`
 
-**Rating** / **Review Count** — leave both as `0` for a brand-new product with no reviews yet.
+> Note: there's no Rating or Review Count column anymore — star ratings and review counts are pulled live from Judge.me (see the reviews app), not entered manually. Nothing to fill in here.
 
 **Benefits, Core Ingredients, How To Use, FAQs** — these four need to be typed in a specific bracketed format. The safest way: **copy the exact cell from row 2 (The Wash) as your starting point**, then only change the text between the quote marks — don't add, remove, or move any punctuation.
 

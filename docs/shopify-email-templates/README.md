@@ -17,6 +17,8 @@ a test.
 
 - [`password-reset.liquid`](./password-reset.liquid) — "Customer account
   password reset" notification. Subject: `Reset your Gloss Up password`.
+- [`customer-account-welcome.liquid`](./customer-account-welcome.liquid) —
+  "Customer account welcome" notification. Subject: `Welcome to Gloss Up`.
 
 ## Brand pattern to reuse for the next template
 
@@ -53,13 +55,14 @@ they feel like one system:
 
 ## TODO
 
-The reset link in `password-reset.liquid` currently points at the Vercel
-deployment domain:
+Both templates currently hardcode the Vercel deployment domain
+(`https://glossup.vercel.app`) for their links/logo fallback, since no custom
+domain is connected yet:
 
-```liquid
-{{ customer.reset_password_url | replace: shop.url, 'https://glossup.vercel.app' }}
-```
+- `password-reset.liquid`: `{{ customer.reset_password_url | replace: shop.url, 'https://glossup.vercel.app' }}`
+- `customer-account-welcome.liquid`: logo fallback link and the "Start
+  shopping" CTA both point at `https://glossup.vercel.app` directly.
 
-**Update this once a custom domain (e.g. `glossup.com`, matching `SITE_URL` in
-`.env.example`) is connected in Vercel** — otherwise password-reset emails
-keep linking to the `.vercel.app` domain instead of the real storefront URL.
+**Update these once a custom domain (e.g. `glossup.com`, matching `SITE_URL`
+in `.env.example`) is connected in Vercel** — otherwise these emails keep
+linking to the `.vercel.app` domain instead of the real storefront URL.

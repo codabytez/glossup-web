@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { linkCartToCustomer } from "@/actions/cart";
 import {
   addCartLines,
   createCart,
@@ -11,6 +12,7 @@ import {
   updateCartLineVariant,
 } from "@/queries/cart";
 import { useCartStore } from "@/store/cart-store";
+import { useSession } from "@/hooks/use-session";
 
 function cartQueryKey(cartId: string | null) {
   return ["cart", cartId] as const;
@@ -36,15 +38,22 @@ export function useAddToCart() {
   const cartId = useCartStore((s) => s.cartId);
   const setCartId = useCartStore((s) => s.setCartId);
   const openCart = useCartStore((s) => s.open);
+  const { data: session } = useSession();
 
   return useMutation({
     mutationFn: ({ variantId, quantity = 1 }: { variantId: string; quantity?: number }) =>
       cartId ? addCartLines(cartId, variantId, quantity) : createCart(variantId, quantity),
     onSuccess: (cart) => {
       if (!cart) return;
+      const isNewCart = !cartId;
       setCartId(cart.id);
       queryClient.setQueryData(cartQueryKey(cart.id), cart);
       openCart();
+      // A cart created while already signed in still starts out anonymous on
+      // Shopify's side — link it so hosted checkout recognizes the customer.
+      if (isNewCart && session) {
+        linkCartToCustomer(cart.id);
+      }
     },
   });
 }

@@ -1,8 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Pencil } from "lucide-react";
 
+import { EditNameModal } from "@/components/account/edit-name-modal";
+import { OrderHistory } from "@/components/account/order-history";
 import { WordmarkLogo } from "@/components/icons/wordmark";
 import { ProductCard } from "@/components/product/product-card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +23,7 @@ export function AccountView({ customer, products }: AccountViewProps) {
   const { data: wishlistHandles = [] } = useWishlist();
   const logOut = useLogOut();
   const savedProducts = products.filter((p) => wishlistHandles.includes(p.slug));
+  const [editNameOpen, setEditNameOpen] = useState(false);
 
   const displayName =
     [customer.firstName, customer.lastName].filter(Boolean).join(" ") || customer.email;
@@ -26,6 +31,11 @@ export function AccountView({ customer, products }: AccountViewProps) {
   const handleLogOut = async () => {
     await logOut.mutateAsync();
     router.refresh();
+  };
+
+  const handleEditNameChange = (open: boolean) => {
+    setEditNameOpen(open);
+    if (!open) router.refresh();
   };
 
   return (
@@ -47,8 +57,23 @@ export function AccountView({ customer, products }: AccountViewProps) {
 
       <div className="mx-auto flex w-full max-w-384 flex-col gap-10 px-4 py-10 sm:px-8 lg:px-20">
         <div className="flex flex-col gap-1">
-          <p className="text-header-h1 text-grey-950 font-normal">Hi, {displayName}</p>
+          <div className="flex items-center gap-2">
+            <p className="text-header-h1 text-grey-950 font-normal">Hi, {displayName}</p>
+            <button
+              type="button"
+              aria-label="Edit name"
+              onClick={() => setEditNameOpen(true)}
+              className="text-grey-500 hover:text-grey-950 transition-colors"
+            >
+              <Pencil className="size-4" />
+            </button>
+          </div>
           <p className="text-grey-600 text-sm">{customer.email}</p>
+        </div>
+
+        <div className="flex flex-col gap-6">
+          <p className="text-header-h2 text-grey-950 font-normal">Order History</p>
+          <OrderHistory />
         </div>
 
         <div className="flex flex-col gap-6">
@@ -66,6 +91,8 @@ export function AccountView({ customer, products }: AccountViewProps) {
           )}
         </div>
       </div>
+
+      <EditNameModal open={editNameOpen} onOpenChange={handleEditNameChange} customer={customer} />
     </div>
   );
 }
