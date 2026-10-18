@@ -1,5 +1,7 @@
 import "server-only";
 
+import { MOCK_COLLECTIONS } from "@/data/mock-catalog";
+import { USE_MOCK_DATA } from "@/lib/mock";
 import { shopify } from "@/lib/shopify";
 
 const COLLECTIONS_QUERY = `#graphql
@@ -36,6 +38,8 @@ function stripHtml(html: string) {
 }
 
 export async function getCollections(first = 20): Promise<Category[]> {
+  if (USE_MOCK_DATA) return MOCK_COLLECTIONS.slice(0, first);
+
   const { data, errors } = await shopify.request<{ collections: { nodes: CollectionNode[] } }>(
     COLLECTIONS_QUERY,
     { variables: { first } },

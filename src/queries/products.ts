@@ -1,5 +1,7 @@
 import "server-only";
 
+import { getMockReviews, MOCK_PRODUCTS, type MockProduct } from "@/data/mock-catalog";
+import { USE_MOCK_DATA } from "@/lib/mock";
 import { shopify } from "@/lib/shopify";
 import { toNaira } from "@/lib/utils";
 import { getAllProductRatings, getProductReviews } from "@/queries/reviews";
@@ -173,7 +175,44 @@ function mapProductCard(
   };
 }
 
+function summarizeMockReviews(product: MockProduct): ProductReviewSummary {
+  const reviews = getMockReviews(product);
+  const distribution = [5, 4, 3, 2, 1].map((stars) => ({
+    stars,
+    count: reviews.filter((r) => r.rating === stars).length,
+  }));
+  const average = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+  return { reviews, average, total: reviews.length, distribution };
+}
+
+function mapMockProduct(product: MockProduct): Product {
+  const [cheapest] = product.variants;
+  const summary = summarizeMockReviews(product);
+  return {
+    slug: product.slug,
+    name: product.name,
+    description: product.shortDescription,
+    price: toNaira(cheapest?.price ?? 0),
+    originalPrice: cheapest?.compareAtPrice ? toNaira(cheapest.compareAtPrice) : undefined,
+    image: product.image,
+    rating: summary.average,
+    reviewCount: String(summary.total),
+    category: product.categories[0],
+    categories: product.categories,
+    variants: product.variants.map((v) => ({
+      id: v.id,
+      size: v.size,
+      price: toNaira(v.price),
+      compareAtPrice: v.compareAtPrice ? toNaira(v.compareAtPrice) : undefined,
+      availableForSale: true,
+    })),
+    ingredients: product.features.coreIngredients.map((i) => i.name),
+  };
+}
+
 export async function getProducts(first = 50): Promise<Product[]> {
+  if (USE_MOCK_DATA) return MOCK_PRODUCTS.slice(0, first).map(mapMockProduct);
+
   const [{ data, errors }, ratings] = await Promise.all([
     shopify.request<{ products: { nodes: ProductCardNode[] } }>(PRODUCTS_QUERY, {
       variables: { first },
@@ -191,6 +230,18 @@ export async function getProducts(first = 50): Promise<Product[]> {
 }
 
 export async function getProductByHandle(handle: string): Promise<ProductDetail | null> {
+  if (USE_MOCK_DATA) {
+    const product = MOCK_PRODUCTS.find((p) => p.slug === handle);
+    if (!product) return null;
+    return {
+      ...mapMockProduct(product),
+      description: product.description,
+      images: product.images,
+      features: product.features,
+      reviewSummary: summarizeMockReviews(product),
+    };
+  }
+
   const { data, errors } = await shopify.request<{ product: ProductDetailNode | null }>(
     PRODUCT_BY_HANDLE_QUERY,
     { variables: { handle } },
