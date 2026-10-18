@@ -116,6 +116,24 @@ const CART_LINES_REMOVE_MUTATION = `#graphql
   }
 `;
 
+const CART_BUYER_IDENTITY_UPDATE_MUTATION = `#graphql
+  ${CART_FIELDS_FRAGMENT}
+  mutation CartBuyerIdentityUpdate($cartId: ID!, $customerAccessToken: String!) {
+    cartBuyerIdentityUpdate(
+      cartId: $cartId
+      buyerIdentity: { customerAccessToken: $customerAccessToken }
+    ) {
+      cart {
+        ...CartFields
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
 interface CartLineNode {
   id: string;
   quantity: number;
@@ -251,4 +269,25 @@ export async function removeCartLine(cartId: string, lineId: string): Promise<Ca
   });
   logErrors("removeCartLine", errors, data?.cartLinesRemove.userErrors);
   return data?.cartLinesRemove.cart ? mapCart(data.cartLinesRemove.cart) : null;
+}
+
+/**
+ * Links a cart to a customer so Shopify's hosted checkout recognizes them as signed in.
+ * Takes the customer access token directly — only ever call this from server code
+ * (e.g. a Server Action reading the httpOnly session cookie), never from the client.
+ */
+export async function linkCartToCustomer(
+  cartId: string,
+  customerAccessToken: string,
+): Promise<Cart | null> {
+  const { data, errors } = await shopifyStorefront.request<{
+    cartBuyerIdentityUpdate: {
+      cart: CartNode | null;
+      userErrors: { field: string[]; message: string }[];
+    };
+  }>(CART_BUYER_IDENTITY_UPDATE_MUTATION, {
+    variables: { cartId, customerAccessToken },
+  });
+  logErrors("linkCartToCustomer", errors, data?.cartBuyerIdentityUpdate.userErrors);
+  return data?.cartBuyerIdentityUpdate.cart ? mapCart(data.cartBuyerIdentityUpdate.cart) : null;
 }

@@ -159,12 +159,12 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
   const { data: session } = useSession();
   const { data: wishlistHandles = [] } = useWishlist();
   const toggleWishlist = useToggleWishlist();
-  const triggerSignInPrompt = useSignInPromptStore((s) => s.trigger);
+  const openSignInPrompt = useSignInPromptStore((s) => s.open);
   const isSaved = wishlistHandles.includes(product.slug);
 
   const toggleSaved = () => {
     if (!session) {
-      triggerSignInPrompt();
+      openSignInPrompt();
       return;
     }
     toggleWishlist.mutate(product.slug);
@@ -285,7 +285,7 @@ export function ProductDetailView({ product, relatedProducts }: ProductDetailVie
         </motion.div>
 
         {relatedProducts}
-        <ProductReviews />
+        <ProductReviews summary={product.reviewSummary} />
 
         {/* ── Mobile sticky CTA ── */}
         <div className="border-grey-100 fixed inset-x-0 bottom-0 z-40 border-t bg-white lg:hidden">
